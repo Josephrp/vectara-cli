@@ -31,9 +31,6 @@ Ensure you have an appropriate PyTorch version installed for your system, especi
 
 ## Usage
 
-### Basic Usage
-
-To enhance the "Basic Usage" section of your README.md for the PyPi package, we'll include examples that cover all the functionalities provided by `core.py`. This will give users a comprehensive guide on how to utilize the VectaraClient class for various operations such as indexing text, querying documents, creating and deleting corpora, indexing documents from a folder, and handling document uploads.
 
 ### Basic Usage
 
@@ -154,9 +151,13 @@ except Exception as e:
 
 The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
 
+![mRebel](<Screenshot 2024-04-05 112158.png>)
+
 #### Non-Commercial Advanced Rag Using Rebel
 
-**insert images here**
+![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](<Screenshot 2024-04-05 112142.png>)
+
+The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata.
 
 
 Use the use the `Rebel Class` for advanced indexing. This will automatically extract `named entities`, `key phrases`, and other relevant information from your documents : 

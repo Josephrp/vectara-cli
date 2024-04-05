@@ -33,7 +33,13 @@ Ensure you have an appropriate PyTorch version installed for your system, especi
 
 ### Basic Usage
 
+To enhance the "Basic Usage" section of your README.md for the PyPi package, we'll include examples that cover all the functionalities provided by `core.py`. This will give users a comprehensive guide on how to utilize the VectaraClient class for various operations such as indexing text, querying documents, creating and deleting corpora, indexing documents from a folder, and handling document uploads.
+
+### Basic Usage
+
 #### Setting Up a Vectara Client
+
+First, initialize the Vectara client with your customer ID and API key. This client will be used for all subsequent operations.
 
 ```python
 from vectara_cli.core import VectaraClient
@@ -45,15 +51,37 @@ vectara_client = VectaraClient(customer_id, api_key)
 
 #### Indexing a Document
 
+To index a document, you need its corpus ID, a unique document ID, and the text you want to index. Optionally, you can include context, metadata in JSON format, and custom dimensions.
+
 ```python
 corpus_id = 'your_corpus_id'
 document_id = 'unique_document_id'
 text = 'This is the document text you want to index.'
+context = 'Document context'
+metadata_json = '{"author": "John Doe"}'
 
-vectara_client.index_text(corpus_id, document_id, text)
+vectara_client.index_text(corpus_id, document_id, text, context, metadata_json)
+```
+
+#### Indexing Documents from a Folder
+
+To index all documents from a specified folder into a corpus, provide the corpus ID and the folder path.
+
+```python
+corpus_id = 'your_corpus_id'
+folder_path = '/path/to/your/documents'
+
+results = vectara_client.index_documents_from_folder(corpus_id, folder_path)
+for document_id, success, extracted_text in results:
+    if success:
+        print(f"Successfully indexed document {document_id}.")
+    else:
+        print(f"Failed to index document {document_id}.")
 ```
 
 #### Querying Documents
+
+To query documents, specify your search query, the number of results you want to return, and the corpus ID.
 
 ```python
 query_text = 'search query'
@@ -62,6 +90,64 @@ corpus_id = 'your_corpus_id'
 
 results = vectara_client.query(query_text, num_results, corpus_id)
 print(results)
+```
+
+#### Creating a Corpus
+
+You can create a new corpus by specifying its ID, name, description, and other settings.
+
+```python
+create_corpus_response = vectara_client.create_corpus(
+    corpus_id=123456789,
+    name="Example Corpus",
+    description="This is an example corpus.",
+    dtProvision=1234567890,
+    enabled=True,
+    swapQenc=False,
+    swapIenc=False,
+    textless=False,
+    encrypted=False,
+    encoderId="default",
+    metadataMaxBytes=10000,
+    customDimensions=[
+        {"name": "dimension1", "description": "First custom dimension", "servingDefault": 1.0, "indexingDefault": 1.0}
+    ],
+    filterAttributes=[
+        {"name": "filter1", "description": "First filter attribute", "indexed": True, "type": "FILTER_ATTRIBUTE_TYPE__UNDEFINED", "level": "FILTER_ATTRIBUTE_LEVEL__UNDEFINED"}
+    ]
+)
+print(create_corpus_response)
+```
+
+#### Deleting a Corpus
+
+To delete a corpus, you only need to provide its ID.
+
+```python
+corpus_id = 'your_corpus_id'
+response, success = vectara_client.delete_corpus(corpus_id)
+
+if success:
+    print("Corpus deleted successfully.")
+else:
+    print("Failed to delete corpus:", response)
+```
+
+#### Uploading a Document
+
+To upload and index a document, specify the corpus ID, the path to the document, and optionally, a document ID and metadata.
+
+```python
+corpus_id = 'your_corpus_id'
+file_path = '/path/to/your/document.pdf'
+document_id = 'unique_document_id'  # Optional
+metadata = {"author": "Author Name", "title": "Document Title"}  # Optional
+
+try:
+    response, status = vectara_client.upload_document(corpus_id, file_path, document_id, metadata)
+    print("Upload successful:", response)
+except Exception as e:
+    print("Upload failed:", str(e))
 ```
 
 ### Advanced Usage
@@ -110,7 +196,7 @@ Contributions to `vectara-cli` are welcome! Please refer to the contributing gui
 
 ## License
 
-`vectara-cli` is MIT licensed. See the LICENSE file for more details.
+`vectara-cli` is MIT licensed. See the [LICENSE](LICENSE.md) file for more details.
 
 ---
 

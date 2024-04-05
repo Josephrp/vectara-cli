@@ -147,11 +147,23 @@ except Exception as e:
     print("Upload failed:", str(e))
 ```
 
-### Advanced Usage
+### Commercial Advanced Useage
+
+The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
+
+
+### Non-Commercial Advanced Usage
 
 The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
 
 ![mRebel](<Screenshot 2024-04-05 112158.png>)
+
+![Span Models for Named Entity Recognition](image.png)
+
+
+#### Non-Commercial Advanced Rag Using Span Models
+
+Aarsen, T. (2023). SpanMarker for Named Entity Recognition. Radboud University. Supervised by Prof. Dr. Fermin Moscoso del Prado Martin (fermin.moscoso-del-prado@ru.nl) and Dr. Daniel Vila Suero (daniel@argilla.io). Second assessor: Dr. Harrie Oosterhuis (harrie.oosterhuis@ru.nl).
 
 #### Non-Commercial Advanced Rag Using Rebel
 

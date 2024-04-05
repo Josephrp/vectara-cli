@@ -147,6 +147,16 @@ except Exception as e:
     print("Upload failed:", str(e))
 ```
 
+### Advanced Useage
+
+
+To leverage the advanced text processing capabilities, ensure you have completed the advanced installation of `vectara-cli`. This includes the necessary dependencies for text analysis:
+
+```bash
+pip install vectara-cli[advanced]
+```
+
+
 ### Commercial Advanced Useage
 
 The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
@@ -160,10 +170,61 @@ The advanced features allow you to enrich your indexes with additional informati
 
 ![Span Models for Named Entity Recognition](image.png)
 
+### Non-Commercial Advanced Usage Using Span Models
 
-#### Non-Commercial Advanced Rag Using Span Models
+The `vectara-cli` package extends its functionality through the advanced usage of Span Models, enabling users to perform sophisticated text analysis and entity recognition tasks. This feature is particularly beneficial for non-commercial applications that require deep understanding and processing of textual data.
 
-Aarsen, T. (2023). SpanMarker for Named Entity Recognition. Radboud University. Supervised by Prof. Dr. Fermin Moscoso del Prado Martin (fermin.moscoso-del-prado@ru.nl) and Dr. Daniel Vila Suero (daniel@argilla.io). Second assessor: Dr. Harrie Oosterhuis (harrie.oosterhuis@ru.nl).
+The `Span` class supports processing and indexing documents from a folder, enabling batch operations for efficiency. This feature allows for the automatic extraction of entities from multiple documents, which are then indexed into specified corpora with enriched metadata.
+
+
+#### Features
+
+- **Named Entity Recognition (NER)**: Utilize pre-trained Span Models to identify and extract entities from text, enriching your document indexes with valuable metadata.
+- **Model Flexibility**: Choose from a variety of pre-trained models tailored to your specific needs, including `fewnerdsuperfine`, `multinerd`, and `largeontonote`.
+- **Enhanced Document Indexing**: Improve search relevance and results by indexing documents enriched with named entity information.
+
+#### Usage
+
+1. **Initialize Vectara Client**: Start by creating a Vectara client instance with your customer ID and API key.
+
+    ```python
+    from vectara_cli.core import VectaraClient
+
+    customer_id = 'your_customer_id'
+    api_key = 'your_api_key'
+    vectara_client = VectaraClient(customer_id, api_key)
+    ```
+
+2. **Load and Use Span Models**: The `Span` class facilitates the loading of pre-trained models and the analysis of text to extract entities.
+
+    ```python
+    from vectara_cli.advanced.nerdspan import Span
+
+    # Initialize the Span class
+    span = Span(customer_id, api_key)
+
+    # Load a pre-trained model
+    model_name = "multinerd"  # Example model
+    model_type = "span_marker"
+    span.load_model(model_name, model_type)
+
+    # Analyze text to extract entities
+    text = "Your text here."
+    output_str, key_value_pairs = span.analyze_text(model_name)
+    print(output_str)
+    ```
+
+3. **Index Enhanced Documents**: After extracting entities, use the `VectaraClient` to index the enhanced documents into your corpus.
+
+    ```python
+    corpus_id = 'your_corpus_id'
+    document_id = 'unique_document_id'
+    metadata_json = json.dumps({"entities": key_value_pairs})
+
+    vectara_client.index_text(corpus_id, document_id, text, metadata_json=metadata_json)
+    ```
+
+**Reference:** Aarsen, T. (2023). SpanMarker for Named Entity Recognition. Radboud University. Supervised by Prof. Dr. Fermin Moscoso del Prado Martin (fermin.moscoso-del-prado@ru.nl) and Dr. Daniel Vila Suero (daniel@argilla.io). Second assessor: Dr. Harrie Oosterhuis (harrie.oosterhuis@ru.nl).
 
 #### Non-Commercial Advanced Rag Using Rebel
 

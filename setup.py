@@ -18,6 +18,8 @@ setup(
             "accelerate",
             "torch>=1.8.0",
             "transformers>=4.5.0",
+            "span_marker",
+            "spacey",
         ],
     },
     entry_points={

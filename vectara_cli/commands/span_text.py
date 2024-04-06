@@ -4,7 +4,7 @@ from vectara_cli.advanced.noncommercial.nerdspan import Span
 from vectara_cli.config_manager import ConfigManager
 
 
-def main(args):
+def main(args, vectara_client):
     if len(args) < 5:
         print("Usage: vectara-cli process-text text model_name model_type")
         return

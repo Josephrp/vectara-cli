@@ -9,6 +9,8 @@ import logging
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"
+        self.customer_id = customer_id
+        self.api_key = api_key
         self.headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -207,17 +209,29 @@ class VectaraClient:
     def _get_index_request_json(
         self, corpus_id, document_id, title, metadata, section_text
     ):
-        # Assuming this method correctly formats the request payload for indexing a document.
-        # This is a placeholder implementation.
-        return json.dumps(
-            {
-                "corpusId": corpus_id,
-                "documentId": document_id,
-                "title": title,
-                "metadata": metadata,
-                "sectionText": section_text,
-            }
-        )
+        # Construct the document payload
+        document = {
+            "document_id": document_id,
+            "title": title,
+            "metadata_json": metadata,  # Pass the dictionary directly if the API expects an object
+            "section": [
+                {"text": section_text},
+            ],
+        }
+
+        # Construct the full request payload
+        request = {
+            "customer_id": self.customer_id,
+            "corpus_id": corpus_id,
+            "document": document,
+        }
+
+        # Convert the request payload to JSON and log it
+        json_payload = json.dumps(request)
+        print("Constructed JSON payload:", json_payload)  # Log the payload for debugging
+
+        return json_payload
+
 
     def index_document(self, corpus_id, document_id, title, metadata, section_text):
         """Indexes a document to the specified corpus using the Vectara platform.
@@ -238,7 +252,7 @@ class VectaraClient:
         )
         try:
             response = requests.post(idx_address, data=payload, headers=self.headers)
-            response.raise_for_status()  # Raises HTTPError for bad responses
+            response.raise_for_status()
 
             message = response.json()
             if "status" in message and message["status"]["code"] in (

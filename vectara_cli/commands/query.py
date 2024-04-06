@@ -4,7 +4,7 @@ from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 
 
-def main(args):
+def main(args, vectara_client):
     if len(args) < 4:
         print("Usage: vectara-cli query query_text num_results corpus_id")
         return
@@ -14,7 +14,6 @@ def main(args):
 
     try:
         customer_id, api_key = ConfigManager.get_api_keys()
-        vectara_client = VectaraClient(customer_id, api_key)
         response = vectara_client.query(query_text, num_results, corpus_id)
         print(response)
     except ValueError as e:

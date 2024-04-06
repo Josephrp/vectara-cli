@@ -31,6 +31,104 @@ Ensure you have an appropriate PyTorch version installed for your system, especi
 
 ## Usage
 
+To include a section in the README of your PyPi package that describes how to use the CLI tool you've developed, you should provide clear, concise instructions covering installation, basic setup, and usage examples for each command. Below is a template you can adapt to fit your package's README file.
+
+---
+
+## Command Line Interface (CLI) Usage
+
+The `vectara-cli` provides a powerful command line interface for interacting with the Vectara platform, enabling tasks such as document indexing, querying, corpus management, and advanced text processing directly from your terminal. This section will guide you through the basics of using the `vectara-cli`.
+
+### Installation
+
+Before using the CLI, ensure you have the package installed. You can install it directly from PyPi using pip:
+
+```bash
+pip install your-package-name
+```
+
+Replace `your-package-name` with the actual name of your package on PyPi.
+
+### Configuration
+
+To use the CLI, you need to configure your Vectara customer ID and API key. These can be set as environment variables or directly within the CLI commands as shown in the examples below.
+
+### Basic Commands
+
+#### Indexing a Document
+
+To index a document into a specific corpus:
+
+```bash
+vectara-cli index-document <corpus_id> <document_id> "<title>" '<metadata_json>' "<section_text>"
+```
+
+- `<corpus_id>`: The ID of the corpus where the document will be indexed.
+- `<document_id>`: A unique identifier for the document.
+- `<title>`: The title of the document.
+- `<metadata_json>`: A JSON string containing document metadata.
+- `<section_text>`: The text content of the document.
+
+#### Querying
+
+To perform a query in a specific corpus:
+
+```bash
+vectara-cli query "<query_text>" <num_results> <corpus_id>
+```
+
+- `<query_text>`: The text of the query.
+- `<num_results>`: The maximum number of results to return.
+- `<corpus_id>`: The ID of the corpus to query against.
+
+#### Creating a Corpus
+
+To create a new corpus:
+
+```bash
+vectara-cli create-corpus <corpus_id> "<name>"
+```
+
+- `<corpus_id>`: The ID for the new corpus.
+- `<name>`: The name of the new corpus.
+
+#### Deleting a Corpus
+
+To delete an existing corpus:
+
+```bash
+vectara-cli delete-corpus <corpus_id>
+```
+
+- `<corpus_id>`: The ID of the corpus to delete.
+
+### Advanced Commands
+
+#### Span Text Processing
+
+To process text using the Span model:
+
+```bash
+vectara-cli span-text "<text>" "<model_name>" "<model_type>"
+```
+
+- `<text>`: The text to process.
+- `<model_name>`: The name of the Span model to use.
+- `<model_type>`: The type of the Span model.
+
+#### Enhanced Batch Processing with NerdSpan
+
+To process and upload documents from a folder:
+
+```bash
+vectara-cli nerdspan-upsert-folder "<folder_path>" "<model_name>" "<model_type>"
+```
+
+- `<folder_path>`: The path to the folder containing documents to process and upload.
+- `<model_name>`: The name of the model to use for processing.
+- `<model_type>`: The type of the model.
+
+For more advanced processing and upsert operations, including using the Rebel model for complex document analysis and upload, refer to the specific command documentation provided with the CLI.
 
 ### Basic Usage
 

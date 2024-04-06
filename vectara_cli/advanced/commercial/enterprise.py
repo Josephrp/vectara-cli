@@ -2,10 +2,12 @@
 
 import logging
 from typing import List, Any, Dict
-from core import VectaraClient
-import span_marker from span_marker import SpanMarkerModel
+from vectara_cli.core import VectaraClient
+import span_marker
+from span_marker import SpanMarkerModel
 import random
 import string
+
 
 class EnterpriseSpan:
     """
@@ -13,6 +15,7 @@ class EnterpriseSpan:
     This class wraps around the SpanMarkerModel for keyphrase extraction and adds enterprise-level features
     such as detailed logging, error handling, and customization options, including an easy way to specify models.
     """
+
     MODEL_MAP = {
         "keyphrase": "tomaarsen/span-marker-bert-base-uncased-keyphrase-inspec",
         "science": "tomaarsen/span-marker-bert-base-ncbi-disease",
@@ -41,7 +44,9 @@ class EnterpriseSpan:
         if self.model_name in self.MODEL_MAP:
             return self.MODEL_MAP[self.model_name]
         else:
-            self.logger.warning(f"Model name {self.model_name} not recognized. Attempting to use it as a direct path or identifier.")
+            self.logger.warning(
+                f"Model name {self.model_name} not recognized. Attempting to use it as a direct path or identifier."
+            )
             return self.model_name
 
     def _load_model(self) -> SpanMarkerModel:
@@ -59,7 +64,6 @@ class EnterpriseSpan:
             self.logger.error(f"Failed to load model from {self.model_path}: {e}")
             raise
 
-
     def predict(self, text: str) -> List[Dict[str, Any]]:
         """
         Runs inference on the given text and returns the extracted entities.
@@ -75,7 +79,9 @@ class EnterpriseSpan:
             self.logger.info(f"Prediction successful for input text: {text[:30]}...")
             return entities
         except Exception as e:
-            self.logger.error(f"Prediction failed for input text: {text[:30]}... Error: {e}")
+            self.logger.error(
+                f"Prediction failed for input text: {text[:30]}... Error: {e}"
+            )
             raise
 
     def format_predictions(self, predictions: List[Dict[str, Any]]) -> str:
@@ -90,22 +96,26 @@ class EnterpriseSpan:
         """
         formatted = ""
         for pred in predictions:
-            formatted += f"{pred['entity_group']}: {pred['word']} (Score: {pred['score']:.2f})\n"
+            formatted += (
+                f"{pred['entity_group']}: {pred['word']} (Score: {pred['score']:.2f})\n"
+            )
         return formatted.strip()
 
     def format_predictions(self, predictions: List[Dict[str, Any]]) -> str:
         formatted = ""
         for pred in predictions:
-            formatted += f"{pred['entity_group']}: {pred['word']} (Score: {pred['score']:.2f})\n"
+            formatted += (
+                f"{pred['entity_group']}: {pred['word']} (Score: {pred['score']:.2f})\n"
+            )
         return formatted.strip()
 
     def generate_metadata(self, predictions: List[Dict[str, Any]]) -> Dict[str, Any]:
         metadata = {}
         for pred in predictions:
-            key = pred['entity_group']
+            key = pred["entity_group"]
             if key not in metadata:
                 metadata[key] = []
-            metadata[key].append(pred['word'])
+            metadata[key].append(pred["word"])
         return metadata
 
     def text_chunk(self, text, chunk_size=512):
@@ -119,13 +129,15 @@ class EnterpriseSpan:
         Returns:
             List[str]: A list of text chunks.
         """
-        return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
+        return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
 
     def upload_enriched_text(self, corpus_id, document_id, text, predictions):
         metadata = self.generate_metadata(predictions)
         enriched_text = self.format_predictions(predictions) + "\n\n" + text
         try:
-            response, success = self.vectara_client.index_document(corpus_id, document_id, "Enriched Text", metadata, enriched_text)
+            response, success = self.vectara_client.index_document(
+                corpus_id, document_id, "Enriched Text", metadata, enriched_text
+            )
             if success:
                 self.logger.info("Enriched document uploaded successfully.")
             else:
@@ -143,12 +155,22 @@ class EnterpriseSpan:
             folder_path (str): Path to the folder containing documents.
         """
         # Create two new corpora
-        corpus_id_1 = ''.join(random.choices(string.ascii_letters + string.digits, k=7))
-        corpus_id_2 = ''.join(random.choices(string.ascii_letters + string.digits, k=7))
-        self.vectara_client.create_corpus(corpus_id=corpus_id_1, name=f"{corpus_id_1}_Plain", description="Plain Document Index")
-        self.vectara_client.create_corpus(corpus_id=corpus_id_2, name=f"{corpus_id_2}_Enhanced", description="Enhanced Document Index")
+        corpus_id_1 = "".join(random.choices(string.ascii_letters + string.digits, k=7))
+        corpus_id_2 = "".join(random.choices(string.ascii_letters + string.digits, k=7))
+        self.vectara_client.create_corpus(
+            corpus_id=corpus_id_1,
+            name=f"{corpus_id_1}_Plain",
+            description="Plain Document Index",
+        )
+        self.vectara_client.create_corpus(
+            corpus_id=corpus_id_2,
+            name=f"{corpus_id_2}_Enhanced",
+            description="Enhanced Document Index",
+        )
 
-        results = self.vectara_client.index_documents_from_folder(corpus_id_1, folder_path, return_extracted_document=True)
+        results = self.vectara_client.index_documents_from_folder(
+            corpus_id_1, folder_path, return_extracted_document=True
+        )
 
         for document_id, success, extracted_text in results:
             if not success or not extracted_text:
@@ -158,7 +180,7 @@ class EnterpriseSpan:
             for chunk in text_chunks:
                 predictions = self.predict(chunk)
                 self.upload_enriched_text(corpus_id_2, document_id, chunk, predictions)
-                
+
 
 # # Example usage
 # if __name__ == "__main__":

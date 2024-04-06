@@ -1,14 +1,14 @@
- # ./setup.py
+# ./setup.py
 
 from setuptools import setup, find_packages
 
 setup(
     name="vectara-cli",
-    version="0.1.5",
+    version="0.1.6",
     author="Tonic-AI",
     author_email="team@tonic-ai.com",
     description="A CLI tool for interacting with the Vectara platform, including advanced text processing and indexing features.",
-    long_description=open('README.md').read(),
+    long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://git.tonic-ai.com/releases/vectara-cli",
     packages=find_packages(),
@@ -25,8 +25,8 @@ setup(
         ],
     },
     entry_points={
-        'console_scripts': [
-            'vectara=vectara_cli.main:main',
+        "console_scripts": [
+            "vectara=vectara_cli.main:main",
         ],
     },
     classifiers=[
@@ -37,7 +37,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Utilities",
     ],
-    python_requires='>=3.9',
+    python_requires=">=3.9",
     license="MIT",
     keywords="vectara search-engine document-indexing text-analysis information-retrieval natural-language-processing cli-tool data-science machine-learning text-processing",
 )

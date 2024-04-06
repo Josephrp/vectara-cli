@@ -3,6 +3,7 @@
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 
+
 def main(args):
     if len(args) < 3:
         print("Usage: vectara-cli create-corpus corpus_id name")
@@ -13,11 +14,27 @@ def main(args):
     try:
         customer_id, api_key = ConfigManager.get_api_keys()
         vectara_client = VectaraClient(customer_id, api_key)
-        response = vectara_client.create_corpus(corpus_id, name, "Description", 1234567890, True, False, False, False, False, "default", 10000, [], [])
+        response = vectara_client.create_corpus(
+            corpus_id,
+            name,
+            "Description",
+            1234567890,
+            True,
+            False,
+            False,
+            False,
+            False,
+            "default",
+            10000,
+            [],
+            [],
+        )
         print(response)
     except ValueError as e:
         print(e)
 
+
 if __name__ == "__main__":
     import sys
+
     main(sys.argv[1:])

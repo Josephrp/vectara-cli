@@ -3,12 +3,16 @@
 import torch
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
 from transformers import DebertaV2Config, DebertaV2PreTrainedModel, DebertaV2Model
-from transformers.models.deberta_v2.modeling_deberta_v2 import ContextPooler, StableDropout
+from transformers.models.deberta_v2.modeling_deberta_v2 import (
+    ContextPooler,
+    StableDropout,
+)
 from transformers.file_utils import ModelOutput
 from transformers import pipeline
 from dataclasses import dataclass
 from typing import Optional, Tuple
 from vectara_cli.core import VectaraClient
+
 
 @dataclass
 class TXNLIClassifierOutput(ModelOutput):
@@ -18,6 +22,7 @@ class TXNLIClassifierOutput(ModelOutput):
     hidden_states: Optional[Tuple[torch.FloatTensor]] = None
     attentions: Optional[Tuple[torch.FloatTensor]] = None
 
+
 class DebertaV2ForTripletClassification(DebertaV2PreTrainedModel):
     def __init__(self, config):
         super().__init__(config)
@@ -26,13 +31,37 @@ class DebertaV2ForTripletClassification(DebertaV2PreTrainedModel):
         self.pooler = ContextPooler(config)
         self.classifier = nn.Linear(self.pooler.output_dim, self.num_labels)
         drop_out = getattr(config, "cls_dropout", None)
-        self.dropout = StableDropout(drop_out if drop_out is not None else config.hidden_dropout_prob)
+        self.dropout = StableDropout(
+            drop_out if drop_out is not None else config.hidden_dropout_prob
+        )
         self.classifier_xnli = nn.Linear(self.pooler.output_dim, 3)
         self.post_init()
 
-    def forward(self, input_ids=None, attention_mask=None, token_type_ids=None, position_ids=None, inputs_embeds=None, labels=None, output_attentions=None, output_hidden_states=None, return_dict=None):
-        return_dict = return_dict if return_dict is not None else self.config.use_return_dict
-        outputs = self.deberta(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, position_ids=position_ids, inputs_embeds=inputs_embeds, output_attentions=output_attentions, output_hidden_states=output_hidden_states, return_dict=return_dict)
+    def forward(
+        self,
+        input_ids=None,
+        attention_mask=None,
+        token_type_ids=None,
+        position_ids=None,
+        inputs_embeds=None,
+        labels=None,
+        output_attentions=None,
+        output_hidden_states=None,
+        return_dict=None,
+    ):
+        return_dict = (
+            return_dict if return_dict is not None else self.config.use_return_dict
+        )
+        outputs = self.deberta(
+            input_ids,
+            token_type_ids=token_type_ids,
+            attention_mask=attention_mask,
+            position_ids=position_ids,
+            inputs_embeds=inputs_embeds,
+            output_attentions=output_attentions,
+            output_hidden_states=output_hidden_states,
+            return_dict=return_dict,
+        )
         encoder_layer = outputs[0]
         pooled_output = self.pooler(encoder_layer)
         pooled_output = self.dropout(pooled_output)
@@ -49,47 +78,86 @@ class DebertaV2ForTripletClassification(DebertaV2PreTrainedModel):
         if not return_dict:
             output = (logits,) + outputs[2:]
             return ((loss,) + output) if loss is not None else output
-        return TXNLIClassifierOutput(loss=loss, logits=logits, logits_xnli=logits_xnli, hidden_states=outputs.hidden_states, attentions=outputs.attentions)
+        return TXNLIClassifierOutput(
+            loss=loss,
+            logits=logits,
+            logits_xnli=logits_xnli,
+            hidden_states=outputs.hidden_states,
+            attentions=outputs.attentions,
+        )
+
 
 class Rebel:
-    def __init__(self, model_path='microsoft/deberta-v2-xlarge'):
+    def __init__(self, model_path="microsoft/deberta-v2-xlarge"):
         self.config = DebertaV2Config.from_pretrained(model_path)
         self.model = DebertaV2ForTripletClassification(self.config)
-        self.triplet_extractor = pipeline('text2text-generation', model='Babelscape/rebel-large', tokenizer='Babelscape/rebel-large')
+        self.triplet_extractor = pipeline(
+            "text2text-generation",
+            model="Babelscape/rebel-large",
+            tokenizer="Babelscape/rebel-large",
+        )
 
     def extract_triplets(self, text):
         triplets = []
-        relation, subject, relation, object_ = '', '', '', ''
+        relation, subject, relation, object_ = "", "", "", ""
         text = text.strip()
-        current = 'x'
-        for token in text.replace("<s>", "").replace("<pad>", "").replace("</s>", "").split():
+        current = "x"
+        for token in (
+            text.replace("<s>", "").replace("<pad>", "").replace("</s>", "").split()
+        ):
             if token == "<triplet>":
-                current = 't'
-                if relation != '':
-                    triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
-                    relation = ''
-                subject = ''
+                current = "t"
+                if relation != "":
+                    triplets.append(
+                        {
+                            "head": subject.strip(),
+                            "type": relation.strip(),
+                            "tail": object_.strip(),
+                        }
+                    )
+                    relation = ""
+                subject = ""
             elif token == "<subj>":
-                current = 's'
-                if relation != '':
-                    triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
-                object_ = ''
+                current = "s"
+                if relation != "":
+                    triplets.append(
+                        {
+                            "head": subject.strip(),
+                            "type": relation.strip(),
+                            "tail": object_.strip(),
+                        }
+                    )
+                object_ = ""
             elif token == "<obj>":
-                current = 'o'
-                relation = ''
+                current = "o"
+                relation = ""
             else:
-                if current == 't':
-                    subject += ' ' + token
-                elif current == 's':
-                    object_ += ' ' + token
-                elif current == 'o':
-                    relation += ' ' + token
-        if subject != '' and relation != '' and object_ != '':
-            triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
+                if current == "t":
+                    subject += " " + token
+                elif current == "s":
+                    object_ += " " + token
+                elif current == "o":
+                    relation += " " + token
+        if subject != "" and relation != "" and object_ != "":
+            triplets.append(
+                {
+                    "head": subject.strip(),
+                    "type": relation.strip(),
+                    "tail": object_.strip(),
+                }
+            )
         return triplets
-      
+
     def extract_text(self, text):
-        extracted_text = self.triplet_extractor.tokenizer.batch_decode([self.triplet_extractor(text, return_tensors=True, return_text=True)[0]["generated_token_ids"]])[0] # return text true so the text chunk is directly useable.
+        extracted_text = self.triplet_extractor.tokenizer.batch_decode(
+            [
+                self.triplet_extractor(text, return_tensors=True, return_text=True)[0][
+                    "generated_token_ids"
+                ]
+            ]
+        )[
+            0
+        ]  # return text true so the text chunk is directly useable.
         return extracted_text
 
     def forward_pass(self, **kwargs):
@@ -107,7 +175,7 @@ class Rebel:
         Returns:
             list: A list of text chunks.
         """
-        return [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]
+        return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
 
     def extract_keywords(self, model_output):
         """
@@ -124,7 +192,9 @@ class Rebel:
             keywords.append(f"{triplet['head']}:{triplet['type']}:{triplet['tail']}")
         return {"keywords": keywords}
 
-    def advanced_upsert_folder(self, vectara_client: VectaraClient, corpus_id_1, corpus_id_2, folder_path):
+    def advanced_upsert_folder(
+        self, vectara_client: VectaraClient, corpus_id_1, corpus_id_2, folder_path
+    ):
         """
         Handles the creation of two corpora, indexing documents, and uploading text chunks with metadata.
 
@@ -135,17 +205,29 @@ class Rebel:
             folder_path (str): The path to the folder containing documents to be indexed.
         """
         # Step 1: Create two corpora
-        corpus_id_1 = ''.join(random.choices(string.ascii_letters + string.digits, k=7))
-        corpus_id_2 = ''.join(random.choices(string.ascii_letters + string.digits, k=7))
-        vectara_client.create_corpus(corpus_id=corpus_id_1, name="{corpus_id_1}_Plain", description="Plain Document Index for ")
-        vectara_client.create_corpus(corpus_id=corpus_id_2, name="{corpus_id_2}_Advanced", description="Second corpus")
+        corpus_id_1 = "".join(random.choices(string.ascii_letters + string.digits, k=7))
+        corpus_id_2 = "".join(random.choices(string.ascii_letters + string.digits, k=7))
+        vectara_client.create_corpus(
+            corpus_id=corpus_id_1,
+            name="{corpus_id_1}_Plain",
+            description="Plain Document Index for ",
+        )
+        vectara_client.create_corpus(
+            corpus_id=corpus_id_2,
+            name="{corpus_id_2}_Advanced",
+            description="Second corpus",
+        )
 
         # Step 2: Index documents from folder into the first corpus and get plain text
-        results = vectara_client.index_documents_from_folder(corpus_id_1, folder_path, return_extracted_document=True)
+        results = vectara_client.index_documents_from_folder(
+            corpus_id_1, folder_path, return_extracted_document=True
+        )
 
         for document_id, success, extracted_text in results:
             if not success or not extracted_text:
-                print(f"Skipping document {document_id} due to failure in extraction or indexing.")
+                print(
+                    f"Skipping document {document_id} due to failure in extraction or indexing."
+                )
                 continue
 
             # Step 3: Chunk plain text into sized text chunks (assuming a function to do this)
@@ -155,10 +237,17 @@ class Rebel:
                 output = self.forward_pass(text=chunk)
                 metadata = self.extract_keywords(output)
 
-                vectara_client.index_document(corpus_id_2, document_id, title="Chunk Title", metadata=metadata, section_text=chunk)
+                vectara_client.index_document(
+                    corpus_id_2,
+                    document_id,
+                    title="Chunk Title",
+                    metadata=metadata,
+                    section_text=chunk,
+                )
 
         return corpus_id_1, corpus_id_2
-    
+
+
 # # Example usage
 # advanced = Advanced()
 # # For triplet extraction

@@ -1,9 +1,23 @@
 # vectara_cli/main.py
 
 import sys
-from vectara_cli.commands import set_api_keys, index_document, query, create_corpus, delete_corpus
+from vectara_cli.commands import (
+    nerdspan_upsert_folder,
+    set_api_keys,
+    index_document,
+    query,
+    create_corpus,
+    delete_corpus,
+    span_enhance_folder,
+    upload_document,
+    upload_enriched_text,
+    span_text,
+    rebel_upsert_folder,
+)
+
 from vectara_cli.config_manager import ConfigManager
 from vectara_cli.core import VectaraClient
+
 
 def get_vectara_client():
     try:
@@ -12,6 +26,7 @@ def get_vectara_client():
     except ValueError as e:
         print(e)
         sys.exit(1)
+
 
 def print_help():
     help_text = """
@@ -34,15 +49,14 @@ def print_help():
     """
     print(help_text)
 
+
 def main():
     args = sys.argv[1:]
-    if not args or args[0] in ('help', '--help', '-h'):
+    if not args or args[0] in ("help", "--help", "-h"):
         print_help()
         return
 
     command = args[0]
-
-    '''TODO create help function for all commands and what they do'''
 
     if command == "set-api-keys":
         set_api_keys.main(args)
@@ -58,19 +72,20 @@ def main():
         elif command == "delete-corpus":
             delete_corpus.main(args, vectara_client)
         elif command == "span-text":
-            delete_corpus.main(args, vectara_client)
-        elif command == "span-enchance-folder":
-            delete_corpus.main(args, vectara_client)
+            span_text.main(args, vectara_client)
+        elif command == "span-enhance-folder":
+            span_enhance_folder.main(args, vectara_client)
         elif command == "upload-document":
-            delete_corpus.main(args, vectara_client)
+            upload_document.main(args, vectara_client)
         elif command == "upload-enriched-text":
-            delete_corpus.main(args, vectara_client)
+            upload_enriched_text.main(args, vectara_client)
         elif command == "nerdspan-upsert-folder":
-            delete_corpus.main(args, vectara_client)
+            nerdspan_upsert_folder.main(args, vectara_client)
         elif command == "rebel-upsert-folder":
-            delete_corpus.main(args, vectara_client)
+            rebel_upsert_folder.main(args, vectara_client)
         else:
             print(f"Unknown command: {command}")
+
 
 if __name__ == "__main__":
     main()

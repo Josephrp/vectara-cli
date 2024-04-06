@@ -439,6 +439,18 @@ The `Span` class supports processing and indexing documents from a folder, enabl
 
 The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata.
 
+```Json
+@inproceedings{huguet-cabot-et-al-2023-redfm-dataset,
+    title = "RED$^{\rm FM}$: a Filtered and Multilingual Relation Extraction Dataset",
+    author = "Huguet Cabot, Pere-Llu{\'\i}s  and Tedeschi, Simone and Ngonga Ngomo, Axel-Cyrille and
+      Navigli, Roberto",
+    booktitle = "Proc. of the 61st Annual Meeting of the Association for Computational Linguistics: ACL 2023",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://arxiv.org/abs/2306.09802",
+}```
 
 Use the use the `Rebel Class` for advanced indexing. This will automatically extract `named entities`, `key phrases`, and other relevant information from your documents : 
 

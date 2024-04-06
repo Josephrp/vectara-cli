@@ -4,9 +4,12 @@ import json
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 
+
 def main(args):
     if len(args) < 6:
-        print("Usage: vectara-cli index-document corpus_id document_id title metadata_json section_text")
+        print(
+            "Usage: vectara-cli index-document corpus_id document_id title metadata_json section_text"
+        )
         return
     corpus_id = args[1]
     document_id = args[2]
@@ -18,7 +21,9 @@ def main(args):
     try:
         customer_id, api_key = ConfigManager.get_api_keys()
         vectara_client = VectaraClient(customer_id, api_key)
-        response, success = vectara_client.index_document(corpus_id, document_id, title, metadata, section_text)
+        response, success = vectara_client.index_document(
+            corpus_id, document_id, title, metadata, section_text
+        )
         if success:
             print("Document indexed successfully.")
         else:
@@ -26,6 +31,8 @@ def main(args):
     except ValueError as e:
         print(e)
 
+
 if __name__ == "__main__":
     import sys
+
     main(sys.argv[1:])

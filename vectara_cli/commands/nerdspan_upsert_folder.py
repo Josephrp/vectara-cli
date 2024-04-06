@@ -1,8 +1,9 @@
 # ./commands/nerdspan_upsert_folder.py
 
 import os
-from vectara_cli.core import Span
+from vectara_cli.advanced.noncommercial.nerdspan import Span
 from vectara_cli.config_manager import ConfigManager
+
 
 def main(args):
     if len(args) < 5:
@@ -20,11 +21,17 @@ def main(args):
             return
 
         span = Span("", customer_id, api_key)
-        corpus_id_1, corpus_id_2 = span.process_and_upload(folder_path, model_name, model_type)
-        print(f"Documents processed and uploaded. Raw uploads in Corpus ID: {corpus_id_1}, Processed uploads in Corpus ID: {corpus_id_2}")
+        corpus_id_1, corpus_id_2 = span.process_and_upload(
+            folder_path, model_name, model_type
+        )
+        print(
+            f"Documents processed and uploaded. Raw uploads in Corpus ID: {corpus_id_1}, Processed uploads in Corpus ID: {corpus_id_2}"
+        )
     except Exception as e:
         print("An error occurred during processing:", str(e))
 
+
 if __name__ == "__main__":
     import sys
+
     main(sys.argv[1:])

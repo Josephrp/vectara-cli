@@ -3,9 +3,12 @@
 from vectara_cli.config_manager import ConfigManager
 from vectara_cli.advanced.commercial.enterprise import EnterpriseSpan
 
+
 def main(args):
     if len(args) < 6:
-        print("Usage: vectara-cli upload-enriched-text corpus_id document_id model_name text")
+        print(
+            "Usage: vectara-cli upload-enriched-text corpus_id document_id model_name text"
+        )
         return
 
     corpus_id = args[1]
@@ -22,6 +25,8 @@ def main(args):
     except Exception as e:
         print("Failed to upload enriched text:", str(e))
 
+
 if __name__ == "__main__":
     import sys
+
     main(sys.argv[1:])

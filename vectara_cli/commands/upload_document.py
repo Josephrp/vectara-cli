@@ -3,6 +3,7 @@
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 
+
 def main(args):
     if len(args) < 4:
         print("Usage: vectara-cli upload-document corpus_id file_path [document_id]")
@@ -16,8 +17,10 @@ def main(args):
     try:
         customer_id, api_key = ConfigManager.get_api_keys()
         vectara_client = VectaraClient(customer_id, api_key)
-        response, status = vectara_client.upload_document(corpus_id, file_path, document_id, metadata)
-        
+        response, status = vectara_client.upload_document(
+            corpus_id, file_path, document_id, metadata
+        )
+
         if status:
             print("Upload successful:", response)
         else:
@@ -25,6 +28,8 @@ def main(args):
     except Exception as e:
         print("Upload failed:", str(e))
 
+
 if __name__ == "__main__":
     import sys
+
     main(sys.argv[1:])

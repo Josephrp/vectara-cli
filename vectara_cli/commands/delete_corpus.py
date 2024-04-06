@@ -3,6 +3,7 @@
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 
+
 def main(args):
     if len(args) < 2:
         print("Usage: vectara-cli delete-corpus corpus_id")
@@ -14,7 +15,7 @@ def main(args):
         customer_id, api_key = ConfigManager.get_api_keys()
         vectara_client = VectaraClient(customer_id, api_key)
         response, success = vectara_client.delete_corpus(corpus_id)
-        
+
         if success:
             print("Corpus deleted successfully.")
         else:
@@ -22,6 +23,8 @@ def main(args):
     except ValueError as e:
         print(e)
 
+
 if __name__ == "__main__":
     import sys
+
     main(sys.argv[1:])

@@ -5,6 +5,7 @@ import json
 import os
 import logging
 
+
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"
@@ -12,10 +13,18 @@ class VectaraClient:
             "Content-Type": "application/json",
             "Accept": "application/json",
             "customer-id": customer_id,
-            "x-api-key": api_key
+            "x-api-key": api_key,
         }
 
-    def index_text(self, corpus_id, document_id, text, context="", metadata_json="", custom_dims=None):
+    def index_text(
+        self,
+        corpus_id,
+        document_id,
+        text,
+        context="",
+        metadata_json="",
+        custom_dims=None,
+    ):
         if custom_dims is None:
             custom_dims = []
 
@@ -31,28 +40,32 @@ class VectaraClient:
                         "text": text,
                         "context": context,
                         "metadataJson": metadata_json,
-                        "customDims": custom_dims
+                        "customDims": custom_dims,
                     }
                 ],
                 "defaultPartContext": context,
-                "customDims": custom_dims
-            }
+                "customDims": custom_dims,
+            },
         }
 
         response = requests.post(url, headers=self.headers, data=json.dumps(payload))
 
         if response.status_code == 200:
             response_data = response.json()
-            if 'status' in response_data and response_data['status']['code'] == "OK":
+            if "status" in response_data and response_data["status"]["code"] == "OK":
                 print("Indexing successful.")
                 return response_data
             else:
-                print("Indexing completed with status:", response_data['status']['code'])
+                print(
+                    "Indexing completed with status:", response_data["status"]["code"]
+                )
                 return response_data
         else:
             try:
                 error_response = response.json()
-                print(f"Error indexing text: {error_response.get('message', 'Unknown error')}")
+                print(
+                    f"Error indexing text: {error_response.get('message', 'Unknown error')}"
+                )
             except json.JSONDecodeError:
                 print(f"Non-JSON error response from server: {response.text}")
             return None
@@ -67,9 +80,9 @@ class VectaraClient:
                     "corpus_key": [
                         {
                             "customer_id": self.headers["customer-id"],
-                            "corpus_id": corpus_id
+                            "corpus_id": corpus_id,
                         }
-                    ]
+                    ],
                 }
             ]
         }
@@ -93,7 +106,9 @@ class VectaraClient:
                 if "response" in response_set:
                     # Extracting and returning the first response for simplicity. Adjust as needed.
                     responses = response_set["response"]
-                    return [self._extract_response_info(response) for response in responses]
+                    return [
+                        self._extract_response_info(response) for response in responses
+                    ]
         else:
             print("No response set found in the data")
         return []
@@ -107,8 +122,10 @@ class VectaraClient:
             "documentIndex": response.get("documentIndex"),
             "corpusKey": response.get("corpusKey", {}),
         }
-    
-    def _get_index_request_json(self, corpus_id, document_id, title, metadata, section_text):
+
+    def _get_index_request_json(
+        self, corpus_id, document_id, title, metadata, section_text
+    ):
         """Constructs the JSON payload for a document to be indexed."""
         document = {
             "document_id": document_id,
@@ -127,7 +144,22 @@ class VectaraClient:
 
         return json.dumps(request)
 
-    def create_corpus(self, corpus_id, name, description, dtProvision, enabled, swapQenc, swapIenc, textless, encrypted, encoderId, metadataMaxBytes, customDimensions, filterAttributes):
+    def create_corpus(
+        self,
+        corpus_id,
+        name,
+        description,
+        dtProvision,
+        enabled,
+        swapQenc,
+        swapIenc,
+        textless,
+        encrypted,
+        encoderId,
+        metadataMaxBytes,
+        customDimensions,
+        filterAttributes,
+    ):
         url = f"{self.base_url}/v1/create-corpus"
         payload = {
             "corpus": {
@@ -143,21 +175,21 @@ class VectaraClient:
                 "encoderId": encoderId,
                 "metadataMaxBytes": metadataMaxBytes,
                 "customDimensions": customDimensions,
-                "filterAttributes": filterAttributes
+                "filterAttributes": filterAttributes,
             }
         }
 
         response = requests.post(url, headers=self.headers, data=json.dumps(payload))
-        
+
         if response.status_code == 200:
             # Assuming a successful response will have a JSON body
             try:
                 response_data = response.json()
                 # Check if the response contains the expected 'status' field with 'OK'
-                if response_data.get('status', {}).get('code') == "OK":
+                if response_data.get("status", {}).get("code") == "OK":
                     return {"success": True, "data": response_data}
                 else:
-                    return {"success": False, "error": response_data.get('status', {})}
+                    return {"success": False, "error": response_data.get("status", {})}
             except ValueError:
                 # In case the response body does not contain valid JSON
                 return {"success": False, "error": "Invalid JSON in response"}
@@ -167,18 +199,25 @@ class VectaraClient:
                 error_data = response.json()
                 return {"success": False, "error": error_data}
             except ValueError:
-                return {"success": False, "error": f"HTTP Error {response.status_code}: {response.text}"}
+                return {
+                    "success": False,
+                    "error": f"HTTP Error {response.status_code}: {response.text}",
+                }
 
-    def _get_index_request_json(self, corpus_id, document_id, title, metadata, section_text):
+    def _get_index_request_json(
+        self, corpus_id, document_id, title, metadata, section_text
+    ):
         # Assuming this method correctly formats the request payload for indexing a document.
         # This is a placeholder implementation.
-        return json.dumps({
-            "corpusId": corpus_id,
-            "documentId": document_id,
-            "title": title,
-            "metadata": metadata,
-            "sectionText": section_text
-        })
+        return json.dumps(
+            {
+                "corpusId": corpus_id,
+                "documentId": document_id,
+                "title": title,
+                "metadata": metadata,
+                "sectionText": section_text,
+            }
+        )
 
     def index_document(self, corpus_id, document_id, title, metadata, section_text):
         """Indexes a document to the specified corpus using the Vectara platform.
@@ -194,17 +233,24 @@ class VectaraClient:
             A tuple containing the response and a boolean indicating success or failure.
         """
         idx_address = f"{self.base_url}/v1/index"
-        payload = self._get_index_request_json(corpus_id, document_id, title, metadata, section_text)
+        payload = self._get_index_request_json(
+            corpus_id, document_id, title, metadata, section_text
+        )
         try:
             response = requests.post(idx_address, data=payload, headers=self.headers)
             response.raise_for_status()  # Raises HTTPError for bad responses
 
             message = response.json()
-            if "status" in message and message["status"]["code"] in ("OK", "ALREADY_EXISTS"):
+            if "status" in message and message["status"]["code"] in (
+                "OK",
+                "ALREADY_EXISTS",
+            ):
                 logging.info("Document indexed successfully or already exists.")
                 return message, True
             else:
-                logging.error("Indexing failed with status: %s", message.get("status", {}))
+                logging.error(
+                    "Indexing failed with status: %s", message.get("status", {})
+                )
                 return message.get("status", {}), False
         except requests.exceptions.HTTPError as e:
             logging.error("HTTP error occurred: %s", e)
@@ -214,9 +260,14 @@ class VectaraClient:
             return {"code": "REQUEST_EXCEPTION", "message": str(e)}, False
         except ValueError as e:
             logging.error("Invalid response received from Vectara API: %s", e)
-            return {"code": "INVALID_RESPONSE", "message": "The response from Vectara API could not be decoded."}, False
+            return {
+                "code": "INVALID_RESPONSE",
+                "message": "The response from Vectara API could not be decoded.",
+            }, False
 
-    def index_documents_from_folder(self, corpus_id, folder_path, return_extracted_document=False):
+    def index_documents_from_folder(
+        self, corpus_id, folder_path, return_extracted_document=False
+    ):
         """Indexes all documents in a specified folder.
 
         Args:
@@ -232,8 +283,17 @@ class VectaraClient:
             document_id = os.path.splitext(file_name)[0]
 
             try:
-                response, status = self.upload_document(corpus_id, file_path, document_id=document_id, return_extracted_document=return_extracted_document)
-                extracted_text = response.get('extractedText', '') if return_extracted_document else None
+                response, status = self.upload_document(
+                    corpus_id,
+                    file_path,
+                    document_id=document_id,
+                    return_extracted_document=return_extracted_document,
+                )
+                extracted_text = (
+                    response.get("extractedText", "")
+                    if return_extracted_document
+                    else None
+                )
                 results.append((document_id, status == "Success", extracted_text))
                 if status != "Success":
                     logging.error(f"Failed to index document {document_id}: {response}")
@@ -244,7 +304,7 @@ class VectaraClient:
                 results.append((document_id, False, None))
 
         return results
- 
+
     def delete_corpus(self, corpus_id):
         """Deletes a specified corpus.
 
@@ -255,23 +315,24 @@ class VectaraClient:
             A tuple containing the response JSON and a boolean indicating success or failure.
         """
         url = f"{self.base_url}/v1/delete-corpus"
-        payload = json.dumps({
-            "corpusId": corpus_id
-        })
+        payload = json.dumps({"corpusId": corpus_id})
 
         try:
             response = requests.post(url, headers=self.headers, data=payload)
             response_json = response.json()
 
             # Check if the response has a 'status' field and handle accordingly
-            if 'status' in response_json:
-                vectara_status_code = response_json['status'].get('code', 'UNKNOWN')
-                if vectara_status_code == 'OK':
+            if "status" in response_json:
+                vectara_status_code = response_json["status"].get("code", "UNKNOWN")
+                if vectara_status_code == "OK":
                     logging.info("Corpus deleted successfully.")
                     return response_json, True
                 else:
-                    logging.error("Failed to delete corpus with Vectara status code %s, detail: %s",
-                                  vectara_status_code, response_json['status'].get('statusDetail', 'No detail'))
+                    logging.error(
+                        "Failed to delete corpus with Vectara status code %s, detail: %s",
+                        vectara_status_code,
+                        response_json["status"].get("statusDetail", "No detail"),
+                    )
                     return response_json, False
             else:
                 logging.error("Unexpected response format: %s", response.text)
@@ -280,7 +341,14 @@ class VectaraClient:
             logging.error("Request failed: %s", e)
             return {"error": str(e)}, False
 
-    def upload_document(self, corpus_id, file_path, document_id=None, metadata=None, return_extracted_document=False):
+    def upload_document(
+        self,
+        corpus_id,
+        file_path,
+        document_id=None,
+        metadata=None,
+        return_extracted_document=False,
+    ):
         """
         Uploads and indexes a document into a corpus.
 
@@ -298,23 +366,31 @@ class VectaraClient:
         if return_extracted_document:
             url += "&d=true"
 
-
-        files = {'file': open(file_path, 'rb')}
+        files = {"file": open(file_path, "rb")}
         if metadata is not None:
-            files['doc_metadata'] = (None, json.dumps(metadata), 'application/json')
+            files["doc_metadata"] = (None, json.dumps(metadata), "application/json")
 
-        response = requests.post(url, headers={key: val for key, val in self.headers.items() if key != 'Content-Type'}, files=files)
+        response = requests.post(
+            url,
+            headers={
+                key: val for key, val in self.headers.items() if key != "Content-Type"
+            },
+            files=files,
+        )
 
         if response.status_code == 200:
             return response.json(), "Success"
         else:
             try:
                 error_response = response.json()
-                error_message = error_response.get('message', 'Unknown error')
+                error_message = error_response.get("message", "Unknown error")
             except json.JSONDecodeError:
                 error_message = "Failed to parse error response."
 
-            raise Exception(f"Failed to upload document: HTTP {response.status_code} - {error_message}")
+            raise Exception(
+                f"Failed to upload document: HTTP {response.status_code} - {error_message}"
+            )
+
 
 # # Example usage
 # CUSTOMER_ID = "your_customer_id"

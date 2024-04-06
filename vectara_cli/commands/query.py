@@ -3,6 +3,7 @@
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 
+
 def main(args):
     if len(args) < 4:
         print("Usage: vectara-cli query query_text num_results corpus_id")
@@ -19,6 +20,8 @@ def main(args):
     except ValueError as e:
         print(e)
 
+
 if __name__ == "__main__":
     import sys
+
     main(sys.argv[1:])

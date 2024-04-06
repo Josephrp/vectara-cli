@@ -26,7 +26,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'vectara-cli=vectara_cli.core:VectaraClient',
+            'vectara=vectara_cli.main:main',
         ],
     },
     classifiers=[

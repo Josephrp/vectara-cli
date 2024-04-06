@@ -8,7 +8,7 @@ from transformers.file_utils import ModelOutput
 from transformers import pipeline
 from dataclasses import dataclass
 from typing import Optional, Tuple
-from core import VectaraClient
+from vectara_cli.core import VectaraClient
 
 @dataclass
 class TXNLIClassifierOutput(ModelOutput):

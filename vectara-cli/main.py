@@ -14,9 +14,6 @@ def main():
         return
 
     command = args[0]
-
-    # Example: Initialize the Vectara client
-    # load these from a config file or environment variables
     customer_id = "your_customer_id"
     api_key = "your_api_key"
     vectara_client = VectaraClient(customer_id, api_key)
@@ -114,6 +111,32 @@ def main():
         rebel = Rebel()
         rebel.advanced_upsert_folder(vectara_client, corpus_id_1, corpus_id_2, folder_path)
         print(f"Advanced processing and upsert completed for folder: {folder_path}")
+    elif command == "upload-enriched-text":
+        if len(args) < 6:
+            print("Usage: vectara-cli upload-enriched-text corpus_id document_id model_name text")
+            return
+        corpus_id = args[1]
+        document_id = args[2]
+        model_name = args[3]
+        text = " ".join(args[4:])
+        enterprise_span = EnterpriseSpan(model_name)
+        predictions = enterprise_span.predict(text)
+        enterprise_span.upload_enriched_text(corpus_id, document_id, text, predictions)
+        print("Enriched text uploaded successfully.")
+    elif command == "span-enhance-folder":
+        if len(args) < 5:
+            print("Usage: vectara-cli span-enhance-folder corpus_id_1 corpus_id_2 model_name folder_path")
+            return
+        corpus_id_1 = args[1]
+        corpus_id_2 = args[2]
+        model_name = args[3]
+        folder_path = args[4]
+        if not os.path.isdir(folder_path):
+            print(f"The specified folder path does not exist: {folder_path}")
+            return
+        enterprise_span = EnterpriseSpan(model_name)
+        enterprise_span.span_enhance(corpus_id_1, corpus_id_2, folder_path)
+        print(f"Documents in {folder_path} enhanced and uploaded to corpora: {corpus_id_1} (plain), {corpus_id_2} (enhanced)")
     else:
         print(f"Unknown command: {command}")
 

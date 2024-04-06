@@ -257,8 +257,78 @@ pip install vectara-cli[advanced]
 
 ### Commercial Advanced Useage
 
-The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
+### Commercial Advanced Usage
 
+The commercial advanced features of `vectara-cli` enable users to leverage state-of-the-art text processing models for enriching document indexes with additional metadata. This enrichment process enhances the search and retrieval capabilities of the Vectara platform, providing more relevant and accurate results for complex queries.
+
+**Reference:** Aarsen, T. (2023). SpanMarker for Named Entity Recognition. Radboud University. Supervised by Prof. Dr. Fermin Moscoso del Prado Martin (fermin.moscoso-del-prado@ru.nl) and Dr. Daniel Vila Suero (daniel@argilla.io). Second assessor: Dr. Harrie Oosterhuis (harrie.oosterhuis@ru.nl).
+
+#### CLI Commands for Advanced Usage
+
+The `vectara-cli` includes specific commands designed to facilitate advanced text processing and enrichment tasks. Below are the key commands and their usage:
+
+>> **- supported models:** `science` and `keyphrase`
+
+- **Upload Enriched Text**
+
+  To upload text that has been enriched with additional metadata:
+
+  ```bash
+  vectara-cli upload-enriched-text <corpus_id> <document_id> <model_name> "<text>"
+  ```
+
+  - `<corpus_id>`: The ID of the corpus where the document will be uploaded.
+  - `<document_id>`: A unique identifier for the document.
+  - `<model_name>`: The name of the model used for text enrichment. `science` and `keyphrase`
+  - `<text>`: The text content to be enriched and uploaded.
+
+- **Span Enhance Folder**
+
+  To process and upload all documents within a folder, enhancing them using a specified model:
+
+  ```bash
+  vectara-cli span-enhance-folder <corpus_id_1> <corpus_id_2> <model_name> "<folder_path>"
+  ```
+
+  - `<corpus_id_1>`: The ID for the corpus to upload plain text documents.
+  - `<corpus_id_2>`: The ID for the corpus to upload enhanced text documents.
+  - `<model_name>`: The name of the model used for document enhancement. **supported models :** `science` and `keyphrase`
+  - `<folder_path>`: The path to the folder containing the documents to be processed.
+
+#### Code Example for Advanced Usage
+
+The following Python code demonstrates how to use the `EnterpriseSpan` class for advanced text processing and enrichment before uploading the processed documents to Vectara:
+
+```python
+from vectara_cli.advanced.commercial.enterpise import EnterpriseSpan
+
+# Initialize the EnterpriseSpan with the desired model
+model_name = "keyphrase"
+enterprise_span = EnterpriseSpan(model_name)
+
+# Example text to be processed
+text = "OpenAI has developed a state-of-the-art language model named GPT-4."
+
+# Predict entities in the text
+predictions = enterprise_span.predict(text)
+
+# Format predictions for readability
+formatted_predictions = enterprise_span.format_predictions(predictions)
+print("Formatted Predictions:\n", formatted_predictions)
+
+# Generate metadata from predictions
+metadata = enterprise_span.generate_metadata(predictions)
+
+# Example corpus and document IDs
+corpus_id = "123456"
+document_id = "doc-001"
+
+# Upload the enriched text along with its metadata to Vectara
+enterprise_span.upload_enriched_text(corpus_id, document_id, text, predictions)
+print("Enriched text uploaded successfully.")
+```
+
+This example showcases how to enrich text with additional metadata using the `EnterpriseSpan` class and upload it to a specified corpus in Vectara. By leveraging advanced models for text processing, users can significantly enhance the quality and relevance of their search and retrieval operations on the Vectara platform.
 
 ### Non-Commercial Advanced Usage
 
@@ -366,10 +436,15 @@ for result in enhanced_results:
 
 Contributions to `vectara-cli` are welcome! Please refer to the contributing guidelines in the repository for more information on how to contribute.
 
+
+### Contributing to Advanced Features
+
+We welcome contributions to improve and expand the advanced features of `vectara-cli`. Whether it's adding new models, enhancing existing functionalities, or fixing bugs, your contributions are valuable to us. Please refer to our contributing guidelines for more information on how to contribute.
+
 ## License
 
 `vectara-cli` is MIT licensed. See the [LICENSE](LICENSE.md) file for more details.
 
 ---
 
-This README provides a comprehensive guide for installing and using the `vectara-cli` package. For further information or assistance, please refer to the [Vectara documentation](https://docs.vectara.com) or submit an issue on the GitHub repository.
+This README provides a comprehensive guide for installing and using the `vectara-cli` package. For further information or assistance, please refer to the [Vectara documentation](https://docs.vectara.com) or submit an issue on the [GitLab repository](https://git.tonic-ai.com/releases/vectara-cli/).

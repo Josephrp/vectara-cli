@@ -3,7 +3,7 @@
 import spacy
 import span_marker
 from span_marker import SpanMarkerModel
-from core import VectaraClient
+from vectara_cli.core import VectaraClient
 
 class Span:
     def __init__(self, text, customer_id, api_key):

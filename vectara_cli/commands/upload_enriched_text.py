@@ -4,7 +4,7 @@ from vectara_cli.config_manager import ConfigManager
 from vectara_cli.advanced.commercial.enterprise import EnterpriseSpan
 
 
-def main(args):
+def main(args, vectara_client):
     if len(args) < 6:
         print(
             "Usage: vectara-cli upload-enriched-text corpus_id document_id model_name text"

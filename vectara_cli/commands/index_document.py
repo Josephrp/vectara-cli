@@ -5,7 +5,7 @@ from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 
 
-def main(args):
+def main(args, vectara_client):
     if len(args) < 6:
         print(
             "Usage: vectara-cli index-document corpus_id document_id title metadata_json section_text"
@@ -17,10 +17,8 @@ def main(args):
     metadata = json.loads(args[4])
     section_text = args[5]
 
-    # Assuming ConfigManager and VectaraClient are set up to handle API keys
     try:
         customer_id, api_key = ConfigManager.get_api_keys()
-        vectara_client = VectaraClient(customer_id, api_key)
         response, success = vectara_client.index_document(
             corpus_id, document_id, title, metadata, section_text
         )

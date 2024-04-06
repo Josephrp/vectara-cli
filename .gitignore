@@ -407,3 +407,5 @@ vectara_cli.egg-info/PKG-INFO
 vectara_cli.egg-info/requires.txt
 vectara_cli.egg-info/SOURCES.txt
 vectara_cli.egg-info/top_level.txt
+config.json
+test.txt

@@ -322,7 +322,7 @@ except Exception as e:
     print("Upload failed:", str(e))
 ```
 
-### Advanced Useage
+### Advanced Usage
 
 
 To leverage the advanced text processing capabilities, ensure you have completed the advanced installation of `vectara-cli`. This includes the necessary dependencies for text analysis:
@@ -495,7 +495,7 @@ The `Span` class supports processing and indexing documents from a folder, enabl
 
 #### Non-Commercial Advanced Rag Using Rebel
 
-![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](<Screenshot 2024-04-05 112142.png>)
+![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](/res/images/image.png)
 
 The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata.
 

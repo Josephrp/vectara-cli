@@ -9,6 +9,10 @@
 - Creating and deleting corpora.
 - Advanced text processing and analysis using pre-trained models (optional advanced package).
 
+## QuickStart
+
+get started with the [example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb) by downloading them and running them locally on any laptop.
+
 ## Installation
 
 ### Basic Installation
@@ -28,12 +32,6 @@ pip install vectara-cli[advanced]
 ```
 
 Ensure you have an appropriate PyTorch version installed for your system, especially if you're installing on a machine with GPU support. Refer to the [official PyTorch installation guide](https://pytorch.org/get-started/locally/) for more details.
-
-## Usage
-
-To include a section in the README of your PyPi package that describes how to use the CLI tool you've developed, you should provide clear, concise instructions covering installation, basic setup, and usage examples for each command. Below is a template you can adapt to fit your package's README file.
-
----
 
 ## Command Line Interface (CLI) Usage
 
@@ -103,32 +101,6 @@ vectara-cli delete-corpus <corpus_id>
 - `<corpus_id>`: The ID of the corpus to delete.
 
 ### Advanced Commands
-
-#### Span Text Processing
-
-To process text using the Span model:
-
-```bash
-vectara-cli span-text "<text>" "<model_name>" "<model_type>"
-```
-
-- `<text>`: The text to process.
-- `<model_name>`: The name of the Span model to use.
-- `<model_type>`: The type of the Span model.
-
-#### Enhanced Batch Processing with NerdSpan
-
-To process and upload documents from a folder:
-
-```bash
-vectara-cli nerdspan-upsert-folder "<folder_path>" "<model_name>" "<model_type>"
-```
-
-- `<folder_path>`: The path to the folder containing documents to process and upload.
-- `<model_name>`: The name of the model to use for processing.
-- `<model_type>`: The type of the model.
-
-For more advanced processing and upsert operations, including using the Rebel model for complex document analysis and upload, refer to the specific command documentation provided with the CLI.
 
 ### Basic Usage
 
@@ -254,8 +226,31 @@ To leverage the advanced text processing capabilities, ensure you have completed
 pip install vectara-cli[advanced]
 ```
 
+#### Span Text Processing
 
-### Commercial Advanced Useage
+To process text using the Span model:
+
+```bash
+vectara-cli span-text "<text>" "<model_name>" "<model_type>"
+```
+
+- `<text>`: The text to process.
+- `<model_name>`: The name of the Span model to use.
+- `<model_type>`: The type of the Span model.
+
+#### Enhanced Batch Processing with NerdSpan
+
+To process and upload documents from a folder:
+
+```bash
+vectara-cli nerdspan-upsert-folder "<folder_path>" "<model_name>" "<model_type>"
+```
+
+- `<folder_path>`: The path to the folder containing documents to process and upload.
+- `<model_name>`: The name of the model to use for processing.
+- `<model_type>`: The type of the model.
+
+For more advanced processing and upsert operations, including using the Rebel model for complex document analysis and upload, refer to the specific command documentation provided with the CLI.
 
 ### Commercial Advanced Usage
 
@@ -279,7 +274,7 @@ The `vectara-cli` includes specific commands designed to facilitate advanced tex
 
   - `<corpus_id>`: The ID of the corpus where the document will be uploaded.
   - `<document_id>`: A unique identifier for the document.
-  - `<model_name>`: The name of the model used for text enrichment. `science` and `keyphrase`
+  - `<model_name>`: The name of the model used for text enrichment. `science` or `keyphrase`
   - `<text>`: The text content to be enriched and uploaded.
 
 - **Span Enhance Folder**

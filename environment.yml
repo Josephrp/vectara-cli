@@ -1,0 +1,13 @@
+name: vectara
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - requests
+  - pip
+  - pip:
+      - accelerate
+      - torch>=1.8.0
+      - transformers>=4.5.0
+      - span_marker
+      - spacy # Make sure this is 'spacy' if you're referring to the NLP library

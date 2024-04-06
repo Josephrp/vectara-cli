@@ -3,8 +3,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="vectara-cli",
-    version="0.1.1",
+    name="vectara_cli",
+    version="0.1.2",
     author="Tonic-AI",
     author_email="team@tonic-ai.com",
     description="A CLI tool for interacting with the Vectara platform, including advanced text processing and indexing features.",
@@ -21,7 +21,7 @@ setup(
             "torch>=1.8.0",
             "transformers>=4.5.0",
             "span_marker",
-            "spacey",
+            "spacy",
         ],
     },
     entry_points={

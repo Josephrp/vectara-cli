@@ -2,6 +2,7 @@
 
 import torch
 from torch.nn import CrossEntropyLoss, BCEWithLogitsLoss
+import torch.nn as nn 
 from transformers import DebertaV2Config, DebertaV2PreTrainedModel, DebertaV2Model
 from transformers.models.deberta_v2.modeling_deberta_v2 import (
     ContextPooler,

@@ -3,8 +3,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="vectara_cli",
-    version="0.1.3",
+    name="vectara-cli",
+    version="0.1.4",
     author="Tonic-AI",
     author_email="team@tonic-ai.com",
     description="A CLI tool for interacting with the Vectara platform, including advanced text processing and indexing features.",

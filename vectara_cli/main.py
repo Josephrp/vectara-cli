@@ -1,6 +1,6 @@
 # ./vectara_cli/main.py
 
-from .core import VectaraClient
+from .core import VectaraClient , ConfigManager
 from .advanced.noncommercial.nerdspan import Span
 from .advanced.noncommercial.rebel import Rebel
 import json
@@ -8,14 +8,21 @@ import sys
 import os
 
 def main():
-    args = sys.argv[1:]
-    if not args:
-        print("Usage: vectara-cli [command] [options]")
+    if command == "set-api-keys":
+        if len(args) != 3:
+            print("Usage: vectara-cli set-api-keys customer_id api_key")
+            return
+        customer_id = args[1]
+        api_key = args[2]
+        ConfigManager.set_api_keys(customer_id, api_key)
+        print("API keys set successfully.")
+        return
+    try:
+        customer_id, api_key = ConfigManager.get_api_keys()
+    except ValueError as e:
+        print(e)
         return
 
-    command = args[0]
-    customer_id = "your_customer_id"
-    api_key = "your_api_key"
     vectara_client = VectaraClient(customer_id, api_key)
 
     if command == "index-document":
@@ -47,7 +54,6 @@ def main():
             return
         corpus_id = args[1]
         name = args[2]
-        # Simplified for demonstration; 
         response = vectara_client.create_corpus(corpus_id, name, "Description", 1234567890, True, False, False, False, False, "default", 10000, [], [])
         print(response)
     elif command == "delete-corpus":

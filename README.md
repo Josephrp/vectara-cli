@@ -42,16 +42,60 @@ The `vectara-cli` provides a powerful command line interface for interacting wit
 Before using the CLI, ensure you have the package installed. You can install it directly from PyPi using pip:
 
 ```bash
-pip install your-package-name
+pip install vectara-cli
 ```
-
-Replace `your-package-name` with the actual name of your package on PyPi.
-
 ### Configuration
 
-To use the CLI, you need to configure your Vectara customer ID and API key. These can be set as environment variables or directly within the CLI commands as shown in the examples below.
+#### Setting Credentials via CLI Commands
+
+The `vectara-cli` tool now supports a convenient feature for setting your Vectara customer ID and API key directly through the command line. This method utilizes a command specifically designed for securely storing your credentials, making it easier to manage your Vectara configuration without manually setting environment variables or directly embedding your credentials in your scripts.
+
+#### Using the `set-api-keys` Command
+
+To set your Vectara customer ID and API key using the `vectara-cli`, you can use the `set-api-keys` command. This command stores your credentials securely, allowing `vectara-cli` to automatically use them for authentication in future operations.
+
+- **Syntax:** The command follows this simple syntax:
+
+```bash
+vectara-cli set-api-keys <customer_id> <api_key>
+```
+
+Replace `<customer_id>` with your Vectara customer ID and `<api_key>` with your Vectara API key.
+
+- **Example:**
+
+```bash
+vectara-cli set-api-keys 123456789 abcdefghijklmnopqrstuvwxyz
+```
+
+After executing this command, you will see a confirmation message indicating that your API keys have been set successfully.
+
+#### Windows
+
+For Windows users, you can also set environment variables through the Command Prompt or PowerShell, or via the System Properties window.
+
+- **Command Prompt:**
+
+```cmd
+setx VECTARA_CUSTOMER_ID "your_customer_id"
+setx VECTARA_API_KEY "your_api_key"
+```
+
+- **PowerShell:**
+
+```powershell
+[System.Environment]::SetEnvironmentVariable('VECTARA_CUSTOMER_ID', 'your_customer_id', [System.EnvironmentVariableTarget]::User)
+[System.Environment]::SetEnvironmentVariable('VECTARA_API_KEY', 'your_api_key', [System.EnvironmentVariableTarget]::User)
+```
+
+Note that changes made through the command line will only take effect in new instances of the terminal or command prompt.
+
+#### Using Credentials in `vectara-cli`
+
+Once you have set up your environment variables, `vectara-cli` will automatically use these credentials for authentication. There's no need to manually input your customer ID and API key each time you execute a command.
 
 ### Basic Commands
+
 
 #### Indexing a Document
 

@@ -8,13 +8,13 @@ class CorpusData:
         self.corpus_id = corpus_id
         self.name = name
         self.description = description
-        self.dtProvision = int(dtProvision) if encoderId.isdigit() else None
+        self.dtProvision = dtProvision if dtProvision is not None else None
         self.enabled = enabled
         self.swapQenc = swapQenc
         self.swapIenc = swapIenc
         self.textless = textless
         self.encrypted = encrypted
-        self.encoderId = int(encoderId) if encoderId.isdigit() else 1
+        self.encoderId = encoderId if encoderId is not None else 1
         self.metadataMaxBytes = metadataMaxBytes
         self.customDimensions = [CustomDimension(**dim) for dim in customDimensions]
         self.filterAttributes = [FilterAttribute(**attr) for attr in filterAttributes]

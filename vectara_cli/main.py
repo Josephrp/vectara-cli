@@ -7,6 +7,7 @@ from vectara_cli.commands import (
     index_document,
     query,
     create_corpus,
+    create_corpus_advanced,
     delete_corpus,
     span_enhance_folder,
     upload_document,
@@ -27,6 +28,7 @@ def print_help():
     index-document <args> - Index a document in the Vectara platform.
     query <args> - Query the Vectara platform.
     create-corpus <args> - Create a new corpus in the Vectara platform.
+    create-corpus-advanced <args> - more administrative control when you create a new corpus in the Vectara platform.
     delete-corpus <args> - Delete a corpus from the Vectara platform.
     span-text <args> - Process text using the span model.
     span-enhance-folder <args> - Enhance documents in a folder using the span model.
@@ -44,6 +46,7 @@ def get_command_mapping():
         "index-document": index_document.main,
         "query": query.main,
         "create-corpus": create_corpus.main,
+        "create-corpus-advanced" : create_corpus_advanced.main,
         "delete-corpus": delete_corpus.main,
         "span-text": span_text.main,
         "span-enhance-folder": span_enhance_folder.main,

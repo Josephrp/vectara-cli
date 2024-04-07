@@ -1,6 +1,6 @@
 # create_corpus.py
 
-from vectara_cli.utils import get_vectara_client
+# from vectara_cli.utils import get_vectara_client
 from vectara_cli.corpus_data import CorpusData
 from vectara_cli.defaults import CorpusDefaults
 
@@ -38,24 +38,44 @@ Note:
 """
     print(help_text)
 
-def main(args, vectara_client):
+def parse_json_arg(json_str):
+    try:
+        return json.loads(json_str)
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON format")
 
-    if len(args) < 3:
+def main(args, vectara_client):
+    if len(args) < 4:
         print_help()
         return
+
     corpus_id = int(args[1])
     name = args[2]
     description = args[3]
+
     defaults = CorpusDefaults.get_defaults()
 
-    corpus_data = CorpusData(
-        corpus_id=corpus_id,
-        name=name,
-        description=description,
+    custom_dimensions_json = next((arg.split('=')[1] for arg in args if arg.startswith('--custom_dimensions=')), None)
+    filter_attributes_json = next((arg.split('=')[1] for arg in args if arg.startswith('--filter_attributes=')), None)
+
+    if custom_dimensions_json:
+        custom_dimensions_list = parse_json_arg(custom_dimensions_json)
+        defaults['customDimensions'] = [CustomDimension(**dim).to_dict() for dim in custom_dimensions_list]
+
+    if filter_attributes_json:
+        filter_attributes_list = parse_json_arg(filter_attributes_json)
+        defaults['filterAttributes'] = [FilterAttribute(**attr).to_dict() for attr in filter_attributes_list]
+
+    # Assuming get_vectara_client() is a function that initializes and returns a VectaraClient instance
+    # vectara_client = vectara_client
+
+    corpus_data = {
+        "id": corpus_id,
+        "name": name,
+        "description": description,
         **defaults
-    )
-    if vectara_client is None:
-        vectara_client = get_vectara_client()
+    }#.to_dict()
+
     try:
         response = vectara_client.create_corpus(corpus_data)
         print(response)
@@ -63,7 +83,8 @@ def main(args, vectara_client):
         print(e)
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(sys.argv)
 # def parse_custom_dimensions(dimensions_str):
 #     """Parse custom dimensions from a JSON string."""
 #     if dimensions_str:

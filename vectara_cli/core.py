@@ -152,9 +152,9 @@ class VectaraClient:
 
     def create_corpus(self, corpus_data: CorpusData):
         url = f"{self.base_url}/v1/create-corpus"
-        payload = corpus_data.to_dict()
+        payload = corpus_data 
 
-        response = requests.post(url, headers=self.headers, data=json.dumps(payload))
+        response = requests.post(url, headers=self.headers, data=json.dumps({"corpus": payload}))
         return self._parse_response(response)
 
     def _parse_response(self, response):

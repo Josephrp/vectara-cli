@@ -7,7 +7,7 @@ import json
 import sys
 from vectara_cli.corpus_data import CorpusData
 from vectara_cli.defaults import CorpusDefaults
-from vectara_cli.helptexts.helpetext import print_create_corpus_advanced_help
+from vectara_cli.helptexts.help_text import print_create_corpus_advanced_help
 
 def parse_json_arg(json_str):
     try:

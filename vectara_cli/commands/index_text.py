@@ -1,18 +1,13 @@
 # ./commands/index_text.py
+from vectara_cli.helptexts.help_text import print_index_text_usage
 
-from vectara_cli.core import VectaraClient
 
-def main(args, vectara_client: VectaraClient):
-    if len(args) < 6:
-        print("Usage: vectara-cli index-text corpus_id document_id text context metadata_json")
+def main(args, vectara_client):
+    if len(args) < 5:
+        print_index_text_usage()
         return
-    corpus_id = args[1]
-    document_id = args[2]
-    text = args[3]
-    context = args[4]
-    metadata_json = args[5]
-    custom_dims = []  # This example does not cover custom dimensions input, but you can extend it.
-
+    corpus_id, document_id, text, context, metadata_json = args[:5]
+    custom_dims = []  # This could be extended to support custom dimensions passed as arguments.
     try:
         response = vectara_client.index_text(
             corpus_id=corpus_id,
@@ -24,7 +19,7 @@ def main(args, vectara_client: VectaraClient):
         )
         print("Indexing response:", response)
     except ValueError as e:
-        print(e)
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
-    print("This script is intended to be used as a module.")
+    print("This script is intended to be used as a module and should not be executed directly.")

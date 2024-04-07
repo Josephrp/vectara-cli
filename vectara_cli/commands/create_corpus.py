@@ -3,7 +3,7 @@
 # from vectara_cli.utils import get_vectara_client
 from vectara_cli.corpus_data import CorpusData
 from vectara_cli.defaults import CorpusDefaults
-from vectara_cli.helptexts.helpetext import print_create_corpus_help
+from vectara_cli.helptexts.help_text import print_create_corpus_help
 
 def parse_json_arg(json_str):
     try:
@@ -12,13 +12,13 @@ def parse_json_arg(json_str):
         raise ValueError("Invalid JSON format")
 
 def main(args, vectara_client):
-    if len(args) < 4:
+    if len(args) < 3:
         print_create_corpus_help()
         return
 
-    corpus_id = int(args[1])
-    name = args[2]
-    description = args[3]
+    corpus_id = int(args[0])
+    name = args[1]
+    description = args[2]
 
     defaults = CorpusDefaults.get_defaults()
 

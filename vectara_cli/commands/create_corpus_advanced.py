@@ -7,32 +7,7 @@ import json
 import sys
 from vectara_cli.corpus_data import CorpusData
 from vectara_cli.defaults import CorpusDefaults
-
-def print_help():
-    help_text = """
-Usage: vectara create-corpus-advanced <name> <description> [options]
-
-Arguments:
-    <name>         The name of the corpus. This should be a unique name that describes the corpus.
-    <description>  A brief description of what the corpus is about.
-
-Options:
-    --custom_dimensions JSON_STRING  Optional. A JSON string representing custom dimensions for the corpus.
-    --filter_attributes JSON_STRING  Optional. A JSON string representing attributes used for filtering documents within the corpus.
-    --public BOOLEAN                 Optional. A boolean flag indicating whether the corpus should be public (true) or private (false). Default is false.
-    --encoder_id INT                 Optional. Encoder ID, default is 1.
-    --metadata_max_bytes INT         Optional. Maximum metadata bytes, default is 10000.
-    --swap_qenc BOOLEAN              Optional. Swap query encoder, default is False.
-    --swap_ienc BOOLEAN              Optional. Swap index encoder, default is False.
-    --textless BOOLEAN               Optional. If the corpus is textless, default is False.
-    --encrypted BOOLEAN              Optional. If the corpus is encrypted, default is True.
-
-Examples of usage:
-    vectara create-corpus-advanced "My Corpus" "A corpus containing documents on topic XYZ"
-    vectara create-corpus-advanced "Research Papers" "Corpus for academic research papers" --custom_dimensions '{"dimension1": "value1", "dimension2": "value2"}' --filter_attributes '{"author": "John Doe"}'
-    vectara create-corpus-advanced "Public Data" "A corpus of public datasets" --public true
-"""
-    print(help_text)
+from vectara_cli.helptexts.helpetext import print_create_corpus_advanced_help
 
 def parse_json_arg(json_str):
     try:
@@ -71,7 +46,7 @@ def parse_args(args):
 
 def main(args, vectara_client):
     if len(args) < 3:
-        print_help()
+        print_create_corpus_advanced_help()
         return
 
     name, description, options = parse_args(args[1:])

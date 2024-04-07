@@ -2,7 +2,7 @@
 import sys 
 from vectara_cli.commands import (
     nerdspan_upsert_folder,
-    # set_api_keys,
+    index_text,
     index_document,
     query,
     create_corpus,
@@ -66,6 +66,7 @@ def main():
                 "upload-enriched-text": upload_enriched_text.main,
                 "nerdspan-upsert-folder": nerdspan_upsert_folder.main,
                 "rebel-upsert-folder": rebel_upsert_folder.main,
+                "index-text": index_text.main,
             }
 
             if command in command_mapping:

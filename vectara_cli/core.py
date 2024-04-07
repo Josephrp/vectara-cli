@@ -15,7 +15,7 @@ class VectaraClient:
         self.headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
-            "customer-id": customer_id,
+            "customer-id": str(customer_id),
             "x-api-key": api_key,
         }
 
@@ -30,6 +30,8 @@ class VectaraClient:
     ):
         if custom_dims is None:
             custom_dims = []
+        if not isinstance(metadata_json, str):
+            metadata_json = json.dumps(metadata_json)
         corpus_id = str(corpus_id)
         url = f"{self.base_url}/v1/core/index"
         payload = {
@@ -37,12 +39,13 @@ class VectaraClient:
             "corpusId": int(corpus_id), 
             "document": {
                 "documentId": document_id,
-                "metadataJson": json.dumps(metadata_json),
+                "metadataJson": metadata_json.replace('"', '\\"'),
                 "parts": [
                     {
                         "text": text,
                         "context": context,
-                        "metadataJson": json.dumps(metadata_json),
+#                       "metadataJson": json.dumps(metadata_json),
+                        "metadataJson": metadata_json,
                         "customDims": custom_dims,
                     }
                 ],

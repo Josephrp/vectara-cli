@@ -4,8 +4,8 @@ import sys
 import argparse
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
-from corpus_data import CorpusData
-from defaults import CorpusDefaults
+from vectara_cli.corpus_data import CorpusData
+from vectara_cli.defaults import CorpusDefaults
 
 def main():
     parser = argparse.ArgumentParser(description="Create a new corpus in Vectara platform.")

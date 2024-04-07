@@ -1,5 +1,5 @@
-from filter_attribute import FilterAttribute
-from custom_dimension import CustomDimension
+from .filter_attribute import FilterAttribute
+from .custom_dimension import CustomDimension
 
 class CorpusData:
     def __init__(self, corpus_id, name, description, dtProvision, enabled, swapQenc, swapIenc, textless, encrypted, encoderId, metadataMaxBytes, customDimensions, filterAttributes):

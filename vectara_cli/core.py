@@ -5,7 +5,6 @@ import json
 import os
 import logging
 
-
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"

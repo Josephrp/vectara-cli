@@ -43,8 +43,8 @@ Thank you for your interest in contributing to `vectara-cli`! We value the contr
 2. **Push Your Changes to GitHub**
    - Push your changes to your forked repository on GitHub.
 
-3. **Open a Pull Request (PR)**
-   - Navigate to the [Pull Requests](https://git.tonic-ai.com/contribute/vectara/vectara-cli/pulls) page of the original `vectara-cli` repository and click "New pull request".
+3. **Open a Merge Request (PR)**
+   - Navigate to the [Merge Requests](https://git.tonic-ai.com/contribute/vectara/vectara-cli/-/merge_requests) page of the `contribute/vectara-cli` repository and click "New merge request".
    - Choose your branch and compare it against the `devbranch` of the main repository.
    - Provide a clear and detailed description of your changes in the PR description. Include any relevant issue numbers.
 

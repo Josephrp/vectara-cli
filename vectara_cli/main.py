@@ -64,12 +64,12 @@ def main():
         return
 
     command = sys.argv[1]
-    args = sys.argv[1:]
-    
-    
-
+    args = sys.argv[2:]
     if command == "set-api-keys":
-        set_api_keys_main(args)
+        if len(args) != 2:
+            print("Error: set-api-keys requires exactly 2 arguments: customer_id and api_key.")
+            sys.exit(1)
+        set_api_keys_main(*args)  # Unpack arguments directly
     else:
         try:
             vectara_client = get_vectara_client()

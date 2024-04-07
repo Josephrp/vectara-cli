@@ -37,25 +37,25 @@ The `vectara-cli` provides a powerful command line interface for interacting wit
 
 ### Configuration
 
-- **[Configuration](.docs/configuration.md)**
+- **[Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
 
 ### Usage
 
-- **[Basic Usage](./docs/basic_usage.md)**
-- **[Advanced Usage](./docs/advanced_usage.md)**
+- **[Basic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
+- **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
 
 ## Contributing
 
-- **[Contributing](./CONTRIBUTE.md)**
+- **[Contributing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
 
 ## License
 
-`vectara-cli` is MIT licensed. See the [LICENSE](LICENSE.md) file for more details.
+`vectara-cli` is MIT licensed. See the [LICENSE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/LICENSE.md?ref_type=heads) file for more details.
 
 ```
-@misc{Vectara CLI,
+@misc{Vectara Cli,
   author = {p3nGu1nZz, Tonic},
-  title = {Vectara CLI is a Python package for Vectara platform interaction, ideal for search and information retrieval tasks.},
+  title = {Vectara Cli is a Python package for Vectara platform interaction, ideal for search and information retrieval tasks.},
   year = {2024},
   publisher = {Tonic-AI},
   journal = {Tonic-AI repository},

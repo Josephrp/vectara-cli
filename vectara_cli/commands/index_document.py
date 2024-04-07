@@ -1,16 +1,18 @@
+# ./commands/index_document.py
+
 import json
 from vectara_cli.core import VectaraClient
-from vectara_cli.helptexts.helpetext import print_index_document_help
+from vectara_cli.helptexts.help_text import print_index_document_help
 
 def main(args, vectara_client):
-    if len(args) < 6:
+    if len(args) < 4:
         print_index_document_help()
         return
-    corpus_id = int(args[1])
-    document_id = args[2]
-    title = args[3]
-    metadata_json = args[4]
-    section_text = args[5]
+    corpus_id = int(args[0])
+    document_id = args[1]
+    title = args[2]
+    metadata_json = args[3]
+    section_text = args[4]
     try:
         metadata = json.loads(metadata_json)
     except json.JSONDecodeError as e:

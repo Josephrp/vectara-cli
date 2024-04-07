@@ -25,27 +25,30 @@ class VectaraClient:
         document_id,
         text,
         context="",
-        metadata_json="",
+        metadata_json="{}",
         custom_dims=None,
+        timeout=30
     ):
         if custom_dims is None:
             custom_dims = []
-        if not isinstance(metadata_json, str):
-            metadata_json = json.dumps(metadata_json)
+        try:
+            metadata_json_obj = json.loads(metadata_json)  # Ensure metadata_json is a valid JSON string
+        except json.JSONDecodeError:
+            raise ValueError("metadata_json must be a valid JSON string.")
+        
         corpus_id = str(corpus_id)
         url = f"{self.base_url}/v1/core/index"
         payload = {
-            "customerId": int(self.customer_id),
-            "corpusId": int(corpus_id), 
+            "customerId": self.customer_id,
+            "corpusId": corpus_id,
             "document": {
                 "documentId": document_id,
-                "metadataJson": metadata_json.replace('"', '\\"'),
+                "metadataJson": json.dumps(metadata_json_obj),
                 "parts": [
                     {
                         "text": text,
                         "context": context,
-#                       "metadataJson": json.dumps(metadata_json),
-                        "metadataJson": metadata_json,
+                        "metadataJson": json.dumps(metadata_json_obj),
                         "customDims": custom_dims,
                     }
                 ],
@@ -53,28 +56,13 @@ class VectaraClient:
                 "customDims": custom_dims,
             },
         }
-
-        response = requests.post(url, headers=self.headers, data=json.dumps(payload))
-
-        if response.status_code == 200:
-            response_data = response.json()
-            if "status" in response_data and response_data["status"]["code"] == "OK":
-                print("Indexing successful.")
-                return response_data
-            else:
-                print(
-                    "Indexing completed with status:", response_data["status"]["code"]
-                )
-                return response_data
-        else:
-            try:
-                error_response = response.json()
-                print(
-                    f"Error indexing text: {error_response.get('message', 'Unknown error')}"
-                )
-            except json.JSONDecodeError:
-                print(f"Non-JSON error response from server: {response.text}")
-            return None
+        try:
+            response = requests.post(f"{self.base_url}/v1/core/index", headers=self.headers, json=payload, timeout=timeout)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Request failed: {e}")
+            raise
 
     def query(self, query_text, num_results=10, corpus_id=None):
         url = f"{self.base_url}/v1/query"

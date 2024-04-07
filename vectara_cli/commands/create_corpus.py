@@ -4,58 +4,13 @@ import sys
 import argparse
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
+from corpus_data import CorpusData
 
-def create_corpus(vectara_client, args):
-    # Convert string "True"/"False" to boolean
-    def str2bool(v):
-        return v.lower() in ("yes", "true", "t", "1")
-
-    # Parse custom dimensions
-    custom_dimensions = []
-    if args.custom_dimensions:
-        for dim in args.custom_dimensions.split(';'):
-            name, description, serving_default, indexing_default = dim.split(',')
-            custom_dimensions.append({
-                "name": name,
-                "description": description,
-                "servingDefault": int(serving_default),
-                "indexingDefault": int(indexing_default)
-            })
-
-    # Parse filter attributes
-    filter_attributes = []
-    if args.filter_attributes:
-        for attr in args.filter_attributes.split(';'):
-            name, description, indexed, type, level = attr.split(',')
-            filter_attributes.append({
-                "name": name,
-                "description": description,
-                "indexed": str2bool(indexed),
-                "type": type,
-                "level": level
-            })
-
-    response = vectara_client.create_corpus(
-        args.corpus_id,
-        args.name,
-        args.description,
-        args.dt_provision,
-        str2bool(args.enabled),
-        str2bool(args.swap_qenc),
-        str2bool(args.swap_ienc),
-        str2bool(args.textless),
-        str2bool(args.encrypted),
-        args.encoder_id,
-        args.metadata_max_bytes,
-        custom_dimensions,
-        filter_attributes,
-    )
-    print(response)
 
 def main():
     parser = argparse.ArgumentParser(description="Create a new corpus in Vectara platform.")
     parser.add_argument("corpus_id", type=int, help="Corpus ID")
-    parser.add_argument("name", type=str, default="CorpusTonic",  help="Name of the corpus")
+    parser.add_argument("name", type=str, help="Name of the corpus")
     parser.add_argument("--description", type=str, default="Description", help="Description of the corpus")
     parser.add_argument("--dt_provision", type=int, default=1234567890, help="Provisioning timestamp")
     parser.add_argument("--enabled", type=str, default="True", help="Enable corpus")
@@ -70,10 +25,31 @@ def main():
 
     args = parser.parse_args()
 
+    # Convert string "True"/"False" to boolean for enabled, swapQenc, swapIenc, textless, encrypted
+    def str2bool(v):
+        return v.lower() in ("yes", "true", "t", "1")
+
+    corpus_data = CorpusData(
+        corpus_id=args.corpus_id,
+        name=args.name,
+        description=args.description,
+        dtProvision=args.dt_provision,
+        enabled=str2bool(args.enabled),
+        swapQenc=str2bool(args.swap_qenc),
+        swapIenc=str2bool(args.swap_ienc),
+        textless=str2bool(args.textless),
+        encrypted=str2bool(args.encrypted),
+        encoderId=args.encoder_id,
+        metadataMaxBytes=args.metadata_max_bytes,
+        customDimensions=[],  # Add logic to parse custom_dimensions if provided
+        filterAttributes=[],  # Add logic to parse filter_attributes if provided
+    )
+
     try:
         customer_id, api_key = ConfigManager.get_api_keys()
         vectara_client = VectaraClient(customer_id, api_key)
-        create_corpus(vectara_client, args)
+        response = vectara_client.create_corpus(corpus_data)
+        print(response)
     except ValueError as e:
         print(e)
 

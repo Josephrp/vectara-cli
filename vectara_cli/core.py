@@ -4,7 +4,7 @@ import requests
 import json
 import os
 import logging
-
+from corpus_data import CorpusData
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"
@@ -145,65 +145,26 @@ class VectaraClient:
 
         return json.dumps(request)
 
-    def create_corpus(
-        self,
-        corpus_id,
-        name,
-        description,
-        dtProvision,
-        enabled,
-        swapQenc,
-        swapIenc,
-        textless,
-        encrypted,
-        encoderId,
-        metadataMaxBytes,
-        customDimensions,
-        filterAttributes,
-    ):
+    def create_corpus(self, corpus_data: CorpusData):
         url = f"{self.base_url}/v1/create-corpus"
-        payload = {
-            "corpus": {
-                "id": corpus_id,
-                "name": name,
-                "description": description,
-                "dtProvision": dtProvision,
-                "enabled": enabled,
-                "swapQenc": swapQenc,
-                "swapIenc": swapIenc,
-                "textless": textless,
-                "encrypted": encrypted,
-                "encoderId": encoderId,
-                "metadataMaxBytes": metadataMaxBytes,
-                "customDimensions": customDimensions,
-                "filterAttributes": filterAttributes,
-            }
-        }
+        payload = {"corpus": {corpus_data.to_dict()}}
 
         response = requests.post(url, headers=self.headers, data=json.dumps(payload))
+        return self._parse_response(response)
 
+    def _parse_response(self, response):
         if response.status_code == 200:
-            # Assuming a successful response will have a JSON body
             try:
                 response_data = response.json()
-                # Check if the response contains the expected 'status' field with 'OK'
-                if response_data.get("status", {}).get("code") == "OK":
-                    return {"success": True, "data": response_data}
-                else:
-                    return {"success": False, "error": response_data.get("status", {})}
+                return {"success": True, "data": response_data}
             except ValueError:
-                # In case the response body does not contain valid JSON
                 return {"success": False, "error": "Invalid JSON in response"}
         else:
-            # Handle HTTP errors
             try:
                 error_data = response.json()
                 return {"success": False, "error": error_data}
             except ValueError:
-                return {
-                    "success": False,
-                    "error": f"HTTP Error {response.status_code}: {response.text}",
-                }
+                return {"success": False, "error": f"HTTP Error {response.status_code}: {response.text}"}
 
     def _get_index_request_json(
         self, corpus_id, document_id, title, metadata, section_text

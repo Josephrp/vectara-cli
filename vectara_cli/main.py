@@ -1,10 +1,8 @@
-# vectara_cli/main.py
-
-from .defaults import CorpusDefaults
-import sys
+ # ./main.py
+import sys 
 from vectara_cli.commands import (
     nerdspan_upsert_folder,
-    set_api_keys,
+    # set_api_keys,
     index_document,
     query,
     create_corpus,
@@ -15,18 +13,13 @@ from vectara_cli.commands import (
     span_text,
     rebel_upsert_folder,
 )
-
 from vectara_cli.config_manager import ConfigManager
-from vectara_cli.core import VectaraClient
-
+from vectara_cli.commands.set_api_keys import main as set_api_keys_main
 
 def get_vectara_client():
-    try:
-        customer_id, api_key = ConfigManager.get_api_keys()
-        return VectaraClient(customer_id=customer_id, api_key=api_key)
-    except ValueError as e:
-        print(e)
-        sys.exit(1)
+    customer_id, api_key = ConfigManager.get_api_keys()
+    from vectara_cli.core import VectaraClient  
+    return VectaraClient(customer_id=customer_id, api_key=api_key)
 
 def print_help():
     help_text = """
@@ -49,38 +42,40 @@ def print_help():
     """
     print(help_text)
 
-
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ("help", "--help", "-h"):
         print_help()
         return
 
     command = sys.argv[1]
-    args = sys.argv[2:]
+    args = sys.argv[1:] 
 
     if command == "set-api-keys":
-        set_api_keys.main(args)
+        set_api_keys_main(args)
     else:
-        vectara_client = get_vectara_client()
+        try:
+            vectara_client = get_vectara_client()
+            command_mapping = {
+                "index-document": index_document.main,
+                "query": query.main,
+                "create-corpus": create_corpus.main,
+                "delete-corpus": delete_corpus.main,
+                "span-text": span_text.main,
+                "span-enhance-folder": span_enhance_folder.main,
+                "upload-document": upload_document.main,
+                "upload-enriched-text": upload_enriched_text.main,
+                "nerdspan-upsert-folder": nerdspan_upsert_folder.main,
+                "rebel-upsert-folder": rebel_upsert_folder.main,
+            }
 
-        command_mapping = {
-            "index-document": index_document.main,
-            "query": query.main,
-            "create-corpus": create_corpus.main,
-            "delete-corpus": delete_corpus.main,
-            "span-text": span_text.main,
-            "span-enhance-folder": span_enhance_folder.main,
-            "upload-document": upload_document.main,
-            "upload-enriched-text": upload_enriched_text.main,
-            "nerdspan-upsert-folder": nerdspan_upsert_folder.main,
-            "rebel-upsert-folder": rebel_upsert_folder.main,
-        }
+            if command in command_mapping:
+                command_mapping[command](args, vectara_client)
+            else:
+                print(f"Unknown command: {command}")
+                print_help()
+        except ValueError as e:
+            print(e)
+            sys.exit(1)
 
-        if command in command_mapping:
-            command_mapping[command](args, vectara_client)
-        else:
-            print(f"Unknown command: {command}")
-            print_help()
-            
 if __name__ == "__main__":
     main()

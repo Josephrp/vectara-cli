@@ -435,7 +435,7 @@ This example showcases how to enrich text with additional metadata using the `En
 The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
 
 
-![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](https://git.tonic-ai.com/releases/vectara-cli/res/images/image.png?ref_type=heads)
+![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](https://git.tonic-ai.com/releases/vectara-cli/-/raw/devbranch/res/images/image.png?ref_type=heads)
 
 ### Non-Commercial Advanced Usage Using Span Models
 

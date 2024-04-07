@@ -1,3 +1,5 @@
+# ./corpus_data.py
+
 from .filter_attribute import FilterAttribute
 from .custom_dimension import CustomDimension
 
@@ -6,13 +8,13 @@ class CorpusData:
         self.corpus_id = corpus_id
         self.name = name
         self.description = description
-        self.dtProvision = dtProvision
+        self.dtProvision = int(dtProvision) if encoderId.isdigit() else None
         self.enabled = enabled
         self.swapQenc = swapQenc
         self.swapIenc = swapIenc
         self.textless = textless
         self.encrypted = encrypted
-        self.encoderId = encoderId
+        self.encoderId = int(encoderId) if encoderId.isdigit() else 1
         self.metadataMaxBytes = metadataMaxBytes
         self.customDimensions = [CustomDimension(**dim) for dim in customDimensions]
         self.filterAttributes = [FilterAttribute(**attr) for attr in filterAttributes]
@@ -22,7 +24,7 @@ class CorpusData:
             "id": self.corpus_id,
             "name": self.name,
             "description": self.description,
-            "dtProvision": self.dtProvision,
+            "dtProvision": self.dtProvision, # ommit if there's an issue ?
             "enabled": self.enabled,
             "swapQenc": self.swapQenc,
             "swapIenc": self.swapIenc,

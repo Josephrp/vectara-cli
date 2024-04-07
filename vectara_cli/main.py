@@ -14,12 +14,8 @@ from vectara_cli.commands import (
     rebel_upsert_folder,
 )
 from vectara_cli.config_manager import ConfigManager
-from vectara_cli.commands.set_api_keys import main as set_api_keys_main
-
-def get_vectara_client():
-    customer_id, api_key = ConfigManager.get_api_keys()
-    from vectara_cli.core import VectaraClient  
-    return VectaraClient(customer_id=customer_id, api_key=api_key)
+# from vectara_cli.commands.set_api_keys import main as set_api_keys_main
+from vectara_cli.utils import get_vectara_client , set_api_keys as set_api_keys_main
 
 def print_help():
     help_text = """
@@ -27,7 +23,7 @@ def print_help():
 
     Commands:
     set-api-keys <customer_id> <api_key> - Set the API keys for Vectara client.
-    index-section <args> - Index a document in the Vectara platform.
+    index-document <args> - Index a document in the Vectara platform.
     query <args> - Query the Vectara platform.
     create-corpus <args> - Create a new corpus in the Vectara platform.
     delete-corpus <args> - Delete a corpus from the Vectara platform.

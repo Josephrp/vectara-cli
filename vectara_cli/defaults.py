@@ -1,13 +1,13 @@
 #./defaults.py
 
 class CorpusDefaults:
-    DT_PROVISION = 1234567890
+    DT_PROVISION = None
     ENABLED = True
     SWAP_QENC = False
     SWAP_IENC = False
     TEXTLESS = False
     ENCRYPTED = True
-    ENCODER_ID = "default"
+    ENCODER_ID = 1
     METADATA_MAX_BYTES = 10000
     CUSTOM_DIMENSIONS = []
     FILTER_ATTRIBUTES = []

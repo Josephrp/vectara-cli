@@ -548,3 +548,16 @@ We welcome contributions to improve and expand the advanced features of `vectara
 ---
 
 This README provides a comprehensive guide for installing and using the `vectara-cli` package. For further information or assistance, please refer to the [Vectara documentation](https://docs.vectara.com) or submit an issue on the [GitLab repository](https://git.tonic-ai.com/releases/vectara-cli/).
+
+---
+
+```
+@misc{Vectara CLI,
+  author = {p3nGu1nZz, Tonic},
+  title = {Vectara CLI is a Python package for Vectara platform interaction, ideal for search and information retrieval tasks.},
+  year = {2024},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://git.tonic-ai.com/releases/vectara-cli}}
+}
+```

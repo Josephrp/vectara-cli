@@ -11,3 +11,5 @@ dependencies:
       - transformers>=4.5.0
       - span_marker
       - spacy #NLP
+      - pytest
+      - coverage

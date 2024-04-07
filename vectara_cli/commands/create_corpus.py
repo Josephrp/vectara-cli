@@ -7,7 +7,7 @@ from vectara_cli.config_manager import ConfigManager
 from vectara_cli.corpus_data import CorpusData
 from vectara_cli.defaults import CorpusDefaults
 
-def main():
+def main(args=None, vectara_client=None):
     parser = argparse.ArgumentParser(description="Create a new corpus in Vectara platform.")
     parser.add_argument("corpus_id", type=int, help="Corpus ID")
     parser.add_argument("name", type=str, help="Name of the corpus")
@@ -15,7 +15,11 @@ def main():
 
     args = parser.parse_args()
 
-    # Use defaults for unspecified parameters
+    if args is not None:
+        args = parser.parse_args(args)
+    else:
+        args = parser.parse_args()
+
     defaults = CorpusDefaults.get_defaults()
 
     corpus_data = CorpusData(
@@ -25,9 +29,12 @@ def main():
         **defaults
     )
 
-    try:
+    if vectara_client is None:
+        from vectara_cli.config_manager import ConfigManager
         customer_id, api_key = ConfigManager.get_api_keys()
         vectara_client = VectaraClient(customer_id, api_key)
+
+    try:
         response = vectara_client.create_corpus(corpus_data)
         print(response)
     except ValueError as e:
@@ -35,7 +42,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 # def parse_custom_dimensions(dimensions_str):
 #     """Parse custom dimensions from a JSON string."""

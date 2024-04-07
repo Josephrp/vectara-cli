@@ -7,6 +7,7 @@ def test_command_mapping():
         "index-document",
         "query",
         "create-corpus",
+        "create-corpus-advanced",
         "delete-corpus",
         "span-text",
         "span-enhance-folder",

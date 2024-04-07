@@ -3,40 +3,7 @@
 # from vectara_cli.utils import get_vectara_client
 from vectara_cli.corpus_data import CorpusData
 from vectara_cli.defaults import CorpusDefaults
-
-def print_help():
-    help_text = """
-Usage: vectara create-corpus <corpus_id> <name> <description> [options]
-
-Arguments:
-    <corpus_id>    The unique identifier for the corpus. Must be an integer.
-    <name>         The name of the corpus. This should be a unique name that describes the corpus.
-    <description>  A brief description of what the corpus is about.
-
-Options:
-    --custom_dimensions JSON_STRING  Optional. A JSON string representing custom dimensions for the corpus. 
-                                     Custom dimensions allow you to add additional metadata that can be used for 
-                                     filtering and querying. Example: '{"dimension1": "value1", "dimension2": "value2"}'
-    --filter_attributes JSON_STRING  Optional. A JSON string representing attributes used for filtering documents 
-                                     within the corpus. Example: '{"attribute1": "value1", "attribute2": "value2"}'
-    --public BOOLEAN                 Optional. A boolean flag indicating whether the corpus should be public 
-                                     (true) or private (false). Default is false.
-
-Examples of usage:
-    Create a basic corpus:
-        vectara create-corpus 123 "My Corpus" "A corpus containing documents on topic XYZ"
-
-    Create a corpus with custom dimensions and filter attributes:
-        vectara create-corpus 456 "Research Papers" "Corpus for academic research papers" --custom_dimensions '{"subject": "Computer Science", "year": "2024"}' --filter_attributes '{"author": "John Doe"}'
-
-    Create a public corpus:
-        vectara create-corpus 789 "Public Data" "A corpus of public datasets" --public true
-
-Note:
-    - Ensure that the JSON strings for --custom_dimensions and --filter_attributes are properly formatted. Incorrect JSON format will result in an error.
-    - The --public option is a simple flag. If you want the corpus to be public, include '--public true' in your command. The default behavior is to create a private corpus if the flag is not specified.
-"""
-    print(help_text)
+from vectara_cli.helptexts.helpetext import print_create_corpus_help
 
 def parse_json_arg(json_str):
     try:
@@ -46,7 +13,7 @@ def parse_json_arg(json_str):
 
 def main(args, vectara_client):
     if len(args) < 4:
-        print_help()
+        print_create_corpus_help()
         return
 
     corpus_id = int(args[1])

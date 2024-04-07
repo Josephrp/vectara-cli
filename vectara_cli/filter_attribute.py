@@ -1,3 +1,5 @@
+# ./filter_attribute.py
+
 class FilterAttribute:
     def __init__(self, name, description, indexed, type, level):
         self.name = name

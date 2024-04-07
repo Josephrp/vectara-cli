@@ -10,7 +10,7 @@ from .defaults import CorpusDefaults
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"
-        self.customer_id = customer_id
+        self.customer_id = str(customer_id)
         self.api_key = api_key
         self.headers = {
             "Content-Type": "application/json",
@@ -30,19 +30,19 @@ class VectaraClient:
     ):
         if custom_dims is None:
             custom_dims = []
-
+        corpus_id = str(corpus_id)
         url = f"{self.base_url}/v1/core/index"
         payload = {
-            "customerId": self.headers["customer-id"],
-            "corpusId": corpus_id,
+            "customerId": int(self.customer_id),
+            "corpusId": int(corpus_id), 
             "document": {
                 "documentId": document_id,
-                "metadataJson": metadata_json,
+                "metadataJson": json.dumps(metadata_json),
                 "parts": [
                     {
                         "text": text,
                         "context": context,
-                        "metadataJson": metadata_json,
+                        "metadataJson": json.dumps(metadata_json),
                         "customDims": custom_dims,
                     }
                 ],

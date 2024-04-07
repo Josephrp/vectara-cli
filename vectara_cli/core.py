@@ -5,6 +5,8 @@ import json
 import os
 import logging
 from corpus_data import CorpusData
+from defaults import CorpusDefaults
+
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"

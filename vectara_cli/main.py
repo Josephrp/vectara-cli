@@ -1,5 +1,5 @@
 # vectara_cli/main.py
-
+from defaults import CorpusDefaults
 import sys
 from vectara_cli.commands import (
     nerdspan_upsert_folder,

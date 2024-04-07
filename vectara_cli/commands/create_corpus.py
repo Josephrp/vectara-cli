@@ -5,44 +5,24 @@ import argparse
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
 from corpus_data import CorpusData
-
+from defaults import CorpusDefaults
 
 def main():
     parser = argparse.ArgumentParser(description="Create a new corpus in Vectara platform.")
     parser.add_argument("corpus_id", type=int, help="Corpus ID")
     parser.add_argument("name", type=str, help="Name of the corpus")
     parser.add_argument("--description", type=str, default="Description", help="Description of the corpus")
-    parser.add_argument("--dt_provision", type=int, default=1234567890, help="Provisioning timestamp")
-    parser.add_argument("--enabled", type=str, default="True", help="Enable corpus")
-    parser.add_argument("--swap_qenc", type=str, default="False", help="Swap QEnc")
-    parser.add_argument("--swap_ienc", type=str, default="False", help="Swap IEnc")
-    parser.add_argument("--textless", type=str, default="False", help="Textless")
-    parser.add_argument("--encrypted", type=str, default="False", help="Encrypted")
-    parser.add_argument("--encoder_id", type=str, default="default", help="Encoder ID")
-    parser.add_argument("--metadata_max_bytes", type=int, default=10000, help="Maximum metadata bytes")
-    parser.add_argument("--custom_dimensions", type=str, help="Custom dimensions (name,description,servingDefault,indexingDefault;...)")
-    parser.add_argument("--filter_attributes", type=str, help="Filter attributes (name,description,indexed,type,level;...)")
 
     args = parser.parse_args()
 
-    # Convert string "True"/"False" to boolean for enabled, swapQenc, swapIenc, textless, encrypted
-    def str2bool(v):
-        return v.lower() in ("yes", "true", "t", "1")
+    # Use defaults for unspecified parameters
+    defaults = CorpusDefaults.get_defaults()
 
     corpus_data = CorpusData(
         corpus_id=args.corpus_id,
         name=args.name,
         description=args.description,
-        dtProvision=args.dt_provision,
-        enabled=str2bool(args.enabled),
-        swapQenc=str2bool(args.swap_qenc),
-        swapIenc=str2bool(args.swap_ienc),
-        textless=str2bool(args.textless),
-        encrypted=str2bool(args.encrypted),
-        encoderId=args.encoder_id,
-        metadataMaxBytes=args.metadata_max_bytes,
-        customDimensions=[],  # Add logic to parse custom_dimensions if provided
-        filterAttributes=[],  # Add logic to parse filter_attributes if provided
+        **defaults
     )
 
     try:
@@ -55,3 +35,26 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# def parse_custom_dimensions(dimensions_str):
+#     """Parse custom dimensions from a JSON string."""
+#     if dimensions_str:
+#         try:
+#             return json.loads(dimensions_str)
+#         except json.JSONDecodeError:
+#             raise ValueError("Invalid JSON format for custom dimensions.")
+#     return []
+
+# def parse_filter_attributes(attributes_str):
+#     """Parse filter attributes from a JSON string."""
+#     if attributes_str:
+#         try:
+#             return json.loads(attributes_str)
+#         except json.JSONDecodeError:
+#             raise ValueError("Invalid JSON format for filter attributes.")
+#     return []
+
+# def str2bool(v):
+#     """Convert string to boolean."""
+#     return v.lower() in ("yes", "true", "t", "1")

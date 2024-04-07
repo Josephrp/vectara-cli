@@ -1,3 +1,6 @@
+from filter_attribute import FilterAttribute
+from custom_dimension import CustomDimension
+
 class CorpusData:
     def __init__(self, corpus_id, name, description, dtProvision, enabled, swapQenc, swapIenc, textless, encrypted, encoderId, metadataMaxBytes, customDimensions, filterAttributes):
         self.corpus_id = corpus_id
@@ -11,8 +14,8 @@ class CorpusData:
         self.encrypted = encrypted
         self.encoderId = encoderId
         self.metadataMaxBytes = metadataMaxBytes
-        self.customDimensions = customDimensions
-        self.filterAttributes = filterAttributes
+        self.customDimensions = [CustomDimension(**dim) for dim in customDimensions]
+        self.filterAttributes = [FilterAttribute(**attr) for attr in filterAttributes]
 
     def to_dict(self):
         return {
@@ -27,6 +30,6 @@ class CorpusData:
             "encrypted": self.encrypted,
             "encoderId": self.encoderId,
             "metadataMaxBytes": self.metadataMaxBytes,
-            "customDimensions": self.customDimensions,
-            "filterAttributes": self.filterAttributes,
+            "customDimensions": [dim.to_dict() for dim in self.customDimensions],
+            "filterAttributes": [attr.to_dict() for attr in self.filterAttributes],
         }

@@ -198,7 +198,7 @@ class VectaraClient:
         return json_payload
 
 
-    def index_document(self, corpus_id, document_id, title, metadata, section_text):
+    def index_section(self, corpus_id, document_id, title, metadata, section_text):
         """Indexes a document to the specified corpus using the Vectara platform.
 
         Args:

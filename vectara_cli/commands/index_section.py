@@ -19,7 +19,7 @@ def main(args, vectara_client):
 
     try:
         customer_id, api_key = ConfigManager.get_api_keys()
-        response, success = vectara_client.index_document(
+        response, success = vectara_client.index_section(
             corpus_id, document_id, title, metadata, section_text
         )
         if success:

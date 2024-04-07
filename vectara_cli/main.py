@@ -3,7 +3,7 @@ import sys
 from vectara_cli.commands import (
     nerdspan_upsert_folder,
     index_text,
-    index_document,
+    index_section,
     query,
     create_corpus,
     delete_corpus,
@@ -27,7 +27,7 @@ def print_help():
 
     Commands:
     set-api-keys <customer_id> <api_key> - Set the API keys for Vectara client.
-    index-document <args> - Index a document in the Vectara platform.
+    index-section <args> - Index a document in the Vectara platform.
     query <args> - Query the Vectara platform.
     create-corpus <args> - Create a new corpus in the Vectara platform.
     delete-corpus <args> - Delete a corpus from the Vectara platform.
@@ -56,7 +56,7 @@ def main():
         try:
             vectara_client = get_vectara_client()
             command_mapping = {
-                "index-document": index_document.main,
+                "index-section": index_section.main,
                 "query": query.main,
                 "create-corpus": create_corpus.main,
                 "delete-corpus": delete_corpus.main,

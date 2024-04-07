@@ -3,7 +3,7 @@ import sys
 from vectara_cli.commands import (
     nerdspan_upsert_folder,
     index_text,
-    index_section,
+    index_document,
     query,
     create_corpus,
     delete_corpus,
@@ -56,7 +56,7 @@ def main():
         try:
             vectara_client = get_vectara_client()
             command_mapping = {
-                "index-section": index_section.main,
+                "index-document": index_document.main,
                 "query": query.main,
                 "create-corpus": create_corpus.main,
                 "delete-corpus": delete_corpus.main,

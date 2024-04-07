@@ -198,38 +198,46 @@ class VectaraClient:
         return json_payload
 
 
-    def index_section(self, corpus_id, document_id, title, metadata, section_text):
-        """Indexes a document to the specified corpus using the Vectara platform.
+    def index_document(self, corpus_id, document_id, title, metadata, section_text):
+        """
+        Indexes a document to the specified corpus using the Vectara platform.
 
         Args:
-            corpus_id: ID of the corpus to which data needs to be indexed.
-            document_id: Unique identifier for the document.
-            title: Title of the document.
-            metadata: A dictionary containing metadata about the document.
-            section_text: The main content/text of the document.
+            corpus_id (int): ID of the corpus to which data needs to be indexed.
+            document_id (str): Unique identifier for the document.
+            title (str): Title of the document.
+            metadata (dict): A dictionary containing metadata about the document.
+            section_text (str): The main content/text of the document.
 
         Returns:
             A tuple containing the response and a boolean indicating success or failure.
         """
         idx_address = f"{self.base_url}/v1/index"
-        payload = self._get_index_request_json(
-            corpus_id, document_id, title, metadata, section_text
-        )
+        metadata_json = json.dumps(metadata)  # Convert metadata to a JSON string
+
+        payload = {
+            "customerId": self.customer_id,
+            "corpusId": corpus_id,
+            "document": {
+                "documentId": document_id,
+                "title": title,
+                "metadataJson": metadata_json, 
+                "sections": [{
+                    "text": section_text
+                }]
+            }
+        }
+
         try:
-            response = requests.post(idx_address, data=payload, headers=self.headers)
-            response.raise_for_status()
+            response = requests.post(idx_address, headers=self.headers, json=payload) 
+            response.raise_for_status()  
 
             message = response.json()
-            if "status" in message and message["status"]["code"] in (
-                "OK",
-                "ALREADY_EXISTS",
-            ):
+            if "status" in message and message["status"]["code"] in ("OK", "ALREADY_EXISTS"):
                 logging.info("Document indexed successfully or already exists.")
                 return message, True
             else:
-                logging.error(
-                    "Indexing failed with status: %s", message.get("status", {})
-                )
+                logging.error("Indexing failed with status: %s", message.get("status", {}))
                 return message.get("status", {}), False
         except requests.exceptions.HTTPError as e:
             logging.error("HTTP error occurred: %s", e)
@@ -239,10 +247,8 @@ class VectaraClient:
             return {"code": "REQUEST_EXCEPTION", "message": str(e)}, False
         except ValueError as e:
             logging.error("Invalid response received from Vectara API: %s", e)
-            return {
-                "code": "INVALID_RESPONSE",
-                "message": "The response from Vectara API could not be decoded.",
-            }, False
+            return {"code": "INVALID_RESPONSE", "message": "The response from Vectara API could not be decoded."}, False
+
 
     def index_documents_from_folder(
         self, corpus_id, folder_path, return_extracted_document=False

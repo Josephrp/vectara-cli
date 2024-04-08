@@ -26,3 +26,12 @@ class CorpusDefaults:
             "customDimensions": CorpusDefaults.CUSTOM_DIMENSIONS,
             "filterAttributes": CorpusDefaults.FILTER_ATTRIBUTES,
         }
+
+class DefaultTextCustomDimensions:
+    @staticmethod
+    def get_default_dimensions():
+        # Example custom dimensions
+        return [
+            TextCustomDimensions(name="relevance", value=0.9),
+            TextCustomDimensions(name="freshness", value=0.8)
+        ]

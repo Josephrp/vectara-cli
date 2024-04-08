@@ -1,5 +1,5 @@
 # /utils.py
-from vectara_cli.config_manager import ConfigManager
+from vectara_cli.utils.config_manager import ConfigManager
 def get_vectara_client():
     customer_id, api_key = ConfigManager.get_api_keys()
     from vectara_cli.core import VectaraClient  

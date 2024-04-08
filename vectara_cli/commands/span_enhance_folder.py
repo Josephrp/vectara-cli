@@ -1,7 +1,7 @@
 # ./commands/span_enhance_folder.py
 
 import os
-from vectara_cli.config_manager import ConfigManager
+from vectara_cli.utils.config_manager import ConfigManager
 from vectara_cli.advanced.commercial.enterprise import EnterpriseSpan
 
 

@@ -1,13 +1,37 @@
 # ./helptexts/helptext.py
 
+def main_help_text():
+    help_text = """
+    Usage: vectara-cli <command> [arguments]
+
+    Commands:
+    set-api-keys <customer_id> <api_key> - Set the API keys for Vectara client.
+    index-document <args> - Index a document in the Vectara platform.
+    query <args> - Query the Vectara platform.
+    create-corpus <args> - Create a new corpus in the Vectara platform.
+    create-corpus-advanced <args> - more administrative control when you create a new corpus in the Vectara platform.
+    delete-corpus <args> - Delete a corpus from the Vectara platform.
+    span-text <args> - Process text using the span model.
+    span-enhance-folder <args> - Enhance documents in a folder using the span model.
+    upload-document <args> - Upload a document to the Vectara platform.
+    upload-enriched-text <args> - Upload enriched text to the Vectara platform.
+    nerdspan-upsert-folder <args> - Process and upload documents in a folder using the nerdspan model.
+    rebel-upsert-folder <args> - Perform advanced upsert for a folder using the rebel model.
+    create-ui - deploy a special UI for your corpus / data.
+
+    Use 'vectara-cli help' to display this help message.
+    """
+    print(help_text)
+    
+
 def print_index_text_usage():
     """
     Prints detailed usage instructions for the index-text command of vectara-cli.
     """
     usage_text = """
-    Usage: vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json>
+    Usage: vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json> [custom_dims...]
 
-    This command allows you to index a text document into the Vectara platform.
+    This command allows you to index a text document into the Vectara platform, with optional custom dimensions for advanced indexing strategies.
 
     Parameters:
     - corpus_id: The unique identifier for the corpus where the document will be indexed. A corpus represents a collection of documents.
@@ -15,11 +39,16 @@ def print_index_text_usage():
     - text: The actual text content of the document that you want to index.
     - context: Additional context or information about the document. This could be a summary, tags, or any other relevant information that helps in categorizing or understanding the document.
     - metadata_json: A JSON string containing metadata about the document. This could include information like the author, publish date, document type, etc. The metadata should be formatted as a valid JSON string.
+    - custom_dims (optional): Custom dimensions for the document, specified as key=value pairs. These dimensions allow for fine-grained control over how documents are indexed and retrieved.
 
     Example:
-    vectara-cli index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}'
+    vectara-cli index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}' relevance=0.9 freshness=0.8
 
-    Note: Ensure that the metadata_json is properly formatted as a JSON string. Incorrect formatting can lead to errors in indexing.
+    In the above example, 'relevance' and 'freshness' are custom dimensions provided for the document, with their respective values.
+
+    Note:
+    - Ensure that the metadata_json is properly formatted as a JSON string. Incorrect formatting can lead to errors in indexing.
+    - Custom dimensions should be provided after the mandatory parameters. Each custom dimension should be in the format 'name=value', where 'value' is a numeric value.
 
     For more information and advanced usage, refer to the Vectara documentation or use the help command.
     """

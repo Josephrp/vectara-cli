@@ -15,6 +15,7 @@ from vectara_cli.commands import (
     span_text,
     rebel_upsert_folder,
 )
+from vectara_cli.create_ui import create_ui
 from vectara_cli.config_manager import ConfigManager
 from vectara_cli.utils import get_vectara_client, set_api_keys as set_api_keys_main
 
@@ -36,6 +37,7 @@ def print_help():
     upload-enriched-text <args> - Upload enriched text to the Vectara platform.
     nerdspan-upsert-folder <args> - Process and upload documents in a folder using the nerdspan model.
     rebel-upsert-folder <args> - Perform advanced upsert for a folder using the rebel model.
+    create-ui - deploy a special UI for your corpus / data.
 
     Use 'vectara-cli help' to display this help message.
     """
@@ -55,6 +57,7 @@ def get_command_mapping():
         "nerdspan-upsert-folder": nerdspan_upsert_folder.main,
         "rebel-upsert-folder": rebel_upsert_folder.main,
         "index-text": index_text.main,
+        "create-ui":create_ui,
     }
     return command_mapping
 

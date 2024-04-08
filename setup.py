@@ -4,7 +4,11 @@ from setuptools import setup, find_packages
 
 setup(
     name="vectara-cli",
+<<<<<<< Updated upstream
     version="0.1.13",
+=======
+    version="0.1.17",
+>>>>>>> Stashed changes
     author="Tonic-AI",
     author_email="team@tonic-ai.com",
     description="A CLI tool for interacting with the Vectara platform, including advanced text processing and indexing features.",

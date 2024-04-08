@@ -2,14 +2,15 @@
 
 from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
+from vectara_cli.helptexts.help_text import show_delete_corpus_help
 
 
 def main(args, vectara_client):
-    if len(args) < 2:
-        print("Usage: vectara-cli delete-corpus corpus_id")
+    if len(args) < 1:
+        show_delete_corpus_help()
         return
 
-    corpus_id = args[1]
+    corpus_id = args[0]
 
     try:
         customer_id, api_key = ConfigManager.get_api_keys()

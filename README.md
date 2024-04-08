@@ -41,12 +41,14 @@ The `vectara-cli` provides a powerful command line interface for interacting wit
 
 ### Usage
 
-- **[Basic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
+- **[Basic Usage CLI](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage_cli.md?ref_type=heads)**
+- **[Programmatic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
 - **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
 
 ## Contributing
 
-- **[Contributing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
+- **[CONTRIBUTE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
+- **[Testing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/tests)**
 
 ## License
 

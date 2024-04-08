@@ -1,20 +1,4 @@
 
-### Basic Commands
-
-
-#### Indexing a Document
-
-To index a document into a specific corpus:
-
-```bash
-vectara-cli index-document <corpus_id> <document_id> "<title>" '<metadata_json>' "<section_text>"
-```
-
-- `<corpus_id>`: The ID of the corpus where the document will be indexed.
-- `<document_id>`: A unique identifier for the document.
-- `<title>`: The title of the document.
-- `<metadata_json>`: A JSON string containing document metadata.
-- `<section_text>`: The text content of the document.
 
 #### Querying
 
@@ -28,16 +12,6 @@ vectara-cli query "<query_text>" <num_results> <corpus_id>
 - `<num_results>`: The maximum number of results to return.
 - `<corpus_id>`: The ID of the corpus to query against.
 
-#### Creating a Corpus
-
-To create a new corpus:
-
-```bash
-vectara-cli create-corpus <corpus_id> "<name>"
-```
-
-- `<corpus_id>`: The ID for the new corpus.
-- `<name>`: The name of the new corpus.
 
 #### Deleting a Corpus
 
@@ -48,10 +22,6 @@ vectara-cli delete-corpus <corpus_id>
 ```
 
 - `<corpus_id>`: The ID of the corpus to delete.
-
-### Advanced Commands
-
-### Basic Usage
 
 #### Setting Up a Vectara Client
 
@@ -106,33 +76,6 @@ corpus_id = 'your_corpus_id'
 
 results = vectara_client.query(query_text, num_results, corpus_id)
 print(results)
-```
-
-#### Creating a Corpus
-
-You can create a new corpus by specifying its ID, name, description, and other settings.
-
-```python
-create_corpus_response = vectara_client.create_corpus(
-    corpus_id=123456789,
-    name="Example Corpus",
-    description="This is an example corpus.",
-    dtProvision=1234567890,
-    enabled=True,
-    swapQenc=False,
-    swapIenc=False,
-    textless=False,
-    encrypted=False,
-    encoderId="default",
-    metadataMaxBytes=10000,
-    customDimensions=[
-        {"name": "dimension1", "description": "First custom dimension", "servingDefault": 1.0, "indexingDefault": 1.0}
-    ],
-    filterAttributes=[
-        {"name": "filter1", "description": "First filter attribute", "indexed": True, "type": "FILTER_ATTRIBUTE_TYPE__UNDEFINED", "level": "FILTER_ATTRIBUTE_LEVEL__UNDEFINED"}
-    ]
-)
-print(create_corpus_response)
 ```
 
 #### Deleting a Corpus

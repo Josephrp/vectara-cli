@@ -105,6 +105,84 @@ This command indexes a document with the specified title, metadata, and content 
 """
     print(help_text)
 
+
+def show_delete_corpus_help():
+    """
+    Displays help information for the delete_corpus.py script.
+    """
+    help_text = """
+    delete_corpus.py Help
+    ======================
+
+    Purpose:
+    --------
+    This script is designed to delete a corpus from the Vectara platform. 
+    A corpus is a collection of documents that you can search and analyze. 
+    Deleting a corpus will remove all its documents and associated data.
+
+    Usage:
+    ------
+    vectara delete-corpus.py <corpus_id>
+
+    Arguments:
+    ----------
+    - corpus_id: The unique identifier for the corpus you wish to delete. 
+                 This is a required argument.
+
+    Example:
+    --------
+    To delete a corpus with the ID 12345, you would use the following command:
+
+    vectara delete-corpus 12345
+
+    Note:
+    -----
+    Before using this script, ensure you have configured your Vectara API keys 
+    correctly. The script retrieves your customer ID and API key from the 
+    configuration to authenticate your request.
+
+    If the corpus is deleted successfully, you will see a confirmation message. 
+    If there is an error, an appropriate error message will be displayed instead.
+
+    For more information on managing corpora and other functionalities, 
+    please refer to the Vectara documentation or the vectara_cli documentation.
+    """
+
+    print(help_text)
+
+def print_upload_document_help():
+    """
+    Prints the help text for the upload_document.py script.
+    """
+    help_text = """
+Vectara CLI Upload Document Help
+--------------------------------
+The `upload_document.py` script is used to upload documents to a specified corpus within the Vectara platform.
+
+Usage:
+    vectara-cli upload-document <corpus_id> <file_path> [document_id]
+
+Parameters:
+    <corpus_id>    The ID of the corpus to which the document will be uploaded. This is a required parameter.
+    <file_path>    The path to the document file that you want to upload. This is a required parameter.
+    [document_id]  An optional parameter that specifies the document ID. If not provided, Vectara will generate one.
+
+Examples:
+    1. Upload a document without specifying a document ID:
+       vectara-cli upload-document 12345 /path/to/document.pdf
+
+    2. Upload a document with a specified document ID:
+       vectara-cli upload-document 12345 /path/to/document.pdf my-document-id
+
+Note:
+- The document ID is optional. If not provided, Vectara generates a unique ID for the document.
+- Ensure that the corpus ID and API keys are correctly configured before uploading documents.
+- Supported document formats include PDF, DOCX, PPTX, and TXT files.
+
+For more information, visit the Vectara documentation at https://docs.vectara.com.
+    """
+    print(help_text)
+
 if __name__ == "__main__":
     print("This script is intended to be used as a module and should not be executed directly.")
     

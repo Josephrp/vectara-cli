@@ -1,17 +1,16 @@
 # ./commands/upload_document.py
 
-from vectara_cli.core import VectaraClient
 from vectara_cli.config_manager import ConfigManager
-
+from vectara_cli.helptexts.help_text import print_upload_document_help
 
 def main(args, vectara_client):
-    if len(args) < 4:
-        print("Usage: vectara-cli upload-document corpus_id file_path [document_id]")
+    if len(args) < 3:
+        print_upload_document_help()
         return
 
-    corpus_id = args[1]
-    file_path = args[2]
-    document_id = args[3] if len(args) > 3 else None
+    corpus_id = args[0]
+    file_path = args[1]
+    document_id = args[2] if len(args) > 3 else None
     metadata = {}
 
     try:
@@ -30,5 +29,4 @@ def main(args, vectara_client):
 
 if __name__ == "__main__":
     import sys
-
-    main(sys.argv[1:])
+    main(sys.argv)

@@ -1,6 +1,6 @@
 # ./commands/upload_document.py
 
-from vectara_cli.config_manager import ConfigManager
+from vectara_cli.utils.config_manager import ConfigManager
 from vectara_cli.helptexts.help_text import print_upload_document_help
 
 def main(args, vectara_client):

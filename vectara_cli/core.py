@@ -4,8 +4,8 @@ import requests
 import json
 import os
 import logging
-from .corpus_data import CorpusData
-from .defaults import CorpusDefaults
+from .data.corpus_data import CorpusData
+from .data.defaults import CorpusDefaults
 
 class VectaraClient:
     def __init__(self, customer_id, api_key):

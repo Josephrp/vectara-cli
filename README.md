@@ -37,13 +37,25 @@ The `vectara-cli` provides a powerful command line interface for interacting wit
 
 ### Configuration
 
-- **[Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
+Before your start always set your api keys with :
+
+```bash
+vectara set-api-keys <user_id> <api_key>
+```
+
+- **[More About Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
 
 ### Usage
 
 - **[Basic Usage CLI](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage_cli.md?ref_type=heads)**
 - **[Programmatic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
 - **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
+
+## Deploy Your App
+
+- [x] **`vectara create-ui`:** This command will create a new UI for your app.
+
+**Note:** that this script assumes you have [Node.js and NPM installed](https://nodejs.org/en/download) on your system, as required by the npx command.
 
 ## Contributing
 

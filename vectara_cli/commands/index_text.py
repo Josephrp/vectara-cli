@@ -1,7 +1,7 @@
 # ./commands/index_text.py
 from vectara_cli.helptexts.help_text import print_index_text_usage
-from vectara_cli.custom_dimension import TextCustomDimensions
-from vectara_cli.metadata_handler import MetaDataJson, MetaDataDefault
+from vectara_cli.data.custom_dimension import TextCustomDimensions
+from vectara_cli.data.metadata_handler import MetaDataJson, MetaDataDefault
 # from vectara_cli.defaults import DefaultTextCustomDimensions
 import json
 

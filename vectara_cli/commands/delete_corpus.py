@@ -1,7 +1,7 @@
 # ./commands/delete_corpus.py
 
 from vectara_cli.core import VectaraClient
-from vectara_cli.config_manager import ConfigManager
+from vectara_cli.utils.config_manager import ConfigManager
 from vectara_cli.helptexts.help_text import show_delete_corpus_help
 
 

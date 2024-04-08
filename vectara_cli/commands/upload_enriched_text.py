@@ -1,6 +1,6 @@
 # ./commands/upload_enriched_text.py
 
-from vectara_cli.config_manager import ConfigManager
+from vectara_cli.utils.config_manager import ConfigManager
 from vectara_cli.advanced.commercial.enterprise import EnterpriseSpan
 
 

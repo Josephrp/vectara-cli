@@ -15,9 +15,9 @@ from vectara_cli.commands import (
     span_text,
     rebel_upsert_folder,
 )
-from vectara_cli.create_ui import create_ui
-from vectara_cli.config_manager import ConfigManager
-from vectara_cli.utils import get_vectara_client, set_api_keys as set_api_keys_main
+from vectara_cli.utils.create_ui import create_ui
+from vectara_cli.utils.config_manager import ConfigManager
+from vectara_cli.utils.utils import get_vectara_client, set_api_keys as set_api_keys_main
 from vectara_cli.helptexts.help_text import main_help_text
 
 def get_command_mapping():

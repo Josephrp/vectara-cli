@@ -6,16 +6,16 @@ from vectara_cli.advanced.commercial.enterprise import EnterpriseSpan
 
 
 def main(args, vectara_client):
-    if len(args) < 5:
+    if len(args) < 4:
         print(
             "Usage: vectara-cli span-enhance-folder corpus_id_1 corpus_id_2 model_name folder_path"
         )
         return
 
-    corpus_id_1 = args[1]
-    corpus_id_2 = args[2]
-    model_name = args[3]
-    folder_path = args[4]
+    corpus_id_1 = args[0]
+    corpus_id_2 = args[1]
+    model_name = args[2]
+    folder_path = args[3]
 
     try:
         customer_id, api_key = ConfigManager.get_api_keys()

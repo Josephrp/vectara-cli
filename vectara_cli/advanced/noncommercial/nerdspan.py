@@ -7,14 +7,18 @@ from vectara_cli.core import VectaraClient
 
 
 class Span:
-    def __init__(self, text, customer_id, api_key):
-        super().__init__(text)
-        self.vectara_client = VectaraClient(customer_id, api_key)
+    def __init__(self, text, vectara_client, model_name, model_type):
+        self.text = text
+        self.vectara_client = vectara_client
+        # self.customer_id = customer_id
+        # self.api_key = api_key
+        self.models = {}
         self.model_mapping = {
             "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
             "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
             "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
         }
+        self.load_model(model_name, model_type)
 
     def load_model(self, model_name, model_type):
         """
@@ -72,16 +76,19 @@ class Span:
         """
         Analyze the text with a given model and return formatted outputs.
         """
+        if model_name not in self.models:
+            raise ValueError(f"Model '{model_name}' not loaded.")
+        # model = self.models[model_name]
         entities = self.run_inference(model_name)
         return self.format_output(entities)
 
     def create_corpus(self, name, description):
-        corpus_id = uuid.uuid4().int  # Generates a random corpus ID
+#       corpus_id = uuid.uuid4().int  # Generates a random corpus ID
         response = self.vectara_client.create_corpus(
-            corpus_id=corpus_id,
+ #          corpus_id=corpus_id,
             name=name,
             description=description,
-            dtProvision=int(uuid.uuid1().time),  # Example timestamp
+#           dtProvision=int(uuid.uuid1().time),  # Example timestamp
             enabled=True,
             swapQenc=False,
             swapIenc=False,
@@ -133,21 +140,3 @@ class Span:
                 )
 
         return corpus_id_1, corpus_id_2
-
-
-# # Example usage
-# if __name__ == "__main__":
-#     text = "Amelia Earhart flew her single engine Lockheed Vega 5B across the Atlantic to Paris."
-#     span = Span(text)
-
-#     # Load and run SpanMarkerModel
-#     span.load_model("tomaarsen/span-marker-mbert-base-multinerd", "span_marker")
-#     output_str, key_value_pairs = span.analyze_text("tomaarsen/span-marker-mbert-base-multinerd")
-#     print(output_str)
-#     print(key_value_pairs)
-
-#     # Load and run spaCy model with span_marker pipeline
-#     span.load_model("tomaarsen/span-marker-roberta-large-ontonotes5", "spacy")
-#     output_str, key_value_pairs = span.analyze_text("tomaarsen/span-marker-roberta-large-ontonotes5")
-#     print(output_str)
-#     print(key_value_pairs)

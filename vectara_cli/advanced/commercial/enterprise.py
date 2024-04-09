@@ -180,19 +180,3 @@ class EnterpriseSpan:
             for chunk in text_chunks:
                 predictions = self.predict(chunk)
                 self.upload_enriched_text(corpus_id_2, document_id, chunk, predictions)
-
-
-# # Example usage
-# if __name__ == "__main__":
-#     logging.basicConfig(level=logging.INFO)
-#     enterprise_model = EnterpriseSpan("keyphrase")
-#     text = "Example text for processing."
-#     try:
-#         entities = enterprise_model.predict(text)
-#         formatted_predictions = enterprise_model.format_predictions(entities)
-#         print("Predictions:\n", formatted_predictions)
-#         # Prepend formatted predictions to the original text
-#         complete_text = f"Extracted Information:\n{formatted_predictions}\n\nOriginal Text:\n{text}"
-#         print("\nComplete Text:\n", complete_text)
-#     except Exception as e:
-#         print(f"An error occurred: {e}")

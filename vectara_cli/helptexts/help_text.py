@@ -82,10 +82,9 @@ Examples of usage:
 
 def print_create_corpus_help():
     help_text = """
-Usage: vectara create-corpus <corpus_id> <name> <description> [options]
+Usage: vectara create-corpus <name> <description> [options]
 
 Arguments:
-    <corpus_id>    The unique identifier for the corpus. Must be an integer.
     <name>         The name of the corpus. This should be a unique name that describes the corpus.
     <description>  A brief description of what the corpus is about.
 
@@ -100,13 +99,13 @@ Options:
 
 Examples of usage:
     Create a basic corpus:
-        vectara create-corpus 123 "My Corpus" "A corpus containing documents on topic XYZ"
+        vectara create-corpus "My Corpus" "A corpus containing documents on topic XYZ"
 
     Create a corpus with custom dimensions and filter attributes:
-        vectara create-corpus 456 "Research Papers" "Corpus for academic research papers" --custom_dimensions '{"subject": "Computer Science", "year": "2024"}' --filter_attributes '{"author": "John Doe"}'
+        vectara create-corpus "Research Papers" "Corpus for academic research papers" --custom_dimensions '{"subject": "Computer Science", "year": "2024"}' --filter_attributes '{"author": "John Doe"}'
 
     Create a public corpus:
-        vectara create-corpus 789 "Public Data" "A corpus of public datasets" --public true
+        vectara create-corpus "Public Data" "A corpus of public datasets" --public true
 
 Note:
     - Ensure that the JSON strings for --custom_dimensions and --filter_attributes are properly formatted. Incorrect JSON format will result in an error.

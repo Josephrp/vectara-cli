@@ -14,6 +14,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "requests",
+        "python-dotenv"
     ],
     extras_require={
         "advanced": [

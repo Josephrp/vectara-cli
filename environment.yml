@@ -10,6 +10,7 @@ dependencies:
       - torch>=1.8.0
       - transformers>=4.5.0
       - span_marker
-      - spacy #NLP
+      - spacy
       - pytest
       - coverage
+      - python-dotenv

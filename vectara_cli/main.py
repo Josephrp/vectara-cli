@@ -6,7 +6,6 @@ from vectara_cli.commands import (
     index_text,
     index_document,
     query,
-    create_corpus,
     create_corpus_advanced,
     delete_corpus,
     span_enhance_folder,

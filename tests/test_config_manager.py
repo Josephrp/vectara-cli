@@ -5,10 +5,10 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def fresh_env():
-    old_env = dict(os.environ)  # Copy current environment
+    old_env = dict(os.environ)
     os.environ.clear()
     yield
-    os.environ.update(old_env)  # Restore environment after the test
+    os.environ.update(old_env) 
 
 class TestConfigManagerEffect:
     @patch.dict(os.environ, {}, clear=True)

@@ -9,7 +9,6 @@ def main_help_text():
     index-document <args> - Index a document in the Vectara platform.
     query <args> - Query the Vectara platform.
     create-corpus <args> - Create a new corpus in the Vectara platform.
-    create-corpus-advanced <args> - more administrative control when you create a new corpus in the Vectara platform.
     delete-corpus <args> - Delete a corpus from the Vectara platform.
     span-text <args> - Process text using the span model.
     span-enhance-folder <args> - Enhance documents in a folder using the span model.
@@ -56,7 +55,7 @@ def print_index_text_usage():
 
 def print_create_corpus_advanced_help():
     help_text = """
-Usage: vectara create-corpus-advanced <name> <description> [options]
+Usage: vectara create-corpus <name> <description> [options]
 
 Arguments:
     <name>         The name of the corpus. This should be a unique name that describes the corpus.
@@ -75,7 +74,7 @@ Options:
 
 Examples of usage:
     vectara create-corpus-advanced "My Corpus" "A corpus containing documents on topic XYZ"
-    vectara create-corpus-advanced "Research Papers" "Corpus for academic research papers" --custom_dimensions '{"dimension1": "value1", "dimension2": "value2"}' --filter_attributes '{"author": "John Doe"}'
+    vectara create-corpus-advanced "Research Papers" "Corpus for academic research papers" --custom_dimensions='{"dimension1": "value1", "dimension2": "value2"}' --filter_attributes='{"author": "John Doe"}'
     vectara create-corpus-advanced "Public Data" "A corpus of public datasets" --public true
 """
     print(help_text)

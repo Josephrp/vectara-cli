@@ -24,8 +24,7 @@ def get_command_mapping():
     command_mapping = {
         "index-document": index_document.main,
         "query": query.main,
-        "create-corpus": create_corpus.main,
-        "create-corpus-advanced" : create_corpus_advanced.main,
+        "create-corpus" : create_corpus_advanced.main,
         "delete-corpus": delete_corpus.main,
         "span-text": span_text.main,
         "span-enhance-folder": span_enhance_folder.main,

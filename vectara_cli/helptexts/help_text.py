@@ -210,6 +210,36 @@ For more information, visit the Vectara documentation at https://docs.vectara.co
     """
     print(help_text)
 
+
+def advanced_query_help():
+    help_text = """
+Usage: vectara-cli advanced-query <query_text> <num_results> <corpus_id> [context_config_json] [summary_config_json]
+
+Arguments:
+  query_text             The text of the query to perform against the Vectara platform.
+  num_results            The number of search results to return.
+  corpus_id              The ID of the corpus to search against.
+
+Optional Arguments:
+  context_config_json    JSON string specifying the context configuration for the query. Includes settings such as chars_before, chars_after, sentences_before, sentences_after, start_tag, and end_tag.
+  summary_config_json    JSON string specifying the summary configuration for the query. Includes settings such as summarizer_prompt_name, max_summarized_results, and response_lang.
+
+Examples:
+  Basic Query:
+    vectara-cli advanced-query "example query" 10 123
+
+  Query with Context Configuration:
+    vectara-cli advanced-query "example query" 10 123 '{"chars_before": 100, "chars_after": 100, "sentences_before": 2, "sentences_after": 2, "start_tag": "<b>", "end_tag": "</b>"}'
+
+  Query with Context and Summary Configuration:
+    vectara-cli advanced-query "example query" 10 123 '{"chars_before": 100, "chars_after": 100, "sentences_before": 2, "sentences_after": 2, "start_tag": "<b>", "end_tag": "</b>"}' '{"summarizer_prompt_name": "default", "max_summarized_results": 5, "response_lang": "en"}'
+
+Notes:
+  - The context_config_json and summary_config_json arguments must be valid JSON strings.
+  - Ensure proper quoting of JSON strings when using them as command line arguments.
+    """
+    print(help_text)
+
 if __name__ == "__main__":
     print("This script is intended to be used as a module and should not be executed directly.")
     

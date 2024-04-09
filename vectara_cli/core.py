@@ -6,7 +6,7 @@ import os
 import logging
 from .data.corpus_data import CorpusData
 from .data.defaults import CorpusDefaults
-
+from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"
@@ -32,7 +32,7 @@ class VectaraClient:
         if custom_dims is None:
             custom_dims = []
         try:
-            metadata_json_obj = json.loads(metadata_json)  # Ensure metadata_json is a valid JSON string
+            metadata_json_obj = json.loads(metadata_json)
         except json.JSONDecodeError:
             raise ValueError("metadata_json must be a valid JSON string.")
         
@@ -94,6 +94,47 @@ class VectaraClient:
 
         return self._parse_query_response(response_data)
 
+
+    def advanced_query(self, query_text, num_results=10, corpus_id=None, context_config=None, summary_config=None):
+        url = f"{self.base_url}/v1/query"
+        print(f"Making advanced query to URL: {url}")  # Debug print
+
+        if not corpus_id:
+            corpus_id = 1
+        
+        corpus_keys = [{"customerId": self.customer_id, "corpusId": corpus_id, "semantics": "DEFAULT"}]
+        context_config_dict = context_config.to_dict() if context_config else {}
+        summary_config_dict = summary_config.to_dict() if summary_config else {}
+   
+        data = {
+            "query": [{"query": query_text}],
+            "start": 0,
+            "numResults": num_results,
+            "contextConfig": context_config_dict,
+            "corpusKey": corpus_keys,
+            "summary": [summary_config_dict] if summary_config else []
+        }
+        print(f"Query Request Data: {data}")  # Debug print to show the request being made
+
+        # Make the POST request
+        response = requests.post(url, headers=self.headers, json=data)
+        print(f"Response Status Code: {response.status_code}")  # Debug print for response status
+        if response.status_code != 200:
+            logging.error(f"Query failed with status code: {response.status_code}")
+            logging.error(f"Response: {response.text}")
+            return None
+
+        try:
+            response_data = response.json()
+            print(f"Response Data: {response_data}")  # Debug print for the actual response data
+        except json.JSONDecodeError:
+            logging.error("Failed to parse JSON response from query.")
+            return None
+
+        result = self._parse_query_response(response_data)
+        print(f"Parsed Query Response: {result}")  # Debug print for the parsed response
+        return result
+    
     def _parse_query_response(self, response_data):
         if "responseSet" in response_data:
             for response_set in response_data["responseSet"]:

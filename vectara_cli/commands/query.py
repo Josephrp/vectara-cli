@@ -2,7 +2,7 @@
 
 from vectara_cli.core import VectaraClient
 from vectara_cli.utils.config_manager import ConfigManager
-
+from vectara_cli.data.query_response import QueryResponse
 
 def main(args, vectara_client):
     if len(args) < 3:
@@ -13,14 +13,15 @@ def main(args, vectara_client):
     corpus_id = args[2]
 
     try:
-        customer_id, api_key = ConfigManager.get_api_keys()
+        # customer_id, api_key = ConfigManager.get_api_keys()
         response = vectara_client.query(query_text, num_results, corpus_id)
-        print(response)
+        parsed_response = QueryResponse.parse_response(response)
+        for item in parsed_response:
+            print(item)
     except ValueError as e:
         print(e)
-
 
 if __name__ == "__main__":
     import sys
 
-    main(sys.argv[1:])
+    main(sys.argv)

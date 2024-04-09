@@ -8,17 +8,17 @@ CONFIG_FILE_PATH = 'config.json'
 class ConfigManager:
     @staticmethod
     def set_api_keys(customer_id, api_key):
-        """Sets the customer ID and API key in a configuration file."""
-        with open(CONFIG_FILE_PATH, 'w') as config_file:
-            json.dump({'VECTARA_CUSTOMER_ID': customer_id, 'VECTARA_API_KEY': api_key}, config_file)
+        """Sets the customer ID and API key in environment variables."""
+        os.environ['VECTARA_CUSTOMER_ID'] = customer_id
+        os.environ['VECTARA_API_KEY'] = api_key
 
     @staticmethod
     def get_api_keys():
-        """Retrieves the customer ID and API key from a configuration file."""
-        if not os.path.exists(CONFIG_FILE_PATH):
+        """Retrieves the customer ID and API key from environment variables."""
+        customer_id = os.getenv('VECTARA_CUSTOMER_ID')
+        api_key = os.getenv('VECTARA_API_KEY')
+        if customer_id is None or api_key is None:
             raise ValueError(
-                "API keys are not set. Please set them using the 'set-api-keys' command."
+                "API keys are not set in environment variables. Please set them using the appropriate method."
             )
-        with open(CONFIG_FILE_PATH, 'r') as config_file:
-            config = json.load(config_file)
-        return config['VECTARA_CUSTOMER_ID'], config['VECTARA_API_KEY']
+        return customer_id, api_key

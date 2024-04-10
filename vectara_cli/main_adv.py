@@ -22,6 +22,7 @@ from vectara_cli.utils.create_ui import create_ui
 from vectara_cli.utils.config_manager import ConfigManager
 from vectara_cli.utils.utils import get_vectara_client, set_api_keys as set_api_keys_main
 from vectara_cli.helptexts.help_text import main_help_text
+from vectara_cli.commands.create_corpus_adv import setup_arg_parser as setup_create_corpus_adv_parser
 
 def main():
     parser = argparse.ArgumentParser(description="Vectara CLI Tool")
@@ -32,13 +33,14 @@ def main():
     set_api_keys_parser.add_argument('api_key', type=str, help='API Key')
     set_api_keys_parser.set_defaults(func=set_api_keys)
 
+    # setup_create_corpus_adv_parser(subparsers)
+
     commands = {
         "create-ui": create_ui,
         "advanced-query-adv": advanced_query_main,
         "index-document-adv": index_text_adv.main,
+        "create-corpus-adv": setup_create_corpus_adv_parser(subparsers)
         # "index-document": index_document.main,
-        # "query": query.main,
-        # "create-corpus": create_corpus_advanced.main,
         # "delete-corpus": delete_corpus.main,
         # "span-text": span_text.main,
         # "span-enhance-folder": span_enhance_folder.main,

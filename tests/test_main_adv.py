@@ -30,6 +30,12 @@ def test_index_document_adv_command(mock_client):
         main()
     mock_client.return_value.index_text.assert_called()
 
+def test_main_create_corpus_adv(mocker):
+    mocker.patch('sys.argv', ['main_advanced.py', 'create-corpus-adv', 'TestCorpus', 'This is a test corpus', '--public'])
+    mock_create_corpus_adv = mocker.patch('vectara_cli.commands.create_corpus_adv.create_corpus_adv')
+
+    main()
+
 def test_unknown_command():
     """Test handling of an unknown command."""
     with patch.object(sys, "argv", ["main_adv.py", "unknown-command"]):

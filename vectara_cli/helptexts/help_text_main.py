@@ -213,7 +213,7 @@ For more information, visit the Vectara documentation at https://docs.vectara.co
 
 def advanced_query_help():
     help_text = """
-Usage: vectara-cli advanced-query <query_text> <num_results> <corpus_id> [context_config_json] [summary_config_json]
+Usage: vectara-cli advanced-query-adv <query_text> <num_results> <corpus_id> [context_config_json] [summary_config_json]
 
 Arguments:
   query_text             The text of the query to perform against the Vectara platform.

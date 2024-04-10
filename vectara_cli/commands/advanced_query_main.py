@@ -1,16 +1,14 @@
-# advanced_query.py
+# advanced_query_main.py
 
-from vectara_cli.core import VectaraClient
-from vectara_cli.utils.config_manager import ConfigManager
-from vectara_cli.data.query_request import ContextConfig, SummaryConfig, QueryRequest
-from vectara_cli.helptexts.help_text import advanced_query_help
 import json
-from vectara_cli.data.query_response import QueryResponse
 import sys
+from vectara_cli.core import VectaraClient
+from vectara_cli.data.query_request import ContextConfig, SummaryConfig
+from vectara_cli.helptexts.help_text_main import advanced_query_help
 
-def main(args, vectara_client):
+def advanced_query_main(args, vectara_client=None):
     if len(args) < 3:
-        advanced_query_help()
+        advanced_query_help
         return
 
     query_text = args[0]
@@ -45,6 +43,10 @@ def main(args, vectara_client):
             print(f"Error in summary config parameters: {e}")
             return
 
+    if not vectara_client:
+        print("Vectara client is not initialized.")
+        return
+
     try:
         response = vectara_client.advanced_query(query_text, num_results, corpus_id, context_config, summary_config)
         if response is not None:
@@ -56,6 +58,7 @@ def main(args, vectara_client):
         print(e)
 
 if __name__ == "__main__":
-    import sys
-
-    main(sys.argv)
+    if len(sys.argv) > 1:
+        advanced_query_main(sys.argv)
+    else:
+        print("No arguments provided.")

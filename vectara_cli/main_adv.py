@@ -3,19 +3,20 @@
 import argparse
 import sys
 from vectara_cli.commands import (
-    index_document,
-    query,
-    create_corpus_advanced,
-    delete_corpus,
-    span_text,
-    span_enhance_folder,
-    upload_document,
-    upload_enriched_text,
-    nerdspan_upsert_folder,
-    rebel_upsert_folder,
-    advanced_query,
-    index_text,
-    advanced_query_main
+    advanced_query_main,
+    index_text_adv
+    # index_document,
+    # query,
+    # create_corpus_advanced,
+    # delete_corpus,
+    # span_text,
+    # span_enhance_folder,
+    # upload_document,
+    # upload_enriched_text,
+    # nerdspan_upsert_folder,
+    # rebel_upsert_folder,
+    # advanced_query,
+    # index_text,
 )
 from vectara_cli.utils.create_ui import create_ui
 from vectara_cli.utils.config_manager import ConfigManager
@@ -32,20 +33,22 @@ def main():
     set_api_keys_parser.set_defaults(func=set_api_keys)
 
     commands = {
-        "index-document": index_document.main,
-        "query": query.main,
-        "create-corpus": create_corpus_advanced.main,
-        "delete-corpus": delete_corpus.main,
-        "span-text": span_text.main,
-        "span-enhance-folder": span_enhance_folder.main,
-        "upload-document": upload_document.main,
-        "upload-enriched-text": upload_enriched_text.main,
-        "nerdspan-upsert-folder": nerdspan_upsert_folder.main,
-        "rebel-upsert-folder": rebel_upsert_folder.main,
-        "index-text": index_text.main,
         "create-ui": create_ui,
-        "advanced-query": advanced_query.main
-        "advanced-query-adv": advanced_query_main
+        "advanced-query-adv": advanced_query_main,
+        "index-document-adv": index_text_adv.main,
+        # "index-document": index_document.main,
+        # "query": query.main,
+        # "create-corpus": create_corpus_advanced.main,
+        # "delete-corpus": delete_corpus.main,
+        # "span-text": span_text.main,
+        # "span-enhance-folder": span_enhance_folder.main,
+        # "upload-document": upload_document.main,
+        # "upload-enriched-text": upload_enriched_text.main,
+        # "nerdspan-upsert-folder": nerdspan_upsert_folder.main,
+        # "rebel-upsert-folder": rebel_upsert_folder.main,
+        # "index-text": index_text.main,
+        # "advanced-query": advanced_query.main,
+
     }
 
     for command_name, command_func in commands.items():

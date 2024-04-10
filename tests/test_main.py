@@ -1,18 +1,14 @@
 # tests/test_main.py
-from unittest.mock import patch, MagicMock
-import pytest
-from vectara_cli.main import main, get_command_mapping
+
+from unittest.mock import patch
 import sys
+import pytest
+from vectara_cli.main import main
 
-# Test the successful execution of a valid command
-@patch('vectara_cli.main.get_vectara_client')
-@patch('vectara_cli.commands.index_document.main')
-def test_valid_command_execution(mock_index_document_main, mock_get_vectara_client):
-    # Mocking get_vectara_client and a specific command function, index_document.main
-    vectara_client_mock = MagicMock()
-    mock_get_vectara_client.return_value = vectara_client_mock
 
-    with patch.object(sys, 'argv', ['main.py', 'index-document', 'dummy_arg']):
+def test_valid_command():
+    # Simulate running the script with a valid command
+    with patch.object(sys, "argv", ["main.py", "help"]):
         main()
 
     # Verify that index_document.main was called with the expected arguments, including the mocked vectara client

@@ -23,6 +23,7 @@ from vectara_cli.utils.utils import get_vectara_client, set_api_keys as set_api_
 from vectara_cli.helptexts.help_text import main_help_text
 from vectara_cli.commands.create_corpus_adv import setup_arg_parser as setup_create_corpus_adv_parser
 from vectara_cli.commands.delete_corpus_adv import setup_arg_parser as setup_delete_corpus_adv_parser
+from vectara_cli.commands.index_text_adv import parse_args as setup_index_text_adv_parser
 
 def set_api_keys(args):
     set_api_keys_main(args.customer_id, args.api_key)
@@ -45,7 +46,8 @@ def main():
     set_api_keys_main(subparsers)
     setup_create_corpus_adv_parser(subparsers)
     setup_create_corpus_adv_parser(subparsers)
-    
+    setup_index_text_adv_parser(subparsers)
+
     # set_api_keys_parser = subparsers.add_parser('set-api-keys', help='Set the API keys')
     # set_api_keys_parser.add_argument('customer_id', type=str, help='Customer ID')
     # set_api_keys_parser.add_argument('api_key', type=str, help='API Key')

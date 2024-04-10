@@ -36,6 +36,11 @@ def test_main_create_corpus_adv(mocker):
 
     main()
 
+def test_main_delete_corpus_adv(mocker):
+    mocker.patch('sys.argv', ['main_advanced.py', 'delete-corpus-adv', '56'])
+    mock_delete_corpus_adv = mocker.patch('vectara_cli.commands.delete_corpus_adv.main')
+    main()
+
 def test_unknown_command():
     """Test handling of an unknown command."""
     with patch.object(sys, "argv", ["main_adv.py", "unknown-command"]):

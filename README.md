@@ -812,7 +812,7 @@ This example showcases how to enrich text with additional metadata using the `En
 The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
 
 
-![Span Models for Named Entity Recognition](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/res/images/image.png?ref_type=heads)
+![Span Models for Named Entity Recognition](https://git.tonic-ai.com/releases/vectara-cli/-/raw/devbranch/res/images/image.png?ref_type=heads)
 
 ### Non-Commercial Advanced Usage Using Span Models
 
@@ -872,8 +872,8 @@ The `Span` class supports processing and indexing documents from a folder, enabl
 
 #### Non-Commercial Advanced Rag Using Rebel
 
-![mRebel](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/res/images/Screenshot_2024-04-05_112158.png?ref_type=heads)
-![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/res/images/Screenshot_2024-04-05_112142.png?ref_type=heads)
+![mRebel](https://git.tonic-ai.com/releases/vectara-cli/-/blob/3f829fbdfc322916bb78632adfba41a73d5c95a5/res/images/Screenshot_2024-04-05_112158.png)
+![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](https://git.tonic-ai.com/releases/vectara-cli/-/blob/3f829fbdfc322916bb78632adfba41a73d5c95a5/res/images/Screenshot_2024-04-05_112142.png)
 
 The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata.
 

@@ -38,7 +38,7 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Utilities",
     ],
-    python_requires="==3.9",
+    python_requires=">=3.9",
     license="MIT",
     keywords="vectara search-engine document-indexing text-analysis information-retrieval natural-language-processing cli-tool data-science machine-learning text-processing",
 )

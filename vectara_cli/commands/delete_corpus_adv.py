@@ -23,7 +23,7 @@ def main(args):
     except ValueError as e:
         print(e)
 
-def setup_arg_parser(subparsers):
+def setup_arg_parser(subparsers, vectara_client):
     delete_corpus_adv_parser = subparsers.add_parser('delete-corpus-adv', help='Delete a corpus with advanced options')
     delete_corpus_adv_parser.add_argument('corpus_id', type=int, help='Corpus ID to delete')
-    delete_corpus_adv_parser.set_defaults(func=main)
+    delete_corpus_adv_parser.set_defaults(func=lambda args: delete_corpus(args, vectara_client))

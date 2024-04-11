@@ -33,7 +33,7 @@ def create_corpus_adv(args, vectara_client):
     except ValueError as e:
         print(e)
 
-def setup_arg_parser(subparsers):
+def setup_arg_parser(subparsers, vectara_client):
     parser = subparsers.add_parser('create-corpus-adv', help='Create a corpus with advanced options. Use "vectara create-corpus-adv -h" for more details.')
     parser.add_argument('name', type=str, help='The name of the corpus. This should be a unique name that describes the corpus.')
     parser.add_argument('description', type=str, help='A brief description of what the corpus is about.')
@@ -46,4 +46,4 @@ def setup_arg_parser(subparsers):
     parser.add_argument('--swap_ienc', action='store_true', help='Swap index encoder, default is False.')
     parser.add_argument('--textless', action='store_true', help='If the corpus is textless, default is False.')
     parser.add_argument('--encrypted', action='store_true', help='If the corpus is encrypted, default is True.')
-    parser.set_defaults(func=create_corpus_adv)
+    parser.set_defaults(func=lambda args: create_corpus_adv(args, vectara_client))

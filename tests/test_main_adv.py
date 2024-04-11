@@ -44,7 +44,6 @@ def test_main_test_upload_document_adv(mocker):
     mock_delete_corpus_adv = mocker.patch('vectara_cli.commands.delete_corpus_adv.main')
     mock_delete_corpus_adv.return_value.index_text.assert_called()
 
-
 def test_unknown_command():
     """Test handling of an unknown command."""
     with patch.object(sys, "argv", ["main_adv.py", "unknown-command"]):

@@ -873,6 +873,7 @@ The `Span` class supports processing and indexing documents from a folder, enabl
 #### Non-Commercial Advanced Rag Using Rebel
 
 ![mRebel](https://git.tonic-ai.com/releases/vectara-cli/-/raw/devbranch/res/images/Screenshot_2024-04-05_112158.png)
+
 ![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](https://git.tonic-ai.com/releases/vectara-cli/-/raw/devbranch/res/images/Screenshot_2024-04-05_112142.png)
 
 The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata.

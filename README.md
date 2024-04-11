@@ -1,18 +1,6 @@
 # vectara-cli
 
 `vectara-cli` is a Python package designed to interact with the Vectara platform, providing a command-line interface (CLI) and a set of APIs for indexing and querying documents, managing corpora, and performing advanced text analysis and processing tasks. This package is particularly useful for developers and data scientists working on search and information retrieval applications.
-<details>
-<summary> Table of Contents </summary>
-
-- **[Get started with the example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb)**
-- **[More About Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
-- **[Basic Usage CLI](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_useage_cli.md?ref_type=heads)**
-- **[Programmatic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
-- **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
-- **[CONTRIBUTE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
-- **[Testing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/tests)**
-
-</details>
 
 
 #### Features
@@ -51,9 +39,26 @@ Before your start always set your api keys with :
 vectara set-api-keys <user_id> <api_key>
 ```
 
+#### Deploy Your App
+
+- [x] **`vectara create-ui`:** This command will create a new UI for your app.
+
+**Note:** that this script assumes you have [Node.js and NPM installed](https://nodejs.org/en/download) on your system, as required by the npx command.
+<details>
+<summary> Table of Contents </summary>
+
+- **[Get started with the example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb)**
+- **[More About Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
+- **[Basic Usage CLI](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_useage_cli.md?ref_type=heads)**
+- **[Programmatic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
+- **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
+- **[CONTRIBUTE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
+- **[Testing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/tests)**
+
+</details>
+
 <details>
 <summary> Get Started </summary>
-
 
 #### Command Line Interface (CLI) Usage
 
@@ -602,13 +607,6 @@ Once you have set up your environment variables, `vectara-cli` will automaticall
 - coming soon !
 
 </details>
-
-#### Deploy Your App
-
-[x] **`vectara create-ui`:** This command will create a new UI for your app.
-
-**Note:** that this script assumes you have [Node.js and NPM installed](https://nodejs.org/en/download) on your system, as required by the npx command.
-
 <details>
 <summary> Contributing </summary>
 

@@ -1,18 +1,23 @@
 # vectara-cli
 
 `vectara-cli` is a Python package designed to interact with the Vectara platform, providing a command-line interface (CLI) and a set of APIs for indexing and querying documents, managing corpora, and performing advanced text analysis and processing tasks. This package is particularly useful for developers and data scientists working on search and information retrieval applications.
+<details>
+<summary> Table of Contents </summary>
 
+- **Get started** with the [example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb)
+- **[More About Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
+- **[Basic Usage CLI](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_useage_cli.md?ref_type=heads)**
+- **[Programmatic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
+- **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
+- **[CONTRIBUTE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
+- **[Testing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/tests)**
+</details>
 ## Features
 
 - Indexing text and documents into Vectara corpora.
 - Querying indexed documents.
 - Creating and deleting corpora.
-- Advanced text processing and analysis using pre-trained models (optional advanced package).
-
-## Get Started
-
-Get started with the [example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb) by downloading them and running them locally on any laptop.
-
+- Advanced text processing and analysis using pre-trained models (optional advanced package(s)).
 ### Basic Installation
 
 The basic installation includes the core functionality for interacting with the Vectara platform.
@@ -43,6 +48,8 @@ vectara set-api-keys <user_id> <api_key>
 
 <details>
 <summary> Get Started </summary>
+
+
 ## Command Line Interface (CLI) Usage
 
 The `vectara-cli` provides a powerful command line interface for interacting with the Vectara platform, enabling tasks such as document indexing, querying, corpus management, and advanced text processing directly from your terminal.
@@ -566,11 +573,7 @@ Once you have set up your environment variables, `vectara-cli` will automaticall
 - **[Get started with the example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb)**
 - **[More About Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
 
-### Usage
-
-- **[Basic Usage CLI](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_useage_cli.md?ref_type=heads)**
-- **[Programmatic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
-- **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
+</details>
 
 ## Deploy Your App
 
@@ -578,61 +581,37 @@ Once you have set up your environment variables, `vectara-cli` will automaticall
 
 **Note:** that this script assumes you have [Node.js and NPM installed](https://nodejs.org/en/download) on your system, as required by the npx command.
 
-### 3. Write Tests
+<details>
+<summary> Programmatic Usage </summary>
 
-- Add tests for your new functionalities in the `tests/` directory.
-- Ensure all tests pass by running them locally.
 
-### 4. Document Your Changes
 
-Update any documentation relevant to your changes, including inline comments and README if necessary.
+- coming soon !
 
-## Submitting Changes
+</details>
 
-### 1. Commit Your Changes
+<details>
+<summary> Advanced Usage </summary>
 
-Commit your changes with a clear message describing the feature or fix:
 
-```bash
-git commit -am "Add feature XYZ"
-```
+- coming soon !
 
-### 2. Push Your Changes
+</details>
 
-Push your branch to your GitHub fork:
+## Deploy Your App
 
-```bash
-git push origin your-feature-branch
-```
+[x] **`vectara create-ui`:** This command will create a new UI for your app.
 
-### 3. Create a Merge Request
-- Go to the [Merge Requests](https://git.tonic-ai.com/contribute/vectara/vectara-cli/-/merge_requests) page.
-- Create a new merge request, compare your feature branch to the main repository's `devbranch`.
-- Fill in a detailed description of your changes and link to any relevant issues.
+**Note:** that this script assumes you have [Node.js and NPM installed](https://nodejs.org/en/download) on your system, as required by the npx command.
 
-## Review Process
-Once your merge request is submitted:
-- The project maintainers will review your code and may request changes.
-- Collaborate on modifications and push updates to your branch accordingly.
-- Once approved, a maintainer will merge your changes into the main codebase.
+<details>
+<summary> Contributing </summary>
 
-## Post-merge
-After your changes have been merged:
-- Sync your fork with the original repository.
-- Consider deleting your branch to keep your fork clean:
-  ```bash
-  git branch -d your-feature-branch
-  git push origin --delete your-feature-branch
-  ```
-
-Thank you for contributing to `vectara-cli`! For any questions or further discussions, please reach out on the issues page or [on discord](https://discord.gg/7H4SKQekKe).
 
 - **[CONTRIBUTE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
 - **[Testing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/tests)**
 
-</details>
-
-<details> <summary> License</summary>
+## License
 
 `vectara-cli` is MIT licensed. See the [LICENSE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/LICENSE.md?ref_type=heads) file for more details.
 

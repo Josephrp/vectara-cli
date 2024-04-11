@@ -4,20 +4,25 @@
 <details>
 <summary> Table of Contents </summary>
 
-- **Get started** with the [example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb)
+- **[Get started with the example_notebooks here](https://git.tonic-ai.com/releases/vectara-cli/examples/examples.ipynb)**
 - **[More About Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
 - **[Basic Usage CLI](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_useage_cli.md?ref_type=heads)**
 - **[Programmatic Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/basic_usage.md?ref_type=heads)**
 - **[Advanced Usage](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/advanced_usage.md?ref_type=heads)**
 - **[CONTRIBUTE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/CONTRIBUTE.md?ref_type=heads)**
 - **[Testing](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/tests)**
+
 </details>
-## Features
+
+
+#### Features
 
 - Indexing text and documents into Vectara corpora.
 - Querying indexed documents.
 - Creating and deleting corpora.
 - Advanced text processing and analysis using pre-trained models (optional advanced package(s)).
+
+
 ### Basic Installation
 
 The basic installation includes the core functionality for interacting with the Vectara platform.
@@ -50,7 +55,7 @@ vectara set-api-keys <user_id> <api_key>
 <summary> Get Started </summary>
 
 
-## Command Line Interface (CLI) Usage
+#### Command Line Interface (CLI) Usage
 
 The `vectara-cli` provides a powerful command line interface for interacting with the Vectara platform, enabling tasks such as document indexing, querying, corpus management, and advanced text processing directly from your terminal.
 
@@ -598,7 +603,7 @@ Once you have set up your environment variables, `vectara-cli` will automaticall
 
 </details>
 
-## Deploy Your App
+#### Deploy Your App
 
 [x] **`vectara create-ui`:** This command will create a new UI for your app.
 

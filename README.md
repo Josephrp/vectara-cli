@@ -70,11 +70,11 @@ Before your start always set your api keys with :
 vectara set-api-keys <user_id> <api_key>
 ```
 
-# Basic Usage of Vectara CLI
+## Basic Usage of Vectara CLI
 
 The Vectara CLI provides a simple and efficient way to interact with the Vectara platform, allowing users to create corpora, index documents, and perform various other operations directly from the command line. This section covers the basic usage of the Vectara CLI for common tasks such as creating a corpus and indexing documents.
 
-## Creating a Corpus
+### Creating a Corpus
 
 To create a new corpus, you can use the `create-corpus` command. A corpus represents a collection of documents and serves as the primary organizational unit within Vectara.
 
@@ -96,9 +96,9 @@ vectara create-corpus 123 "My Corpus" "A corpus containing documents on topic XY
 
 This command creates a basic corpus with the specified ID, name, and description.
 
-## Indexing a Document
+### Indexing a Document
 
-To index a document into a corpus, you can use the `index-text` command. This command allows you to add a text document to the specified corpus, making it searchable within the Vectara platform.
+To index a document into a corpus, you can use the `index-document` command. This command allows you to add a text document to the specified corpus, making it searchable within the Vectara platform.
 
 ### Indexing Text
 
@@ -120,7 +120,7 @@ vectara-cli index-text 12345 67890 "This is the text of the document." "Summary 
 
 This command indexes a document with the provided text, context, and metadata into the specified corpus.
 
-## Advanced Corpus Creation
+### Advanced Corpus Creation
 
 For more advanced scenarios, you might want to specify additional options such as custom dimensions, filter attributes, or privacy settings for your corpus. The `create-corpus-advanced` command allows for these additional configurations.
 
@@ -208,6 +208,20 @@ Ensure that your documents are in one of the supported formats before attempting
 While the basic upload command does not include options for metadata and context, it's important to note that Vectara allows for the association of metadata with documents. This can be accomplished through advanced usage of the Vectara CLI or API, enabling you to provide additional information about the documents you upload, such as author, publication date, tags, and more.
 
 For detailed instructions on advanced document upload options, including how to include metadata and context, please refer to the Vectara documentation or the advanced usage section of the Vectara CLI help.
+
+
+#### Querying
+
+To perform a query in a specific corpus:
+
+```bash
+vectara-cli query "<query_text>" <num_results> <corpus_id>
+```
+
+- `<query_text>`: The text of the query.
+- `<num_results>`: The maximum number of results to return.
+- `<corpus_id>`: The ID of the corpus to query against.
+
 </details>
 
 <details>
@@ -264,10 +278,8 @@ This will update the environment with any new dependencies specified in the `env
 If you wish to remove the Conda environment, you can do so with the following command:
 
 ```bash
-conda env remove -n <env_name>
+conda env remove -n vectara
 ```
-
-Again, replace `<env_name>` with the name of your Conda environment.
 
 By following these steps, you can manage your project's dependencies in an isolated environment using Conda.
 
@@ -595,30 +607,6 @@ Once you have set up your environment variables, `vectara-cli` will automaticall
 <summary> Programmatic Usage </summary>
 
 
-
-#### Querying
-
-To perform a query in a specific corpus:
-
-```bash
-vectara-cli query "<query_text>" <num_results> <corpus_id>
-```
-
-- `<query_text>`: The text of the query.
-- `<num_results>`: The maximum number of results to return.
-- `<corpus_id>`: The ID of the corpus to query against.
-
-
-#### Deleting a Corpus
-
-To delete an existing corpus:
-
-```bash
-vectara-cli delete-corpus <corpus_id>
-```
-
-- `<corpus_id>`: The ID of the corpus to delete.
-
 #### Setting Up a Vectara Client
 
 First, initialize the Vectara client with your customer ID and API key. This client will be used for all subsequent operations.
@@ -824,7 +812,7 @@ This example showcases how to enrich text with additional metadata using the `En
 The advanced features allow you to enrich your indexes with additional information automatically. This should produce better results for retrieval.
 
 
-![Span Models for Named Entity Recognition](https://git.tonic-ai.com/releases/vectara-cli/-/blob/f4503fec4714a6c45761d05f7aa93f6120660903/res/images/image.png)
+![Span Models for Named Entity Recognition](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/res/images/image.png?ref_type=heads)
 
 ### Non-Commercial Advanced Usage Using Span Models
 
@@ -884,8 +872,8 @@ The `Span` class supports processing and indexing documents from a folder, enabl
 
 #### Non-Commercial Advanced Rag Using Rebel
 
-![mRebel](https://git.tonic-ai.com/releases/vectara-cli/-/blob/f4503fec4714a6c45761d05f7aa93f6120660903/res/images/Screenshot_2024-04-05_112158.png)
-![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](https://git.tonic-ai.com/releases/vectara-cli/-/blob/f4503fec4714a6c45761d05f7aa93f6120660903/res/images/Screenshot_2024-04-05_112142.png)
+![mRebel](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/res/images/Screenshot_2024-04-05_112158.png?ref_type=heads)
+![The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/res/images/Screenshot_2024-04-05_112142.png?ref_type=heads)
 
 The mRebel pre-trained model is able to extract triplets for up to 400 relation types from Wikidata.
 

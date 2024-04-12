@@ -3,6 +3,8 @@
 from vectara_cli.rebel_span.noncommercial.nerdspan import Span
 from vectara_cli.utils.config_manager import ConfigManager
 
+import json
+
 
 def main(args, vectara_client):
     

@@ -35,13 +35,13 @@ def test_set_api_keys_incorrect_args():
             mock_print.assert_called_with("Error: set-api-keys requires exactly 2 arguments: customer_id and api_key.")
 
 # Test unknown command handling
-def test_unknown_command_stderr():
-    with patch('builtins.print') as mock_print:
-        with patch.object(sys, 'argv', ['main.py', 'nonexistent-command']):
-            with pytest.raises(SystemExit) as exc_info:
-                main()
+def test_unknown_command_stderr(capfd):
+    with patch.object(sys, 'argv', ['main.py', 'nonexistent-command']):
+        with pytest.raises(SystemExit) as exc_info:
+            main()
     assert exc_info.value.code == 1
-    mock_print.assert_called_with("Unknown command: nonexistent-command")
+    out, err = capfd.readouterr()
+    assert "Unknown command: nonexistent-command" in out
 
 # Verifying that all expected commands are mapped properly
 def test_get_command_mapping_completeness():

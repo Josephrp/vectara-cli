@@ -40,7 +40,7 @@ def get_command_mapping():
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ("help", "--help", "-h"):
         main_help_text()
-        return
+        sys.exit(0)
 
     command = sys.argv[1]
     args = sys.argv[2:]
@@ -49,17 +49,14 @@ def main():
             print("Error: set-api-keys requires exactly 2 arguments: customer_id and api_key.")
             sys.exit(1)
         set_api_keys_main(*args) 
+
     else:
-        try:
-            vectara_client = get_vectara_client()
-            command_mapping = get_command_mapping()
-            if command in command_mapping:
-                command_mapping[command](args, vectara_client)
-            else:
-                print(f"Unknown command: {command}")
-                main_help_text()
-        except ValueError as e:
-            print(e)
+        vectara_client = get_vectara_client()
+        command_mapping = get_command_mapping()
+        if command in command_mapping:
+            command_mapping[command](args, vectara_client)
+        else:
+            print(f"vectara: '{command}' is not a vectara command. See 'vectara --help'.")
             sys.exit(1)
 
 if __name__ == "__main__":

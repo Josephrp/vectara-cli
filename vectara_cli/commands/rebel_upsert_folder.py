@@ -3,7 +3,7 @@
 import os
 from vectara_cli.core import VectaraClient
 from vectara_cli.utils.config_manager import ConfigManager
-from vectara_cli.advanced.noncommercial.rebel import Rebel
+from vectara_cli.rebel_span.noncommercial.rebel import Rebel
 
 
 def main(args, vectara_client):

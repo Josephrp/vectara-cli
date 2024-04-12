@@ -13,4 +13,3 @@ dependencies:
       - spacy
       - pytest
       - coverage
-      - python-dotenv

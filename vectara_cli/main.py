@@ -39,7 +39,7 @@ def get_command_mapping():
 
 def main():
     if len(sys.argv) < 2 or sys.argv[1] in ("help", "--help", "-h"):
-        main_help_text
+        main_help_text()
         return
 
     command = sys.argv[1]
@@ -57,7 +57,7 @@ def main():
                 command_mapping[command](args, vectara_client)
             else:
                 print(f"Unknown command: {command}")
-                main_help_text
+                main_help_text()
         except ValueError as e:
             print(e)
             sys.exit(1)

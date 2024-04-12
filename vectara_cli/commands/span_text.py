@@ -2,11 +2,12 @@
 
 from vectara_cli.rebel_span.noncommercial.nerdspan import Span
 from vectara_cli.utils.config_manager import ConfigManager
+from vectara_cli.core import VectaraClient
 
 import json
 
 
-def main(args, vectara_client):
+def main(args, vectara_client:VectaraClient):
     
     if len(args) < 3:
         print("Usage: vectara-cli span-text text model_name model_type")

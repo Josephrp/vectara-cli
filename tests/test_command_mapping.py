@@ -15,11 +15,8 @@ def test_command_mapping():
         "nerdspan-upsert-folder",
         "rebel-upsert-folder",
         "index-text",
+        "upload-folder"
     ]
     command_mapping = get_command_mapping()
     for cmd in expected_commands:
         assert cmd in command_mapping, f"Command '{cmd}' is missing in command_mapping"
-
-# Example usage:
-# Run the tests using `pytest` in your terminal
-# pytest test_command_mapping.py

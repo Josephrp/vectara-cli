@@ -1,8 +1,5 @@
 # ./commands/create_corpus_advanced.py
 
-# create_corpus.py
-
-# from vectara_cli.utils import get_vectara_client
 import json
 import sys
 from vectara_cli.data.corpus_data import CorpusData

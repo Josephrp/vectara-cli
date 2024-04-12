@@ -2,7 +2,7 @@
 
 import os
 from vectara_cli.utils.config_manager import ConfigManager
-from vectara_cli.advanced.commercial.enterprise import EnterpriseSpan
+from vectara_cli.rebel_span.commercial.enterprise import EnterpriseSpan
 
 
 def main(args, vectara_client):

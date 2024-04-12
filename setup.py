@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vectara-cli",
-    version="0.1.17",
+    version="0.1.18",
     author="Tonic-AI",
     author_email="team@tonic-ai.com",
     description="A CLI tool for interacting with the Vectara platform, including advanced text processing and indexing features.",
@@ -14,10 +14,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         "requests",
-        "python-dotenv"
+        "argparse"
     ],
     extras_require={
-        "advanced": [
+        "rebel_span": [
             "accelerate",
             "torch>=1.8.0",
             "transformers>=4.5.0",
@@ -28,6 +28,7 @@ setup(
     entry_points={
         "console_scripts": [
             "vectara=vectara_cli.main:main",
+            "vectara-cli=vectara_cli.main_adv:main",
         ],
     },
     classifiers=[

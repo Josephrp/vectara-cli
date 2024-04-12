@@ -176,6 +176,32 @@ def show_delete_corpus_help():
     """
 
     print(help_text)
+    
+def print_upload_folder_help():
+    """
+    Prints the help text for the upload-folder command.
+    """
+    help_text = """
+Usage: python script_name.py <corpus_id> <folder_path>
+
+Arguments:
+  <corpus_id>    The ID of the corpus where documents will be indexed. This must be an integer.
+  <folder_path>  The path to the folder containing documents to be indexed.
+
+Description:
+  This script uploads and indexes all documents located in the specified folder into the Vectara platform under the specified corpus ID. Each document in the folder is processed, and the script attempts to index it into the Vectara system.
+
+  The script outputs the status of each document's indexing process, indicating whether the indexing was successful and, if applicable, showing a preview of the extracted text.
+
+Example:
+  python script_name.py 1234 /path/to/documents
+
+  This example will attempt to index all documents found in '/path/to/documents' into the corpus with ID 1234.
+
+Note:
+  Ensure that the Vectara client is properly configured and authenticated before running this script. The folder should contain files that are in a format supported by Vectara's indexing system.
+    """
+    print(help_text)
 
 def print_upload_document_help():
     """

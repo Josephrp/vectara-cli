@@ -5,8 +5,9 @@ import json
 import os
 import logging
 from .data.corpus_data import CorpusData
-from .data.defaults import CorpusDefaults
-from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig
+# from .data.defaults import CorpusDefaults
+# from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig
+
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"
@@ -404,106 +405,3 @@ class VectaraClient:
             raise Exception(
                 f"Failed to upload document: HTTP {response.status_code} - {error_message}"
             )
-
-
-# # Example usage
-# CUSTOMER_ID = "your_customer_id"
-# API_KEY = "your_api_key"
-# CORPUS_ID = "your_corpus_id"
-# FILE_PATH = "/path/to/your/document.pdf"
-# DOCUMENT_ID = "unique_document_id"  # Optional
-# METADATA = {"author": "Author Name", "title": "Document Title"}  # Optional
-
-# vectara_client = VectaraClient(CUSTOMER_ID, API_KEY)
-# try:
-#     response = vectara_client.upload_document(CORPUS_ID, FILE_PATH, DOCUMENT_ID, METADATA)
-#     print("Upload successful:", response)
-# except Exception as e:
-#     print("Upload failed:", str(e))
-
-# # Example usage:
-# CUSTOMER_ID = "your_customer_id"
-# API_KEY = "your_api_key"
-# CORPUS_ID = 1  # Example corpus ID, replace with actual corpus ID to delete
-
-# vectara_client = VectaraClient(CUSTOMER_ID, API_KEY)
-# response, success = vectara_client.delete_corpus(CORPUS_ID)
-
-# if success:
-#     print("Corpus deleted successfully.")
-# else:
-#     print("Failed to delete corpus:", response)
-# # Example usage:
-# CUSTOMER_ID = "your_customer_id"
-# API_KEY = "your_api_key"
-# CORPUS_ID = "your_corpus_id"
-
-# vectara_client = VectaraClient(CUSTOMER_ID, API_KEY)
-
-# # Indexing a document
-# metadata = {
-#     "book-name": "Another example title",
-#     "collection": "Mathematics",
-#     "author": "Example Author",
-# }
-# section_text = "The answer to the ultimate question of life, the universe, and everything is 42."
-# document_id = "doc-id-2"
-# title = "Another Example Title"
-
-# response, success = vectara_client.index_document(CORPUS_ID, document_id, title, metadata, section_text)
-# if success:
-#     print("Document indexed successfully.")
-# else:
-#     print("Document indexing failed.", response)
-
-# # Example usage:
-# CUSTOMER_ID = "your_customer_id"
-# API_KEY = "your_api_key"
-
-# vectara_client = VectaraClient(CUSTOMER_ID, API_KEY)
-
-# # Creating a corpus
-# create_corpus_response = vectara_client.create_corpus(
-#     corpus_id=123456789,
-#     name="Example Corpus",
-#     description="This is an example corpus.",
-#     dtProvision=1234567890,
-#     enabled=True,
-#     swapQenc=False,
-#     swapIenc=False,
-#     textless=False,
-#     encrypted=False,
-#     encoderId="default",
-#     metadataMaxBytes=10000,
-#     customDimensions=[
-#         {"name": "dimension1", "description": "First custom dimension", "servingDefault": 1.0, "indexingDefault": 1.0}
-#     ],
-#     filterAttributes=[
-#         {"name": "filter1", "description": "First filter attribute", "indexed": True, "type": "FILTER_ATTRIBUTE_TYPE__UNDEFINED", "level": "FILTER_ATTRIBUTE_LEVEL__UNDEFINED"}
-#     ]
-# )
-# print(create_corpus_response)
-# # Example usage:
-# CUSTOMER_ID = "your_customer_id"
-# API_KEY = "your_api_key"
-# CORPUS_ID = "your_corpus_id"
-
-# vectara_client = VectaraClient(CUSTOMER_ID, API_KEY)
-
-# # Indexing a document
-# index_response = vectara_client.index_document(
-#     corpus_id=CORPUS_ID,
-#     document_id="unique_document_id",
-#     text="This is the document text.",
-#     context="Document context",
-#     metadata_json='{"author": "John Doe"}'
-# )
-# print(index_response)
-
-# # Querying
-# query_response = vectara_client.query(
-#     query_text="What is the meaning of life?",
-#     num_results=10,
-#     corpus_id=CORPUS_ID
-# )
-# print(query_response)

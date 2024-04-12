@@ -1,7 +1,7 @@
 # ./commands/nerdspan_upsert_folder.py
 
 import os
-from vectara_cli.advanced.noncommercial.nerdspan import Span
+from vectara_cli.rebel_span.noncommercial.nerdspan import Span
 from vectara_cli.utils.config_manager import ConfigManager
 
 

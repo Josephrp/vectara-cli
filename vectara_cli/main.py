@@ -1,19 +1,18 @@
-
 # ./main.py
 import sys
 from vectara_cli.commands import (
+    create_corpus,
     nerdspan_upsert_folder,
     index_text,
     index_document,
     query,
-    create_corpus_advanced,
     delete_corpus,
     span_enhance_folder,
     upload_document,
     upload_enriched_text,
     span_text,
     rebel_upsert_folder,
-    advanced_query
+    upload_folder
 )
 from vectara_cli.utils.create_ui import create_ui
 from vectara_cli.utils.config_manager import ConfigManager
@@ -24,7 +23,7 @@ def get_command_mapping():
     command_mapping = {
         "index-document": index_document.main,
         "query": query.main,
-        "create-corpus" : create_corpus_advanced.main,
+        "create-corpus": create_corpus.main,
         "delete-corpus": delete_corpus.main,
         "span-text": span_text.main,
         "span-enhance-folder": span_enhance_folder.main,
@@ -34,7 +33,7 @@ def get_command_mapping():
         "rebel-upsert-folder": rebel_upsert_folder.main,
         "index-text": index_text.main,
         "create-ui":create_ui,
-        "advanced-query":advanced_query.main
+        "upload-folder": upload_folder.main
     }
     return command_mapping
 
@@ -62,7 +61,6 @@ def main():
         except ValueError as e:
             print(e)
             sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

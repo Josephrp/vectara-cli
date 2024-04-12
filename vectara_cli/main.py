@@ -23,7 +23,7 @@ def get_command_mapping():
     command_mapping = {
         "index-document": index_document.main,
         "query": query.main,
-        "create-corpus" : create_corpus_advanced.main,
+        "create-corpus": create_corpus.main,
         "delete-corpus": delete_corpus.main,
         "span-text": span_text.main,
         "span-enhance-folder": span_enhance_folder.main,
@@ -59,7 +59,6 @@ def main():
         else:
             print(f"vectara: '{command}' is not a vectara command. See 'vectara --help'.")
             sys.exit(1)
-
 
 if __name__ == "__main__":
     main()

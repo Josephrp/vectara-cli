@@ -1,34 +1,65 @@
-# tests/test_delete_corpus_adv.py
+# ./tests/test_delete_corpus.py
 
 import pytest
 from unittest.mock import patch, MagicMock
-from vectara_cli.commands.delete_corpus_adv import main, delete_corpus
-
-class ArgsMock:
-    def __init__(self, corpus_id):
-        self.corpus_id = corpus_id
+from vectara_cli.commands.delete_corpus import main
 
 @pytest.fixture
-def vectara_client_mock(mocker):
-    mock = mocker.patch('vectara_cli.core.VectaraClient')
-    mock.return_value.delete_corpus.return_value = ({}, True)  
-    return mock
+def mock_client_success():
+    """Simulates successful deletion."""
+    class MockSuccessClient:
+        def delete_corpus(self, corpus_id):
+            return "Deletion successful", True
+    return MockSuccessClient()
 
-def test_delete_corpus_success(vectara_client_mock):
-    corpus_id = 12345
-    args = ArgsMock(corpus_id=corpus_id)
-    with patch('vectara_cli.commands.delete_corpus_adv.ConfigManager.get_api_keys', return_value=('customer_id', 'api_key')):
-        with patch('sys.argv', ['prog', str(corpus_id)]):
-            main(args)
-            vectara_client_mock.return_value.delete_corpus.assert_called_once_with(corpus_id)
+@pytest.fixture
+def mock_client_failure():
+    """Simulates failed deletion."""
+    class MockFailureClient:
+        def delete_corpus(self, corpus_id):
+            return "Deletion failed", False
+    return MockFailureClient()
 
-def test_delete_corpus_failure(vectara_client_mock):
-    vectara_client_mock.return_value.delete_corpus.return_value = ({"error": "Some error"}, False)
-    corpus_id = 12345
-    args = ArgsMock(corpus_id=corpus_id)
-    with patch('vectara_cli.commands.delete_corpus_adv.ConfigManager.get_api_keys', return_value=('customer_id', 'api_key')):
-        with patch('sys.argv', ['prog', str(corpus_id)]), pytest.raises(SystemExit) as e:
-            main(args)
-            assert e.type == SystemExit
-            vectara_client_mock.return_value.delete_corpus.assert_called_once_with(corpus_id)
-            assert e.value.code != 0
+@pytest.fixture
+def mock_config_manager():
+    """Mocks ConfigManager to return predetermined values."""
+    with patch('vectara_cli.commands.delete_corpus.ConfigManager') as mock:
+        mock.get_api_keys.return_value = (123, "api_key")
+        yield mock
+
+def test_delete_corpus_without_args(capfd):
+    """Tests if the deletion function behaves correctly when no arguments are passed."""
+    with patch('sys.argv', ["delete_corpus"]):
+        with patch('vectara_cli.commands.delete_corpus.show_delete_corpus_help') as mock_help:
+            mock_help.return_value = "\nUSAGE: delete_corpus [OPTIONS] CORPUS_ID\n"
+            main([], None)
+            out, _ = capfd.readouterr()
+            assert "USAGE" in out
+
+def test_delete_corpus_successful(mock_client_success, mock_config_manager, capfd):
+    """Tests successful deletion scenario."""
+    with patch('sys.argv', ["delete_corpus", "1234"]):
+        with patch('vectara_cli.commands.delete_corpus.main', return_value=mock_client_success):
+            main(['1234'], mock_client_success)
+            out, _ = capfd.readouterr()
+            assert "Corpus deleted successfully." in out
+
+def test_delete_corpus_failure(mock_client_failure, mock_config_manager, capfd):
+    """Tests failed deletion scenario."""
+    with patch('sys.argv', ["delete_corpus", "1234"]):
+        with patch('vectara_cli.commands.delete_corpus.main', return_value=mock_client_failure):
+            main(['1234'], mock_client_failure)
+            out, _ = capfd.readouterr()
+            assert "Failed to delete corpus:" in out
+
+def test_delete_corpus_with_exception(mock_config_manager, capfd):
+    """Tests the scenario where an exception is raised."""
+    class MockClientException:
+        def delete_corpus(self, corpus_id):
+            raise ValueError("An error occurred")
+
+    with patch('sys.argv', ["delete_corpus", "1234"]):
+        with patch('vectara_cli.commands.delete_corpus.main', return_value=MockClientException()):
+            main(['1234'], MockClientException())
+            out, _ = capfd.readouterr()
+            assert "An error occurred" in out

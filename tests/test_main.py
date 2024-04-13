@@ -4,13 +4,6 @@ import pytest
 from vectara_cli.main import main, get_command_mapping
 import sys
 
-# # Test the handling of the 'help' command
-# def test_help_command():
-#     with patch('builtins.print') as mock_print:
-#         with patch.object(sys, 'argv', ['main.py', 'help']):
-#             main()
-#             mock_print.assert_called()  # Ensuring help text is printed
-
 # Test the successful execution of a valid command
 @patch('vectara_cli.main.get_vectara_client')
 @patch('vectara_cli.commands.index_document.main')
@@ -41,7 +34,7 @@ def test_unknown_command_stderr(capfd):
             main()
     assert exc_info.value.code == 1
     out, err = capfd.readouterr()
-    assert "Unknown command: nonexistent-command" in out
+    assert "vectara: 'nonexistent-command' is not a vectara command. See 'vectara --help'." in out
 
 # Verifying that all expected commands are mapped properly
 def test_get_command_mapping_completeness():
@@ -53,3 +46,12 @@ def test_get_command_mapping_completeness():
     ]
     command_mapping = get_command_mapping()
     assert all(command in command_mapping for command in expected_commands)
+
+# Test handling of 'set-api-keys' with correct number of arguments
+@patch('vectara_cli.main.set_api_keys_main')
+def test_set_api_keys_correct_args(mock_set_api_keys_main):
+    with patch.object(sys, 'argv', ['main.py', 'set-api-keys', 'customer_id', 'api_key']):
+        main()
+    # Verify that set_api_keys_main was called with the expected arguments
+    mock_set_api_keys_main.assert_called_once_with('customer_id', 'api_key')
+

@@ -1,4 +1,4 @@
-# advanced_query.py
+# /vectara_cli/commands/advanced_query.py
 
 from vectara_cli.core import VectaraClient
 from vectara_cli.utils.config_manager import ConfigManager

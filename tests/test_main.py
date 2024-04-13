@@ -33,4 +33,4 @@ def test_unknown_command_stderr():
             with pytest.raises(SystemExit) as exc_info:
                 main()
             assert exc_info.value.code == 1
-            mock_print.assert_called_with("Unknown command: nonexistent-command")
+            mock_print.assert_called_with("vectara: 'nonexistent-command' is not a vectara command. See 'vectara --help'.")

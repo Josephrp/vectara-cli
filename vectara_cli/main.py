@@ -28,6 +28,7 @@ def get_command_mapping():
         "span-text": span_text.main,
         "span-enhance-folder": span_enhance_folder.main,
         "upload-document": upload_document.main,
+        "upload-folder":upload_folder.main,
         "upload-enriched-text": upload_enriched_text.main,
         "nerdspan-upsert-folder": nerdspan_upsert_folder.main,
         "rebel-upsert-folder": rebel_upsert_folder.main,

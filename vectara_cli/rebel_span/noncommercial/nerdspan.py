@@ -1,7 +1,6 @@
 # ./vectara-cli/advanced/nerdspan.py
 
 import spacy
-import span_marker
 from span_marker import SpanMarkerModel
 from vectara_cli.core import VectaraClient
 import json

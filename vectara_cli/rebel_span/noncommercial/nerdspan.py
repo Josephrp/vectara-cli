@@ -4,10 +4,18 @@ import spacy
 import span_marker
 from span_marker import SpanMarkerModel
 from vectara_cli.core import VectaraClient
+import json
 
 
 class Span:
-    def __init__(self, text, vectara_client, model_name, model_type):
+    def __init__(
+        self, 
+        text:str, # the text that the models will run inference on
+        vectara_client:VectaraClient, # the vectara client
+        model_name, # the model used
+        model_type,
+        ):
+        
         self.text = text
         self.vectara_client = vectara_client
         # self.customer_id = customer_id
@@ -20,31 +28,31 @@ class Span:
         }
         self.load_model(model_name, model_type)
 
-    def load_model(self, model_name, model_type):
+    def load_model(self):
         """
         Load a model given its name and type.
         """
         # Resolve the model name to its full identifier
-        full_model_name = self.model_mapping.get(model_name, "")
+        full_model_name = self.model_mapping.get(self.model_name, "")
         if not full_model_name:
-            raise ValueError(f"Model name '{model_name}' is not recognized.")
-        if model_type == "span_marker":
-            self.models[model_name] = SpanMarkerModel.from_pretrained(model_name)
-        elif model_type == "spacy":
+            raise ValueError(f"Model name '{self.model_name}' is not recognized.")
+        if self.model_type == "span_marker":
+            self.models[self.model_name] = SpanMarkerModel.from_pretrained(self.model_name)
+        elif self.model_type == "spacy":
             nlp = spacy.load("en_core_web_sm", exclude=["ner"])
-            nlp.add_pipe("span_marker", config={"model": model_name})
-            self.models[model_name] = nlp
+            nlp.add_pipe("span_marker", config={"model": self.model_name})
+            self.models[self.model_name] = nlp
         else:
             raise ValueError("Unsupported model type")
 
-    def run_inference(self, model_name):
+    def run_inference(self):
         """
         Run inference using a specified model.
         """
-        if model_name not in self.models:
+        if self.model_name not in self.models:
             raise ValueError("Model not loaded")
 
-        model = self.models[model_name]
+        model = self.models[self.model_name]
         if isinstance(model, SpanMarkerModel):
             return model.predict(self.text)
         elif isinstance(model, spacy.language.Language):
@@ -72,14 +80,14 @@ class Span:
                 key_value_pairs.append(entity)
         return output_str, key_value_pairs
 
-    def analyze_text(self, model_name):
+    def analyze_text(self):
         """
         Analyze the text with a given model and return formatted outputs.
         """
-        if model_name not in self.models:
-            raise ValueError(f"Model '{model_name}' not loaded.")
+        if self.model_name not in self.models:
+            raise ValueError(f"Model '{self.model_name}' not loaded.")
         # model = self.models[model_name]
-        entities = self.run_inference(model_name)
+        entities = self.run_inference(self.model_name)
         return self.format_output(entities)
 
     def create_corpus(self, name, description):

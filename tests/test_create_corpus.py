@@ -5,6 +5,7 @@ from unittest.mock import Mock, patch
 import sys
 from vectara_cli.commands.create_corpus import parse_json_arg, parse_args, main
 from vectara_cli.data.defaults import CorpusDefaults
+
 @pytest.fixture
 def mock_sys_argv_minimal():
     """Fixture to mock sys.argv with minimal valid args"""

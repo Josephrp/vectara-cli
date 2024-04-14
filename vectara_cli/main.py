@@ -13,7 +13,8 @@ from vectara_cli.commands import (
     span_text,
     rebel_upsert_folder,
     upload_folder,
-    query
+    query,
+    specialized_query
 )
 from vectara_cli.utils.create_ui import create_ui
 from vectara_cli.utils.config_manager import ConfigManager
@@ -36,6 +37,7 @@ def get_command_mapping():
         "index-text": index_text.main,
         "create-ui":create_ui,
         "advanced-query":advanced_query.main,
+        "specialized-query": specialized_query
     }
     return command_mapping
 

@@ -6,7 +6,7 @@ import os
 import logging
 from .data.corpus_data import CorpusData
 from .data.defaults import CorpusDefaults
-from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig
+from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig, ChatRequest , ScaleRequest , SpecialRequest, GrowthRequest
 from .data.query_response import QueryResponse
 class VectaraClient:
     def __init__(self, customer_id, api_key):
@@ -81,14 +81,14 @@ class VectaraClient:
                 }
             ]
         }
-
         response = requests.post(url, headers=self.headers, data=json.dumps(data_dict))
         if response.status_code != 200:
             print(f"Query failed with status code: {response.status_code}")
             return None
-
         try:
+            print("a")
             response_data = response.json()
+            print("response_data: ", response_data)
         except json.JSONDecodeError:
             print("Failed to parse JSON response from query.")
             return None
@@ -121,17 +121,17 @@ class VectaraClient:
             return response.json()
         else:
             return {"error": f"Failed to fetch data: {response.text}"}
-
+    
     def _parse_query_response(self, response_data):
         print("Parsing query response data...")
         responses = []
         if "responseSet" in response_data:
             for response_set in response_data["responseSet"]:
-                responses.extend(QueryResponse.parse_response(response_set.get("response", [])))
-            return responses
-        else:
-            return []
-
+                if 'response' in response_set:
+                    processed_responses = QueryResponse.parse_response(response_set['response'])
+                    responses.extend(processed_responses)
+        return responses    
+    
     @staticmethod
     def _extract_response_info(response):
         return {
@@ -162,6 +162,32 @@ class VectaraClient:
         }
 
         return json.dumps(request)
+
+    def post_query(self, data):
+        url = f"{self.base_url}/v1/query"
+        response = requests.post(url, headers=self.headers, json=data)
+        return response.json()
+
+    def make_specialized_request(self, request):
+        if isinstance(request, SpecialRequest):
+            query_data = {
+                "query": [{
+                    "query": request.query,
+                    "start": request.start,
+                    "numResults": request.num_results,
+                    "contextConfig": request.context_config.to_dict(),
+                    "corpusKey": [key.to_dict() for key in request.corpus_config],
+                    "summary": [request.summary_config.to_dict()]
+                }]
+            }
+
+            if isinstance(request, ScaleRequest) and hasattr(request, 'lexical_config'):
+                query_data['query'][0]['lexicalInterpolationConfig'] = request.lexical_config.to_dict()
+
+            if isinstance(request, ChatRequest) and hasattr(request, 'chat_config'):
+                query_data['query'][0]['chat'] = request.chat_config.to_dict()
+
+            return self.post_query(query_data)
 
     def create_corpus(self, corpus_data: CorpusData):
         url = f"{self.base_url}/v1/create-corpus"

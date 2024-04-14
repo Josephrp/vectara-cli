@@ -103,7 +103,7 @@ To index a document into a corpus, you can use the `index-document` command. Thi
 ### Indexing Text
 
 ```bash
-vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json>
+vectara index-text <corpus_id> <document_id> <text> <context> <metadata_json>
 ```
 
 - `<corpus_id>`: The unique identifier for the corpus where the document will be indexed.
@@ -115,7 +115,7 @@ vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json
 #### Example
 
 ```bash
-vectara-cli index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}'
+vectara index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}'
 ```
 
 This command indexes a document with the provided text, context, and metadata into the specified corpus.
@@ -167,7 +167,7 @@ To upload a document to a specific corpus in the Vectara platform, you can use t
 #### Basic Document Upload
 
 ```bash
-vectara-cli upload-document <corpus_id> <file_path> [document_id]
+vectara upload-document <corpus_id> <file_path> [document_id]
 ```
 
 - `<corpus_id>`: The unique identifier for the corpus where the document will be uploaded. This must be an integer.
@@ -177,7 +177,7 @@ vectara-cli upload-document <corpus_id> <file_path> [document_id]
 #### Example
 
 ```bash
-vectara-cli upload-document 12345 "/path/to/document.pdf"
+vectara upload-document 12345 "/path/to/document.pdf"
 ```
 
 This command uploads a document from the specified file path to the corpus with the given ID. If the upload is successful, you will receive a confirmation message along with any relevant details provided by the Vectara platform.
@@ -187,7 +187,7 @@ This command uploads a document from the specified file path to the corpus with 
 If you wish to specify a document ID during the upload process, you can include it as an additional argument:
 
 ```bash
-vectara-cli upload-document 12345 "/path/to/document.pdf" "custom-document-id-123"
+vectara upload-document 12345 "/path/to/document.pdf" "custom-document-id-123"
 ```
 
 This allows you to assign a custom identifier to the document, which can be useful for tracking or referencing the document within your application or database.
@@ -296,7 +296,7 @@ To set your Vectara customer ID and API key using the `vectara-cli`, you can use
 - **Syntax:** The command follows this simple syntax:
 
 ```bash
-vectara-cli set-api-keys <customer_id> <api_key>
+vectara set-api-keys <customer_id> <api_key>
 ```
 
 Replace `<customer_id>` with your Vectara customer ID and `<api_key>` with your Vectara API key.
@@ -304,7 +304,7 @@ Replace `<customer_id>` with your Vectara customer ID and `<api_key>` with your 
 - **Example:**
 
 ```bash
-vectara-cli set-api-keys 123456789 abcdefghijklmnopqrstuvwxyz
+vectara set-api-keys 123456789 abcdefghijklmnopqrstuvwxyz
 ```
 
 After executing this command, you will see a confirmation message indicating that your API keys have been set successfully.
@@ -366,7 +366,7 @@ To index a document into a corpus, you can use the `index-text` command. This co
 ### Indexing Text
 
 ```bash
-vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json>
+vectara index-text <corpus_id> <document_id> <text> <context> <metadata_json>
 ```
 
 - `<corpus_id>`: The unique identifier for the corpus where the document will be indexed.
@@ -378,7 +378,7 @@ vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json
 #### Example
 
 ```bash
-vectara-cli index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}'
+vectara index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}'
 ```
 
 This command indexes a document with the provided text, context, and metadata into the specified corpus.

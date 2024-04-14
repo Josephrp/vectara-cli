@@ -27,9 +27,11 @@ class QueryResponse:
             return [{'code': 'OK', 'detail': 'No status available'}]
         return [{'code': status.get('code', 'UNKNOWN'), 'detail': status.get('statusDetail', 'No detail available')} for status in statuses]
 
+
     @staticmethod
     def parse_response(response):
-        return [QueryResponse(item) for item in response]
+        print("Parsing individual response items...")
+        return [QueryResponse(item) if isinstance(item, dict) else item for item in response]
 
     @staticmethod
     def parse_metrics(metrics):

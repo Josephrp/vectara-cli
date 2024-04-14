@@ -1,5 +1,6 @@
 # ./data/query_request
 
+
 class ContextConfig:
     def __init__(self, chars_before, chars_after, sentences_before, sentences_after, start_tag, end_tag):
         self.chars_before = chars_before
@@ -125,3 +126,35 @@ class QueryRequest:
         if self.chat_config is not None:
             request_dict["chat"] = self.chat_config.to_dict()
         return request_dict
+    
+class SpecialRequest:
+    def __init__(self, context_config, corpus_config, summary_config):
+        self.context_config = context_config
+        self.corpus_config = corpus_config
+        self.summary_config = summary_config
+
+class GrowthRequest(SpecialRequest):
+    def __init__(self):
+        context_config = ContextConfig(20, 20, None, None, "<b>", "</b>")
+        corpus_config = [CorpusKey(customer_id=2, corpus_id=2, semantics="DEFAULT")]
+        summary_config = SummaryConfig("default-summarizer", 3, "en")
+        super().__init__(context_config, corpus_config, summary_config)
+        
+class ScaleRequest(SpecialRequest):
+    def __init__(self):
+        context_config = ContextConfig(None, None, 3, 3, "<b>", "</b>")
+        corpus_config = [CorpusKey(customer_id=3, corpus_id=3)]
+        dimensions = [Dimension("relevance", 1.5)]
+        lexical_config = LexicalInterpolationConfig(0.7, dimensions)
+        summary_config = SummaryConfig("vectara-summary-ext-v1.3.0", 3, "en")
+        super().__init__(context_config, corpus_config, summary_config)
+        self.lexical_config = lexical_config
+        
+class ChatRequest(SpecialRequest):
+    def __init__(self):
+        context_config = ContextConfig(0, 0, None, None, "%START_SNIPPET%", "%END_SNIPPET%")
+        corpus_config = [CorpusKey(customer_id=12, corpus_id=12, semantics="DEFAULT")]
+        chat_config = ChatConfig(True, "1d8f0258-3358-475a-b5eb-02a775cee09e", True)
+        summary_config = SummaryConfig(None, 5, "eng")
+        super().__init__(context_config, corpus_config, summary_config)
+        self.chat_config = chat_config

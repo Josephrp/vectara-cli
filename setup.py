@@ -14,6 +14,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "requests",
+        "argparse", 
     ],
     extras_require={
         "rebel_span": [

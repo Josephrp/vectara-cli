@@ -1,4 +1,4 @@
-# ./commands/create_corpus_advanced.py
+# ./commands/create_corpus.py
 
 import json
 import sys

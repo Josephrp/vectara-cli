@@ -7,6 +7,26 @@ import json
 
 
 class Span:
+    """
+    Model Name and model
+    
+    ### Example model names
+    ```
+    self.model_mapping = {
+            "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
+            "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
+            "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
+        }
+    ```
+    
+
+
+    Model Types
+    -------
+    - span_marker
+    - spacy
+    """
+    
     def __init__(
         self, 
         text:str, # the text that the models will run inference on
@@ -17,6 +37,8 @@ class Span:
         
         self.text = text
         self.vectara_client = vectara_client
+        self.model_name = model_name
+        self.model_type = model_type
         # self.customer_id = customer_id
         # self.api_key = api_key
         self.models = {}
@@ -25,9 +47,10 @@ class Span:
             "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
             "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
         }
-        self.load_model(model_name, model_type)
+        self.load_model()
+        
 
-    def load_model(self):
+    def load_model(self) -> None:
         """
         Load a model given its name and type.
         """
@@ -36,11 +59,14 @@ class Span:
         if not full_model_name:
             raise ValueError(f"Model name '{self.model_name}' is not recognized.")
         if self.model_type == "span_marker":
-            self.models[self.model_name] = SpanMarkerModel.from_pretrained(self.model_name)
+            # self.models[self.model_name] = SpanMarkerModel.from_pretrained(self.model_name)
+            repo_name = self.model_mapping[self.model_name]
+            current_model = SpanMarkerModel.from_pretrained(repo_name)
+            self.models.update({self.model_name : current_model})
         elif self.model_type == "spacy":
             nlp = spacy.load("en_core_web_sm", exclude=["ner"])
             nlp.add_pipe("span_marker", config={"model": self.model_name})
-            self.models[self.model_name] = nlp
+            repo_name = self.model_mapping[self.model_name]
         else:
             raise ValueError("Unsupported model type")
 
@@ -85,8 +111,8 @@ class Span:
         """
         if self.model_name not in self.models:
             raise ValueError(f"Model '{self.model_name}' not loaded.")
-        # model = self.models[model_name]
-        entities = self.run_inference(self.model_name)
+        
+        entities = self.run_inference()
         return self.format_output(entities)
 
     def create_corpus(self, name, description):
@@ -135,7 +161,7 @@ class Span:
             chunks = self.text_chunker(extracted_text)
 
             # Process each chunk and re-upload to the second corpus
-            self.load_model(model_name, model_type)
+            self.load_model()
             for chunk in chunks:
                 self.text = chunk  # Update the Span text to the current chunk
                 _, key_value_pairs = self.analyze_text(model_name)

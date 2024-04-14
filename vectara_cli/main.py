@@ -5,14 +5,15 @@ from vectara_cli.commands import (
     nerdspan_upsert_folder,
     index_text,
     index_document,
-    query,
+    advanced_query,
     delete_corpus,
     span_enhance_folder,
     upload_document,
     upload_enriched_text,
     span_text,
     rebel_upsert_folder,
-    upload_folder
+    upload_folder,
+    query
 )
 from vectara_cli.utils.create_ui import create_ui
 from vectara_cli.utils.config_manager import ConfigManager
@@ -34,8 +35,7 @@ def get_command_mapping():
         "rebel-upsert-folder": rebel_upsert_folder.main,
         "index-text": index_text.main,
         "create-ui":create_ui,
-#       "advanced-query":advanced_query.main,
-#       "index-text-adv": index_text_adv.main,
+        "advanced-query":advanced_query.main,
     }
     return command_mapping
 

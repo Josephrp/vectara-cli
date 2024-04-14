@@ -31,9 +31,6 @@ class SummaryConfig:
             "maxSummarizedResults": self.max_summarized_results,
             "responseLang": self.response_lang,
         }
-
-# query_request.py
-
 class CorpusKey:
     def __init__(self, customer_id, corpus_id, semantics='DEFAULT'):
         self.customer_id = customer_id

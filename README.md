@@ -911,6 +911,7 @@ for result in enhanced_results:
 ```
 
 </details>
+
 <details>
 <summary> Contributing </summary>
 
@@ -937,13 +938,13 @@ Browse the [Issues](https://git.tonic-ai.com/contribute/vectara/vectara-cli/issu
 
 2. **Create a New Branch**: Before you start making changes, switch to the `devbranch` and create a new branch for your feature or fix. We encourage naming your branch in a way that reflects the issue or feature you're working on.
 
-    ```
+    ```bash
     git checkout devbranch
     git checkout -b feature/your-feature-name
     ```
     Or, if you're working on a specific issue:
 
-    ```
+    ```bash
     git checkout devbranch
     git checkout -b issue/ISSUE_NUMBER-short-description
     ```
@@ -990,19 +991,20 @@ Update any documentation relevant to your changes, including inline comments and
 
 1. **Commit Your Changes**: After making your changes, commit them to your branch. Use descriptive commit messages that explain the "why" and "what" of your changes. This practice helps reviewers understand your reasoning and the context of your contributions.
 
-    ```
+    ```bash
     git add .
     git commit -m "A descriptive message explaining the change"
     ```
 
 2. **Push Your Changes**: Once you're ready, push your changes to your forked repository on GitLab.
 
-    ```
+    ```bash
     git push origin feature/your-feature-name
     ```
+    
     Or, if you're working on an issue:
 
-    ```
+    ```bash
     git push origin issue/ISSUE_NUMBER-short-description
     ```
 

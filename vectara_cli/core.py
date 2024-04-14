@@ -5,8 +5,11 @@ import json
 import os
 import logging
 from .data.corpus_data import CorpusData
+import dotenv
 # from .data.defaults import CorpusDefaults
 # from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig
+
+dotenv.load_dotenv()
 
 class VectaraClient:
     def __init__(self, customer_id, api_key):
@@ -405,3 +408,63 @@ class VectaraClient:
             raise Exception(
                 f"Failed to upload document: HTTP {response.status_code} - {error_message}"
             )
+
+
+class LocalVectaraClient(VectaraClient):
+    """
+    A client for interacting with the Vectara API using local environment variables
+    for authentication.
+
+    Inherits from VectaraClient.
+
+    Attributes:
+        base_url (str): The base URL of the Vectara API.
+        customer_id (str): The customer ID used for authentication.
+        api_key (str): The API key used for authentication.
+        headers (dict): The headers to be included in API requests.
+
+    Methods:
+        __init__(self, *args, **kwargs): Initializes the client with authentication
+            credentials retrieved from environment variables.
+        index_text(self, corpus_id, document_id, text, context="", metadata_json="{}",
+            custom_dims=None, timeout=30): Indexes text data into the specified corpus.
+        query(self, query_text, num_results=10, corpus_id=None): Performs a simple
+            text-based query.
+        advanced_query(self, query_text, num_results=10, corpus_id=None, context_config=None,
+            summary_config=None): Performs an advanced query with optional configuration
+            for context and summary.
+        create_corpus(self, corpus_data: CorpusData): Creates a new corpus with the
+            provided metadata.
+        index_document(self, corpus_id, document_id, title, metadata, section_text):
+            Indexes a single document into the specified corpus.
+        index_documents_from_folder(self, corpus_id, folder_path, return_extracted_document=False):
+            Indexes all documents in a specified folder into the specified corpus.
+        delete_corpus(self, corpus_id): Deletes the specified corpus.
+        upload_document(self, corpus_id, file_path, document_id=None, metadata=None,
+            return_extracted_document=False): Uploads and indexes a single document into
+            the specified corpus.
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Initializes the LocalVectaraClient instance with authentication credentials
+        retrieved from environment variables.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        """
+        self.base_url = "https://api.vectara.io"
+        self.customer_id = os.getenv("VECTARA_CUSTOMER_ID")
+        self.api_key = os.getenv("VECTARA_API_KEY")
+        self.headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "customer-id": str(self.customer_id),
+            "x-api-key": self.api_key,
+        }
+
+        
+    

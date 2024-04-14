@@ -10,18 +10,34 @@ Before you begin, ensure you have the following installed:
 - Conda (for managing environments)
 - Git (for version control)
 
-## Getting Started
+## Identify An Issue
 
-### 1. Set Up Your Development Environment
+Browse the [Issues](https://git.tonic-ai.com/contribute/vectara/vectara-cli/issues) to find tasks to work on. You can start with issues labeled as "good first issue".
+- If you have an idea or a bug fix that is not listed, feel free to open a new issue to discuss it with other contributors.
+
+## Setting Up for Contribution
 
 1. **Fork the Repository**: Visit [vectara-cli on GitLab](https://git.tonic-ai.com/contribute/vectara/vectara-cli/) and fork the project to your account.
-   
-2. **Clone Your Fork**: Clone the repository to your local machine:
 
-   ```bash
-   git clone https://git.tonic-ai.com/<your-username>/vectara-cli.git
-   cd vectara-cli
-   ```
+2. **Create a New Branch**: Before you start making changes, switch to the `devbranch` and create a new branch for your feature or fix. We encourage naming your branch in a way that reflects the issue or feature you're working on.
+
+    ```
+    git checkout devbranch
+    git checkout -b feature/your-feature-name
+    ```
+    Or, if you're working on a specific issue:
+
+    ```
+    git checkout devbranch
+    git checkout -b issue/ISSUE_NUMBER-short-description
+    ```
+
+    This naming convention (`feature/your-feature-name` or `issue/ISSUE_NUMBER-short-description`) helps in identifying branches with their purposes, making collaboration and review processes more efficient.
+
+- the easiest way to make a correctly named branch is to use the gitlab gui directly inside the issue that you are responding to.
+
+![easily use the GUI to make a branch](image.png)
+
 
 3. **Create and Activate Conda Environment**:
 
@@ -36,22 +52,7 @@ Before you begin, ensure you have the following installed:
    pip install --editable .
    ```
 
-### 2. Find a Task
-
-- Browse the [Issues](https://git.tonic-ai.com/contribute/vectara/vectara-cli/issues) to find tasks to work on. You can start with issues labeled as "good first issue".
-- If you have an idea or a bug fix that is not listed, feel free to open a new issue to discuss it with other contributors.
-
-## Making Changes
-
-### 1. Create a Branch
-
-Create a new branch for your changes:
-
-```bash
-git checkout -b your-feature-branch
-```
-
-### 2. Develop
+## Develop
 
 - **Add Functionality**: Write your code and add it to the appropriate directory:
   - For new functionalities, add your code in `./vectara_cli/commands`.
@@ -60,32 +61,34 @@ git checkout -b your-feature-branch
 
 - **Add Help Text**: Update help texts in `./vectara_cli/help_texts/help_text.py` to reflect your changes or new commands.
 
-### 3. Write Tests
+## Write Tests
 
 - Add tests for your new functionalities in the `tests/` directory.
 - Ensure all tests pass by running them locally.
 
-### 4. Document Your Changes
+## Document Your Changes
 
 Update any documentation relevant to your changes, including inline comments and README if necessary.
 
-## Submitting Changes
+## Submitting Your Contributions
 
-### 1. Commit Your Changes
+1. **Commit Your Changes**: After making your changes, commit them to your branch. Use descriptive commit messages that explain the "why" and "what" of your changes. This practice helps reviewers understand your reasoning and the context of your contributions.
 
-Commit your changes with a clear message describing the feature or fix:
+    ```
+    git add .
+    git commit -m "A descriptive message explaining the change"
+    ```
 
-```bash
-git commit -am "Add feature XYZ"
-```
+2. **Push Your Changes**: Once you're ready, push your changes to your forked repository on GitLab.
 
-### 2. Push Your Changes
+    ```
+    git push origin feature/your-feature-name
+    ```
+    Or, if you're working on an issue:
 
-Push your branch to your GitHub fork:
-
-```bash
-git push origin your-feature-branch
-```
+    ```
+    git push origin issue/ISSUE_NUMBER-short-description
+    ```
 
 ### 3. Create a Merge Request
 - Go to the [Merge Requests](https://git.tonic-ai.com/contribute/vectara/vectara-cli/-/merge_requests) page.

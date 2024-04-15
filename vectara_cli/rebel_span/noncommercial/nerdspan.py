@@ -75,11 +75,11 @@ class Span:
         output_str += "\n".join([f"{kvp['span']} ({kvp['label']} - Score: {kvp['score']:.2f})" for kvp in key_value_pairs])
         return output_str, key_value_pairs
 
-    def create_corpus(self, name, description):
+    def create_corpus(self, description):
 #       corpus_id = uuid.uuid4().int  # Generates a random corpus ID
         response = self.vectara_client.create_corpus(
  #          corpus_id=corpus_id,
-            name=name,
+ #          name=name,
             description=description,
 #           dtProvision=int(uuid.uuid1().time),  # Example timestamp
             enabled=True,

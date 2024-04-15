@@ -1,11 +1,15 @@
 # ./commands/nerdspan_upsert_folder.py
 
+
+import sys
 import os
 from vectara_cli.rebel_span.noncommercial.nerdspan import Span
 from vectara_cli.utils.config_manager import ConfigManager
+from vectara_cli.core import VectaraClient
+from vectara_cli.data.corpus_data import CorpusData
 
 
-def main(vectara_client, args):
+def main(vectara_client:VectaraClient, args):
     if len(args) < 3:
         print("Usage: vectara process-and-upload folder_path model_name model_type")
         return
@@ -20,7 +24,20 @@ def main(vectara_client, args):
             print(f"The specified folder path does not exist: {folder_path}")
             return
         text=""
-        span = Span(vectara_client=vectara_client, text=text, model_name=model_name, model_type=model_type)
+        span = Span(
+            vectara_client=vectara_client, 
+            text=text, 
+            model_name=model_name, 
+            model_type=model_type
+            )
+        
+        corpus_data = CorpusData(
+            name="Tonic-AI",
+            description="Data the REAL tonic Company"
+        )
+        vectara_client.create_corpus(
+            corpus_data=corpus_data.to_dict()
+        )
         corpus_id_1, corpus_id_2 = span.process_and_upload(
             folder_path, model_name, model_type
         )
@@ -32,6 +49,6 @@ def main(vectara_client, args):
 
 
 if __name__ == "__main__":
-    import sys
+    
 
     main(sys.argv)

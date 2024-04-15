@@ -1,9 +1,10 @@
 import sys
 from vectara_cli.helptexts.help_text import print_upload_folder_help
+from vectara_cli.core import VectaraClient
 
-def main(vectara_client, args):
+def main(vectara_client: VectaraClient, args=None):
     """
-    Main function for uploading and indexing all documents in a specified folder.
+    Main function for uploading and indexisng all documents in a specified folder.
     
     Args:
         args: Command line arguments passed to the upload-folder command.
@@ -32,3 +33,4 @@ def main(vectara_client, args):
 
 if __name__ == "__main__":
     main(sys.argv)
+    # main()

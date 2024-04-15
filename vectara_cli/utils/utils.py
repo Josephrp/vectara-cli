@@ -12,7 +12,3 @@ def set_api_keys(customer_id, api_key) -> None:
     ConfigManager.set_api_keys(customer_id, api_key)
     print("API keys set successfully.")
     return get_vectara_client() 
-
-def set_api_keys_adv(customer_id, api_key) -> None:
-    ConfigManager.set_api_keys(customer_id=customer_id, api_key=api_key)
-    print("API keys set successfully.")

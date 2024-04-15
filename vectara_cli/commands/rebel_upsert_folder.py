@@ -6,7 +6,7 @@ from vectara_cli.utils.config_manager import ConfigManager
 from vectara_cli.rebel_span.noncommercial.rebel import Rebel
 
 
-def main(args, vectara_client):
+def main(vectara_client, args):
     if len(args) < 4:
         print(
             "Usage: vectara-cli advanced-upsert-folder folder_path corpus_id_1 corpus_id_2"

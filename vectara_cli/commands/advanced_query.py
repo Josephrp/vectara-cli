@@ -9,7 +9,7 @@ from vectara_cli.data.query_response import QueryResponse
 import sys
 
 
-def main(args, vectara_client):
+def main(vectara_client, args):
     if len(args) < 4:
         advanced_query_help
         return

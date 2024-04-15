@@ -1,7 +1,7 @@
 import sys
 from vectara_cli.helptexts.help_text import print_upload_folder_help
 
-def main(args, vectara_client):
+def main(vectara_client, args):
     """
     Main function for uploading and indexing all documents in a specified folder.
     

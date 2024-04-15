@@ -4,116 +4,76 @@ import spacy
 from span_marker import SpanMarkerModel
 from vectara_cli.core import VectaraClient
 import json
+import logging
 
 
 class Span:
-    """
-    Model Name and model
-    
-    ### Example model names
-    ```
-    self.model_mapping = {
-            "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
-            "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
-            "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
-        }
-    ```
-    
-
-
-    Model Types
-    -------
-    - span_marker
-    - spacy
-    """
-    
-    def __init__(
-        self, 
-        text:str, # the text that the models will run inference on
-        vectara_client:VectaraClient, # the vectara client
-        model_name, # the model used
-        model_type,
-        ):
-        
+    def __init__(self, vectara_client, text, model_name, model_type):
         self.text = text
         self.vectara_client = vectara_client
         self.model_name = model_name
         self.model_type = model_type
-        # self.customer_id = customer_id
-        # self.api_key = api_key
         self.models = {}
+        
         self.model_mapping = {
             "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
             "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
-            "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
+            "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5"
         }
         self.load_model()
-        
 
-    def load_model(self) -> None:
-        """
-        Load a model given its name and type.
-        """
-        # Resolve the model name to its full identifier
-        full_model_name = self.model_mapping.get(self.model_name, "")
+
+    def load_model(self):
+        full_model_name = self.model_mapping.get(self.model_name)
         if not full_model_name:
-            raise ValueError(f"Model name '{self.model_name}' is not recognized.")
+            logging.error("Model name '%s' is not recognized.", self.model_name)
+            raise ValueError(f"Model '{self.model_name}' not recognized.")
         if self.model_type == "span_marker":
-            # self.models[self.model_name] = SpanMarkerModel.from_pretrained(self.model_name)
-            repo_name = self.model_mapping[self.model_name]
-            current_model = SpanMarkerModel.from_pretrained(repo_name)
-            self.models.update({self.model_name : current_model})
+            try:
+                self.models[self.model_name] = SpanMarkerModel.from_pretrained(full_model_name)
+            except Exception as e:
+                logging.error("Failed to load model '%s' due to: %s", full_model_name, e)
+                raise
         elif self.model_type == "spacy":
-            nlp = spacy.load("en_core_web_sm", exclude=["ner"])
-            nlp.add_pipe("span_marker", config={"model": self.model_name})
-            repo_name = self.model_mapping[self.model_name]
+            try:
+                self.models[self.model_name] = spacy.load("en_core_web_sm")
+            except Exception as e:
+                logging.error("Failed to load spacy model due to: %s", e)
+                raise
         else:
+            logging.error("Unsupported model type: %s", self.model_type)
             raise ValueError("Unsupported model type")
 
     def run_inference(self):
-        """
-        Run inference using a specified model.
-        """
-        if self.model_name not in self.models:
+        model = self.models.get(self.model_name)
+        if not model:
+            logging.error("Model not found for: %s", self.model_name)
             raise ValueError("Model not loaded")
-
-        model = self.models[self.model_name]
-        if isinstance(model, SpanMarkerModel):
-            return model.predict(self.text)
-        elif isinstance(model, spacy.language.Language):
-            doc = model(self.text)
-            return [(entity.text, entity.label_) for entity in doc.ents]
-        else:
-            raise ValueError("Unsupported model instance")
+        try:
+            if hasattr(model, 'predict'):
+                results = model.predict(self.text)
+                logging.debug("Model predictions: %s", results)
+                return results
+            else:
+                results = [(ent.text, ent.label_) for ent in model(self.text).ents]
+                logging.debug("Spacy entities extracted: %s", results)
+                return results
+        except Exception as e:
+            logging.error("Inference failed due to: %s", e)
+            raise
 
     def format_output(self, entities):
-        """
-        Format the output entities into a string and a list of key-value pairs.
-        """
-        output_str = f"Entities found in text: {self.text}\n"
-        key_value_pairs = []
-        for entity in entities:
-            if isinstance(entity, tuple):
-                # spaCy output
-                output_str += f"{entity[0]}: {entity[1]}\n"
-                key_value_pairs.append({"span": entity[0], "label": entity[1]})
-            else:
-                # SpanMarkerModel output
-                output_str += (
-                    f"{entity['span']}: {entity['label']}, Score: {entity['score']}\n"
-                )
-                key_value_pairs.append(entity)
+        output_str = f"Entities found in the text: {self.text}\n"
+        key_value_pairs = [{'span': ent[0], 'label': ent[1]} for ent in entities]
+        output_str += '\n'.join([f"{kv['span']} ({kv['label']})" for kv in key_value_pairs])
         return output_str, key_value_pairs
 
     def analyze_text(self):
-        """
-        Analyze the text with a given model and return formatted outputs.
-        """
-        if self.model_name not in self.models:
-            raise ValueError(f"Model '{self.model_name}' not loaded.")
-        
         entities = self.run_inference()
-        return self.format_output(entities)
+        output_str = f"Entities found in the text: {self.text}\n"
+        key_value_pairs = [{'span': ent['span'], 'label': ent['label'], 'score': ent['score']} for ent in entities]
+        output_str += "\n".join([f"{kvp['span']} ({kvp['label']} - Score: {kvp['score']:.2f})" for kvp in key_value_pairs])
+        return output_str, key_value_pairs
 
     def create_corpus(self, name, description):
 #       corpus_id = uuid.uuid4().int  # Generates a random corpus ID
@@ -173,3 +133,21 @@ class Span:
                 )
 
         return corpus_id_1, corpus_id_2
+    
+    
+# class Span:
+#     """
+#     Model Name and model
+
+#     ```
+#     self.model_mapping = {
+#             "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
+#             "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
+#             "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
+#         }
+#     ```
+#     Model Types
+#     -------
+#     - span_marker
+#     - spacy
+#     """    

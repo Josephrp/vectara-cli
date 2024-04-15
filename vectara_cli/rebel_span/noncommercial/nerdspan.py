@@ -71,7 +71,7 @@ class Span:
     def analyze_text(self):
         entities = self.run_inference()
         output_str = f"Entities found in the text: {self.text}\n"
-        key_value_pairs = [{'span': ent['word'], 'label': ent['entity_group'], 'score': ent['score']} for ent in entities]
+        key_value_pairs = [{'span': ent['span'], 'label': ent['label'], 'score': ent['score']} for ent in entities]
         output_str += "\n".join([f"{kvp['span']} ({kvp['label']} - Score: {kvp['score']:.2f})" for kvp in key_value_pairs])
         return output_str, key_value_pairs
 

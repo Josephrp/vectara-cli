@@ -43,7 +43,7 @@ def parse_args(args):
 
     return name, description, options
 
-def main(args, vectara_client):
+def main(vectara_client, args):
     if len(args) < 2:
         print_create_corpus_advanced_help()
         return

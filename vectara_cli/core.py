@@ -6,8 +6,12 @@ import os
 import logging
 from .data.corpus_data import CorpusData
 from .data.defaults import CorpusDefaults
-from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig, ChatRequest , ScaleRequest , SpecialRequest, GrowthRequest
+from .data.query_request import (
+    QueryRequest, CorpusKey, ContextConfig, SummaryConfig, 
+    ChatRequest , ScaleRequest , SpecialRequest, GrowthRequest
+)
 from .data.query_response import QueryResponse
+
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"

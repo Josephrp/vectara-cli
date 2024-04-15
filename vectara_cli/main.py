@@ -1,4 +1,5 @@
 # ./main.py
+
 import sys
 from vectara_cli.commands import (
     create_corpus,
@@ -46,6 +47,7 @@ def main():
         main_help_text()
         sys.exit(0)
 
+    vectara_client = get_vectara_client()
     command = sys.argv[1]
     args = sys.argv[2:]
     if command == "set-api-keys":
@@ -58,10 +60,12 @@ def main():
         vectara_client = get_vectara_client()
         command_mapping = get_command_mapping()
         if command in command_mapping:
-            if command == "span-text":
+            if command == "create-ui":
                 command_mapping[command]()
             else:
-                command_mapping[command](args, vectara_client)
+                command_func = command_mapping[command]
+                if callable(command_func):
+                    command_func(vectara_client, args)
         else:
             print(f"vectara: '{command}' is not a vectara command. See 'vectara --help'.")
             sys.exit(1)

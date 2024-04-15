@@ -25,9 +25,9 @@ from vectara_cli.utils.utils import (
     get_api_keys as get_api_keys_main,
 )
 from vectara_cli.helptexts.help_text import main_help_text
+from typing import Callable, Dict
 
-
-def get_command_mapping():
+def get_command_mapping() -> Dict[str,Callable]:
     command_mapping = {
         "index-document": index_document.main,
         "query": query.main,

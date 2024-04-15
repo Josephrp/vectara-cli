@@ -7,22 +7,6 @@ import json
 import logging
 
 
-# class Span:
-#     """
-#     Model Name and model
-
-#     ```
-#     self.model_mapping = {
-#             "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
-#             "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
-#             "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
-#         }
-#     ```
-#     Model Types
-#     -------
-#     - span_marker
-#     - spacy
-#     """    
 class Span:
     def __init__(self, vectara_client, text, model_name, model_type):
         self.text = text
@@ -31,7 +15,6 @@ class Span:
         self.model_type = model_type
         self.models = {}
         
-        # Mapping of supported NLP models
         self.model_mapping = {
             "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
             "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
@@ -87,7 +70,10 @@ class Span:
 
     def analyze_text(self):
         entities = self.run_inference()
-        return self.format_output(entities)
+        output_str = f"Entities found in the text: {self.text}\n"
+        key_value_pairs = [{'span': ent['word'], 'label': ent['entity_group'], 'score': ent['score']} for ent in entities]
+        output_str += "\n".join([f"{kvp['span']} ({kvp['label']} - Score: {kvp['score']:.2f})" for kvp in key_value_pairs])
+        return output_str, key_value_pairs
 
     def create_corpus(self, name, description):
 #       corpus_id = uuid.uuid4().int  # Generates a random corpus ID
@@ -147,3 +133,21 @@ class Span:
                 )
 
         return corpus_id_1, corpus_id_2
+    
+    
+# class Span:
+#     """
+#     Model Name and model
+
+#     ```
+#     self.model_mapping = {
+#             "fewnerdsuperfine": "tomaarsen/span-marker-bert-base-fewnerd-fine-super",
+#             "multinerd": "tomaarsen/span-marker-mbert-base-multinerd",
+#             "largeontonote": "tomaarsen/span-marker-roberta-large-ontonotes5",
+#         }
+#     ```
+#     Model Types
+#     -------
+#     - span_marker
+#     - spacy
+#     """    

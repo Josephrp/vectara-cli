@@ -58,7 +58,10 @@ def main():
         vectara_client = get_vectara_client()
         command_mapping = get_command_mapping()
         if command in command_mapping:
-            command_mapping[command](args, vectara_client)
+            if command == "span-text":
+                command_mapping[command]()
+            else:
+                command_mapping[command](args, vectara_client)
         else:
             print(f"vectara: '{command}' is not a vectara command. See 'vectara --help'.")
             sys.exit(1)

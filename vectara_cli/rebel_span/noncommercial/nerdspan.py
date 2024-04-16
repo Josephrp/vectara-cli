@@ -113,18 +113,20 @@ class Span:
         )
 
         for document_id, success, extracted_text in upload_results:
+            logging.info(f"Processing document {document_id}...")
             if not success or extracted_text is None:
                 logging.warning(f"Skipping document {document_id}, upload failed or no text extracted.")
                 continue
 
             chunks = self.text_chunker(extracted_text)
-            self.load_model(model_name, model_type)
+            # self.load_model(model_name, model_type)
+            logging.info(f"Analyzing chunk for document {document_id}...")
             for chunk in chunks:
                 self.text = chunk
                 _, key_value_pairs = self.analyze_text()
                 metadata_json = json.dumps({"entities": key_value_pairs})
                 self.vectara_client.index_text(
-                    corpus_id_2, document_id, chunk, metadata_json=metadata_json
+                    corpus_id=corpus_id_2, document_id=document_id, text=chunk, metadata_json=metadata_json
                 )
 
         logging.info("Finished processing and uploading documents.")

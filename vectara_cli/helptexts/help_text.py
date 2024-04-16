@@ -176,7 +176,35 @@ def show_delete_corpus_help():
     """
 
     print(help_text)
+def print_specialized_query_help():
+    help_text = """
+    Usage: python main.py specialized-query [type] [query] [num_results]
     
+    This command performs a specialized query to the Vectara platform with custom configurations.
+ 
+    Arguments:
+    [type]         Type of specialized query to perform, options are 'growth', 'scale', or 'chat'.
+    [query]        The text query to be processed; encapsulate the query in quotes.
+    [num_results]  The maximum number of results to return.
+
+    Description of request types:
+    - 'growth': Uses a configuration optimized for businesses looking to expand and grow their user base.
+                It emphasizes a balanced retrieval of relevant information prioritizing solid insights.
+
+    - 'scale':  Designed for large-scale operations needing detailed and in-depth analysis. 
+                This type returns detailed replies and ensures comprehensive coverage of the topic.
+
+    - 'chat':   Configured for an engaging conversational interface. This setting is ideal for chatbots 
+                and applications requiring interactive dialogues with contextual understanding.
+
+    Examples:
+    python main.py specialized-query growth "Latest trends in AI" 5
+    python main.py specialized-query scale "Detail on blockchain technology" 10
+    python main.py specialized-query chat "Discuss machine learning advancements" 3
+
+    Use these commands to effectively leverage the Vectara platform for refined, contextually aware queries.
+    """
+    print(help_text)    
 def print_upload_folder_help():
     """
     Prints the help text for the upload-folder command.

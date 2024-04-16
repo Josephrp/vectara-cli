@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %
 logger = logging.getLogger()
 
 class Span:
-    def __init__(self, vectara_client, text, model_name, model_type):
+    def __init__(self, vectara_client:VectaraClient, text, model_name, model_type):
         self.text = text
         self.vectara_client = vectara_client
         self.model_name = model_name
@@ -110,15 +110,15 @@ class Span:
         corpus_response_2 = self.create_corpus("Corpus 2", "Second corpus for processed uploads")  
         corpus_id_2 = corpus_response_2['data']['corpusId']  
           
-        upload_results = self.vectara_client.index_documents_from_folder(corpus_id_1, folder_path, return_extracted_document=True)  
+        upload_results = self.vectara_client.alt_index_documents_from_folder(corpus_id_1, folder_path, return_extracted_document=True)  
         for document_id, success, response in upload_results:  
             logging.debug(f"Received response for document {document_id}: {response}")  
             if not success:  
                 logging.warning(f"Upload failed for document {document_id}.")  
-                continue  
+                # continue  
             if response is None or response == '':  
                 logging.warning(f"No response received for document {document_id}.")  
-                continue  
+                # continue  
     
             # If the response is a string, try to parse it as JSON  
             if isinstance(response, str):  
@@ -127,18 +127,18 @@ class Span:
                 except json.JSONDecodeError as e:  
                     logging.warning(f"Failed to parse response as JSON for document {document_id}: {e}")  
                     logging.debug(f"Response content: '{response}'")  
-                    continue
+                    # continue
             
             # Now we can safely assume response is a dictionary and use the 'get' method  
-            document_text_sections = response.get('document', {}).get('section', [])  
-            if not document_text_sections:  
-                logging.warning(f"Text sections not found or invalid format in the response for document {document_id}.")  
-                continue  
+            # document_text_sections = response.get('document', {}).get('section', [])
+            # if not document_text_sections:  
+            #     logging.warning(f"Text sections not found or invalid format in the response for document {document_id}.")  
+                # continue  
               
             # Combine text from all sections  
-            document_text = " ".join(section['text'] for section in document_text_sections if 'text' in section)  
+            # document_text = " ".join(section['text'] for section in response if 'text' in section)  
               
-            chunks = self.text_chunker(document_text)  
+            chunks = self.text_chunker(response)
             for chunk_index, chunk in enumerate(chunks):  
                 # Use the analyzed_text method to process text and extract entities  
                 self.text = chunk  

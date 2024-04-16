@@ -5,7 +5,11 @@ from span_marker import SpanMarkerModel
 from vectara_cli.core import VectaraClient
 import json
 import logging
+from vectara_cli.data.corpus_data import CorpusData
+import logging
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 class Span:
     def __init__(self, vectara_client, text, model_name, model_type):
@@ -75,13 +79,11 @@ class Span:
         output_str += "\n".join([f"{kvp['span']} ({kvp['label']} - Score: {kvp['score']:.2f})" for kvp in key_value_pairs])
         return output_str, key_value_pairs
 
-    def create_corpus(self, description):
-#       corpus_id = uuid.uuid4().int  # Generates a random corpus ID
-        response = self.vectara_client.create_corpus(
- #          corpus_id=corpus_id,
- #          name=name,
+    def create_corpus(self, name, description):
+        logger.debug("Creating corpus with name: %s, description: %s", name, description)
+        corpus_data = CorpusData(
+            name=name,
             description=description,
-#           dtProvision=int(uuid.uuid1().time),  # Example timestamp
             enabled=True,
             swapQenc=False,
             swapIenc=False,
@@ -91,9 +93,11 @@ class Span:
             metadataMaxBytes=10000,
             customDimensions=[],
             filterAttributes=[],
-        )
+        ).to_dict()
+        # Convert corpus_data to JSON serializable dictionary before sending it over the API
+        response = self.vectara_client.create_corpus(corpus_data)
         print(f"Corpus creation response: {response}")
-        return corpus_id
+        return response
 
     def text_chunker(self, text, chunk_size=512):
         return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]

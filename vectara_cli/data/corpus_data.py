@@ -6,8 +6,8 @@ from .custom_dimension import CustomDimension
 class CorpusData:
     def __init__(
         self, 
-        name:str, # sets the name of the corpus
-        description:str, # sets the description of the corpus
+        name:str, 
+        description:str, 
         dtProvision=None, 
         corpus_id=None, 
         enabled:bool=True, 

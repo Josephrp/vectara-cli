@@ -19,24 +19,15 @@ def main(vectara_client:VectaraClient, args):
     model_type = args[2]
 
     try:
-        customer_id, api_key = ConfigManager.get_api_keys()
+        # customer_id, api_key = ConfigManager.get_api_keys()
         if not os.path.isdir(folder_path):
             print(f"The specified folder path does not exist: {folder_path}")
             return
-        text=""
         span = Span(
             vectara_client=vectara_client, 
-            text=text, 
+            text="", 
             model_name=model_name, 
             model_type=model_type
-            )
-        
-        corpus_data = CorpusData(
-            name="Tonic-AI",
-            description="Data the REAL tonic Company"
-        )
-        vectara_client.create_corpus(
-            corpus_data=corpus_data.to_dict()
         )
         corpus_id_1, corpus_id_2 = span.process_and_upload(
             folder_path, model_name, model_type

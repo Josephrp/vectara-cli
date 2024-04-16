@@ -686,7 +686,7 @@ Browse the [Issues](https://git.tonic-ai.com/contribute/vectara/vectara-cli/issu
 
 - the easiest way to make a correctly named branch is to use the gitlab gui directly inside the issue that you are responding to.
 
-![easily use the GUI to make a branch](image.png)
+![easily use the GUI to make a branch](https://git.tonic-ai.com/releases/vectara-cli/-/raw/devbranch/res/images/contributingimage.png)
 
 
 3. **Create and Activate Conda Environment**:

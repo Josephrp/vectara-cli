@@ -4,7 +4,22 @@ from .filter_attribute import FilterAttribute
 from .custom_dimension import CustomDimension
 
 class CorpusData:
-    def __init__(self, corpus_id, name, description, dtProvision, enabled, swapQenc, swapIenc, textless, encrypted, encoderId, metadataMaxBytes, customDimensions, filterAttributes):
+    def __init__(
+        self, 
+        name:str, 
+        description:str, 
+        dtProvision=None, 
+        corpus_id=None, 
+        enabled:bool=True, 
+        swapQenc:bool=True, 
+        swapIenc:bool=False, 
+        textless:bool=False, 
+        encrypted:bool=False, 
+        encoderId:int=1,
+        metadataMaxBytes:int=1000, 
+        customDimensions:list=[], 
+        filterAttributes:list=[],
+    ):
         self.corpus_id = corpus_id
         self.name = name
         self.description = description
@@ -24,7 +39,7 @@ class CorpusData:
             "id": self.corpus_id,
             "name": self.name,
             "description": self.description,
-            "dtProvision": self.dtProvision, # ommit if there's an issue ?
+            "dtProvision": self.dtProvision,
             "enabled": self.enabled,
             "swapQenc": self.swapQenc,
             "swapIenc": self.swapIenc,

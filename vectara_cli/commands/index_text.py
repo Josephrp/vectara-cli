@@ -23,7 +23,7 @@ def parse_custom_dimensions(args):
                 raise ValueError(f"Invalid value for custom dimension '{name}': must be a float.")
     return custom_dims
 
-def main(args, vectara_client):
+def main(vectara_client, args):
     if len(args) < 5:
         print_index_text_usage()
         return

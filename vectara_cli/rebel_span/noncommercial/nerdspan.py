@@ -5,7 +5,11 @@ from span_marker import SpanMarkerModel
 from vectara_cli.core import VectaraClient
 import json
 import logging
+from vectara_cli.data.corpus_data import CorpusData
+import logging
 
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger()
 
 class Span:
     def __init__(self, vectara_client, text, model_name, model_type):
@@ -76,64 +80,86 @@ class Span:
         return output_str, key_value_pairs
 
     def create_corpus(self, name, description):
-#       corpus_id = uuid.uuid4().int  # Generates a random corpus ID
-        response = self.vectara_client.create_corpus(
- #          corpus_id=corpus_id,
+        logging.info(f"Creating corpus with name: {name}")
+        corpus_data = CorpusData(
             name=name,
             description=description,
-#           dtProvision=int(uuid.uuid1().time),  # Example timestamp
             enabled=True,
             swapQenc=False,
             swapIenc=False,
             textless=False,
             encrypted=False,
-            encoderId="default",
+            encoderId=1,
             metadataMaxBytes=10000,
             customDimensions=[],
             filterAttributes=[],
-        )
-        print(f"Corpus creation response: {response}")
-        return corpus_id
+        ).to_dict()
+        response = self.vectara_client.create_corpus(corpus_data)
+        logging.info(f"Corpus creation response: {response}")
+        return response
 
     def text_chunker(self, text, chunk_size=512):
         return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
 
-    def process_and_upload(self, folder_path, model_name, model_type):
-        # Create two corpora
-        corpus_id_1 = self.create_corpus("Corpus 1", "First corpus for raw uploads")
-        corpus_id_2 = self.create_corpus(
-            "Corpus 2", "Second corpus for processed uploads"
-        )
-
-        # Upload documents from folder to the first corpus
-        upload_results = self.vectara_client.index_documents_from_folder(
-            corpus_id_1, folder_path, return_extracted_document=True
-        )
-
-        for document_id, success, extracted_text in upload_results:
-            if not success or extracted_text is None:
-                print(
-                    f"Skipping document {document_id}, upload failed or no text extracted."
-                )
-                continue
-
-            # Chunk the text
-            chunks = self.text_chunker(extracted_text)
-
-            # Process each chunk and re-upload to the second corpus
-            self.load_model()
-            for chunk in chunks:
-                self.text = chunk  # Update the Span text to the current chunk
-                _, key_value_pairs = self.analyze_text(model_name)
-                # Convert key-value pairs to a metadata JSON string
-                metadata_json = json.dumps({"entities": key_value_pairs})
-                # Index processed chunk into the second corpus
-                self.vectara_client.index_text(
-                    corpus_id_2, document_id, chunk, metadata_json=metadata_json
-                )
-
-        return corpus_id_1, corpus_id_2
+    def process_and_upload(self, folder_path, model_name, model_type):  
+        logging.info("Starting the processing and upload of documents.")  
+          
+        # Create two corpora, one for raw uploads and one for processed uploads  
+        corpus_response_1 = self.create_corpus("Corpus 1", "First corpus for raw uploads")  
+        corpus_id_1 = corpus_response_1['data']['corpusId']  
+        corpus_response_2 = self.create_corpus("Corpus 2", "Second corpus for processed uploads")  
+        corpus_id_2 = corpus_response_2['data']['corpusId']  
+          
+        upload_results = self.vectara_client.index_documents_from_folder(corpus_id_1, folder_path, return_extracted_document=True)  
+        for document_id, success, response in upload_results:  
+            logging.debug(f"Received response for document {document_id}: {response}")  
+            if not success:  
+                logging.warning(f"Upload failed for document {document_id}.")  
+                continue  
+            if response is None or response == '':  
+                logging.warning(f"No response received for document {document_id}.")  
+                continue  
     
+            # If the response is a string, try to parse it as JSON  
+            if isinstance(response, str):  
+                try:  
+                    response = json.loads(response)  
+                except json.JSONDecodeError as e:  
+                    logging.warning(f"Failed to parse response as JSON for document {document_id}: {e}")  
+                    logging.debug(f"Response content: '{response}'")  
+                    continue
+            
+            # Now we can safely assume response is a dictionary and use the 'get' method  
+            document_text_sections = response.get('document', {}).get('section', [])  
+            if not document_text_sections:  
+                logging.warning(f"Text sections not found or invalid format in the response for document {document_id}.")  
+                continue  
+              
+            # Combine text from all sections  
+            document_text = " ".join(section['text'] for section in document_text_sections if 'text' in section)  
+              
+            chunks = self.text_chunker(document_text)  
+            for chunk_index, chunk in enumerate(chunks):  
+                # Use the analyzed_text method to process text and extract entities  
+                self.text = chunk  
+                output_str, entities = self.analyze_text()  # Assuming that analyze_text now returns a tuple  
+  
+                # Prepend the output_str to the chunk  
+                chunk_with_entities = output_str + "\n" + chunk  
+  
+                # Create metadata with extracted entities  
+                metadata_json = json.dumps({"entities": entities})  
+                  
+                # Index the processed chunk with extracted entities as metadata  
+                self.vectara_client.index_text(  
+                    corpus_id=corpus_id_2,  
+                    document_id=f"{document_id}_chunk_{chunk_index}",  
+                    text=chunk_with_entities,  
+                    metadata_json=metadata_json  
+                )  
+          
+        logging.info("Finished processing and uploading documents.")  
+        return corpus_id_1, corpus_id_2  
     
 # class Span:
 #     """

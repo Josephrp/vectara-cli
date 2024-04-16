@@ -103,8 +103,10 @@ class Span:
 
     def process_and_upload(self, folder_path, model_name, model_type):
         logging.info("Starting the processing and upload of documents.")
-        corpus_id_1 = self.create_corpus("Corpus 1", "First corpus for raw uploads")
-        corpus_id_2 = self.create_corpus("Corpus 2", "Second corpus for processed uploads")
+        corpus_response_1 = self.create_corpus("Corpus 1", "First corpus for raw uploads")
+        corpus_id_1 = corpus_response_1['data']['corpusId'] 
+        corpus_response_2 = self.create_corpus("Corpus 2", "Second corpus for processed uploads") 
+        corpus_id_2 = corpus_response_2['data']['corpusId'] 
 
         upload_results = self.vectara_client.index_documents_from_folder(
             corpus_id_1, folder_path, return_extracted_document=True

@@ -312,7 +312,7 @@ class VectaraClient:
                 response, status = self.upload_document(
                     corpus_id,
                     file_path,
-                    document_id=document_id,
+                    # document_id=document_id,
                     return_extracted_document=return_extracted_document,
                 )
                 extracted_text = (
@@ -371,7 +371,7 @@ class VectaraClient:
         self,
         corpus_id,
         file_path,
-        document_id=None,
+        # document_id=None,
         metadata=None,
         return_extracted_document=False,
     ):

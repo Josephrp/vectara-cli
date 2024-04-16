@@ -39,7 +39,7 @@ class CorpusData:
             "id": self.corpus_id,
             "name": self.name,
             "description": self.description,
-            "dtProvision": self.dtProvision, # ommit if there's an issue ?
+            "dtProvision": self.dtProvision,
             "enabled": self.enabled,
             "swapQenc": self.swapQenc,
             "swapIenc": self.swapIenc,

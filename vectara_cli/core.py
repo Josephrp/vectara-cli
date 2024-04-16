@@ -4,6 +4,7 @@ import requests
 import json
 import os
 import logging
+from typing import List, Tuple
 from .data.corpus_data import CorpusData
 from .data.defaults import CorpusDefaults
 from .data.query_request import (
@@ -293,7 +294,7 @@ class VectaraClient:
 
     def index_documents_from_folder(
         self, corpus_id, folder_path, return_extracted_document=False
-    ):
+    ) -> Tuple[str,bool,requests.request]:
         """Indexes all documents in a specified folder.
 
         Args:
@@ -315,12 +316,15 @@ class VectaraClient:
                     # document_id=document_id,
                     return_extracted_document=return_extracted_document,
                 )
-                extracted_text = (
-                    response.get("extractedText", "")
-                    if return_extracted_document
-                    else None
-                )
-                results.append((document_id, status == "Success", extracted_text))
+                extracted_chunks:List[str]=[ i['text'] for i in response['document']['section'] ]
+                joined_chunks:str = ''.join(extracted_chunks)
+                
+                # extracted_text = (
+                #     response.get("extractedText", "")
+                #     if return_extracted_document
+                #     else None
+                # )
+                results.append((document_id, status == "Success", joined_chunks))
                 if status != "Success":
                     logging.error(f"Failed to index document {document_id}: {response}")
                 else:
@@ -328,6 +332,48 @@ class VectaraClient:
             except Exception as e:
                 logging.error(f"Error uploading or indexing file {file_name}: {e}")
                 results.append((document_id, False, None))
+
+        return results
+    
+    def alt_index_documents_from_folder(
+        self, corpus_id, folder_path, return_extracted_document=False
+    # ) -> Tuple[str,requests,requests.request]:
+    ) -> Tuple[str,dict,str]:
+        """Indexes all documents in a specified folder.
+
+        Args:
+            corpus_id: The ID of the corpus to which the documents will be indexed.
+            folder_path: The path to the folder containing the documents.
+
+        Returns:
+            A list of tuples, each containing the document ID and a boolean indicating success or failure.
+        """
+        results = []
+        for file_name in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, file_name)
+            document_id = os.path.splitext(file_name)[0]
+
+            try:
+                response, status = self.upload_document(
+                    corpus_id,
+                    file_path,
+                    # document_id=document_id,
+                    return_extracted_document=return_extracted_document,
+                )
+                extracted_chunks:List[str]=[ i['text'] for i in response['document']['section'] ]
+                joined_chunks:str = ''.join(extracted_chunks)
+                
+
+                results.append((document_id, response , joined_chunks))
+                
+                
+                if status != "Success":
+                    logging.error(f"Failed to index document {document_id}: {response}")
+                else:
+                    logging.info(f"Successfully indexed document {document_id}")
+            except Exception as e:
+                logging.error(f"Error uploading or indexing file {file_name}: {e}")
+                results.append((document_id, response, ""))
 
         return results
 

@@ -15,7 +15,7 @@ class CorpusData:
         swapIenc:bool=False, 
         textless:bool=False, 
         encrypted:bool=False, 
-        encoderId:str="1", 
+        encoderId:int=1,
         metadataMaxBytes:int=1000, 
         customDimensions:list=[], 
         filterAttributes:list=[],

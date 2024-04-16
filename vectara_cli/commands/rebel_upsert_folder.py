@@ -11,9 +11,6 @@ def main(vectara_client, args):
         print(
             "Usage: vectara-cli advanced-upsert-folder folder_path corpus_id_1 corpus_id_2"
         )
-        print(
-            "Usage: vectara-cli advanced-upsert-folder folder_path corpus_id_1 corpus_id_2"
-        )
         return
 
     folder_path = args[1]
@@ -28,9 +25,6 @@ def main(vectara_client, args):
             return
 
         rebel = Rebel()
-        rebel.advanced_upsert_folder(
-            vectara_client, corpus_id_1, corpus_id_2, folder_path
-        )
         rebel.advanced_upsert_folder(
             vectara_client, corpus_id_1, corpus_id_2, folder_path
         )

@@ -5,7 +5,7 @@ from vectara_cli.utils.config_manager import ConfigManager
 from vectara_cli.helptexts.help_text import show_delete_corpus_help
 
 
-def main(args, vectara_client):
+def main(vectara_client, args):
     if len(args) < 1:
         show_delete_corpus_help()
         return

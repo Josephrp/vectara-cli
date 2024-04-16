@@ -1,58 +1,55 @@
-# tests/test_advanced_query.py
+# test_advanced_query.py
 
 import pytest
-from unittest.mock import Mock, patch
-from vectara_cli.commands.advanced_query import main
+import json
+from unittest.mock import patch, MagicMock
+from vectara_cli.commands.advanced_query import main as advanced_query_main
 
-class MockClientResponse:
-    def __init__(self, items):
-        self.items = items
-    
-    def __iter__(self):
-        return iter(self.items)
 
-@pytest.fixture
-def vectara_client_mock():
-    client_mock = Mock()
-    client_mock.advanced_query = Mock()
-    return client_mock
+class TestAdvancedQuery:
 
-def test_main_with_few_arguments(capsys, vectara_client_mock):
-    with patch('vectara_cli.commands.advanced_query.advanced_query_help') as mock_help_function:
-        main(["script_name", "query", "text"], vectara_client_mock)
-        mock_help_function.assert_called_once()
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.vectara_client_mock = MagicMock()
+
+    @pytest.fixture
+    def standard_args(self):
+        return ['script.py', 'test query', '2', '123', json.dumps({}), json.dumps({})]
+
+    def test_main_success(self, capsys, standard_args):
+        self.vectara_client_mock.advanced_query.return_value = {'results': ['Result 1', 'Result 2']}
+        advanced_query_main(standard_args, self.vectara_client_mock)
         captured = capsys.readouterr()
-        assert "Invalid" not in captured.out
+        assert 'Result 1' in captured.out
+        assert 'Result 2' in captured.out
 
-@pytest.mark.parametrize("context_config_json, summary_config_json, is_valid", [
-    ('{}', '{}', True),
-    ('{"invalid_json": true', '{}', False),  # Invalid JSON
-    ('{}', '{"invalid_json": true', False),  # Invalid JSON
-    ('{"context_length": "invalid"}', '{}', False),  # Invalid type in context_config
-])
-def test_main_with_invalid_configs(context_config_json, summary_config_json, is_valid, vectara_client_mock, capsys):
-    arguments = ["script_name", "query", "text", "2", "1", context_config_json, summary_config_json]
-    
-    main(arguments, vectara_client_mock)
-    captured = capsys.readouterr()
+    def test_main_few_arguments(self, capsys):
+        args = ['script.py', 'test query']
+        advanced_query_main(args, self.vectara_client_mock)
+        captured = capsys.readouterr()
+        assert "Error: Not enough arguments" in captured.out
 
-    if is_valid:
-        vectara_client_mock.advanced_query.assert_called()
-    else:
-        assert "Invalid" in captured.out or "Error" in captured.out
-        vectara_client_mock.advanced_query.assert_not_called()
+    def test_main_invalid_json(self, capsys, standard_args):
+        standard_args[4] = "{invalid_json}"
+        advanced_query_main(standard_args, self.vectara_client_mock)
+        captured = capsys.readouterr()
+        assert 'Error: Invalid JSON' in captured.out
 
-def test_advanced_query_response(vectara_client_mock, capsys):
-    vectara_client_mock.advanced_query.return_value = MockClientResponse(["Result 1", "Result 2"])
-    main(["script_name", "query", "text", "2", "1"], vectara_client_mock)
+    def test_main_num_results_not_an_integer(self, capsys, standard_args):
+        standard_args[2] = 'not_a_number'
+        advanced_query_main(standard_args, self.vectara_client_mock)
+        captured = capsys.readouterr()
+        assert 'Error: Invalid number of results' in captured.out
 
-    captured = capsys.readouterr()
-    assert "Result 1" in captured.out
-    assert "Result 2" in captured.out
+    def test_no_response_from_query(self, capsys, standard_args):
+        self.vectara_client_mock.advanced_query.return_value = {}
+        advanced_query_main(standard_args, self.vectara_client_mock)
+        captured = capsys.readouterr()
+        assert '{}' in captured.out
 
-def test_no_advanced_query_response(vectara_client_mock, capsys):
-    vectara_client_mock.advanced_query.return_value = None
-    main(["script_name", "query", "text", "2", "1"], vectara_client_mock)
-
-    captured = capsys.readouterr()
-    assert "No response received from the advanced query." in captured.out
+    def test_error_handling(self, capsys, standard_args):
+        error_message = "Unexpected error"
+        self.vectara_client_mock.advanced_query.side_effect = Exception(error_message)
+        advanced_query_main(standard_args, self.vectara_client_mock)
+        captured = capsys.readouterr()
+        assert f"Error: {error_message}" in captured.out

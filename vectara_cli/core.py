@@ -4,9 +4,14 @@ import requests
 import json
 import os
 import logging
+from typing import List, Tuple
 from .data.corpus_data import CorpusData
-# from .data.defaults import CorpusDefaults
-# from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig
+from .data.defaults import CorpusDefaults
+from .data.query_request import (
+    QueryRequest, CorpusKey, ContextConfig, SummaryConfig, 
+    ChatRequest , ScaleRequest , SpecialRequest, GrowthRequest
+)
+from .data.query_response import QueryResponse
 
 class VectaraClient:
     def __init__(self, customer_id, api_key):
@@ -81,74 +86,57 @@ class VectaraClient:
                 }
             ]
         }
-
         response = requests.post(url, headers=self.headers, data=json.dumps(data_dict))
         if response.status_code != 200:
             print(f"Query failed with status code: {response.status_code}")
             return None
-
         try:
+            print("a")
             response_data = response.json()
+            print("response_data: ", response_data)
         except json.JSONDecodeError:
             print("Failed to parse JSON response from query.")
             return None
 
         return self._parse_query_response(response_data)
 
-
-    def advanced_query(self, query_text, num_results=10, corpus_id=None, context_config=None, summary_config=None):
+    def advanced_query(self, query_text, num_results,  corpus_id, context_config, summary_config):
         url = f"{self.base_url}/v1/query"
-        print(f"Making advanced query to URL: {url}")  # Debug print
-
-        if not corpus_id:
-            corpus_id = 1
-        
-        corpus_keys = [{"customerId": self.customer_id, "corpusId": corpus_id, "semantics": "DEFAULT"}]
-        context_config_dict = context_config.to_dict() if context_config else {}
-        summary_config_dict = summary_config.to_dict() if summary_config else {}
-   
         data = {
-            "query": [{"query": query_text}],
-            "start": 0,
-            "numResults": num_results,
-            "contextConfig": context_config_dict,
-            "corpusKey": corpus_keys,
-            "summary": [summary_config_dict] if summary_config else []
+            "query": [{
+                "query": query_text,
+                "start": 0,
+                "numResults": num_results,
+                "contextConfig": context_config,
+                "corpusKey": [{
+                    #"customerId": self.customer_id,
+                    "corpusId": corpus_id
+                }],
+                "summary": [summary_config]
+            }]
         }
-        print(f"Query Request Data: {data}")  # Debug print to show the request being made
 
-        # Make the POST request
+        print("Sending request to:", url)
+        print("Request data:", json.dumps(data, indent=4)) 
         response = requests.post(url, headers=self.headers, json=data)
-        print(f"Response Status Code: {response.status_code}")  # Debug print for response status
-        if response.status_code != 200:
-            logging.error(f"Query failed with status code: {response.status_code}")
-            logging.error(f"Response: {response.text}")
-            return None
-
-        try:
-            response_data = response.json()
-            print(f"Response Data: {response_data}")  # Debug print for the actual response data
-        except json.JSONDecodeError:
-            logging.error("Failed to parse JSON response from query.")
-            return None
-
-        result = self._parse_query_response(response_data)
-        print(f"Parsed Query Response: {result}")  # Debug print for the parsed response
-        return result
+        print(f"Response Status Code: {response.status_code}")
+        print(f"Response content: {response.text}")
+        print(f"Response Status Code: {response.status_code}")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return {"error": f"Failed to fetch data: {response.text}"}
     
     def _parse_query_response(self, response_data):
+        print("Parsing query response data...")
+        responses = []
         if "responseSet" in response_data:
             for response_set in response_data["responseSet"]:
-                if "response" in response_set:
-                    # Extracting and returning the first response for simplicity. Adjust as needed.
-                    responses = response_set["response"]
-                    return [
-                        self._extract_response_info(response) for response in responses
-                    ]
-        else:
-            print("No response set found in the data")
-        return []
-
+                if 'response' in response_set:
+                    processed_responses = QueryResponse.parse_response(response_set['response'])
+                    responses.extend(processed_responses)
+        return responses    
+    
     @staticmethod
     def _extract_response_info(response):
         return {
@@ -180,11 +168,35 @@ class VectaraClient:
 
         return json.dumps(request)
 
-    def create_corpus(self, corpus_data: CorpusData):
-        url = f"{self.base_url}/v1/create-corpus"
-        payload = corpus_data 
+    def post_query(self, data):
+        url = f"{self.base_url}/v1/query"
+        response = requests.post(url, headers=self.headers, json=data)
+        return response.json()
 
-        response = requests.post(url, headers=self.headers, data=json.dumps({"corpus": payload}))
+    def make_specialized_request(self, request):
+        if isinstance(request, SpecialRequest):
+            query_data = {
+                "query": [{
+                    "query": request.query,
+                    "start": request.start,
+                    "numResults": request.num_results,
+                    "contextConfig": request.context_config.to_dict(),
+                    "corpusKey": [key.to_dict() for key in request.corpus_config],
+                    "summary": [request.summary_config.to_dict()]
+                }]
+            }
+
+            if isinstance(request, ScaleRequest) and hasattr(request, 'lexical_config'):
+                query_data['query'][0]['lexicalInterpolationConfig'] = request.lexical_config.to_dict()
+
+            if isinstance(request, ChatRequest) and hasattr(request, 'chat_config'):
+                query_data['query'][0]['chat'] = request.chat_config.to_dict()
+
+            return self.post_query(query_data)
+
+    def create_corpus(self, corpus_data: dict):
+        url = f"{self.base_url}/v1/create-corpus"
+        response = requests.post(url, headers=self.headers, data=json.dumps({"corpus": corpus_data}))
         return self._parse_response(response)
 
     def _parse_response(self, response):
@@ -282,7 +294,7 @@ class VectaraClient:
 
     def index_documents_from_folder(
         self, corpus_id, folder_path, return_extracted_document=False
-    ):
+    ) -> Tuple[str,bool,requests.request]:
         """Indexes all documents in a specified folder.
 
         Args:
@@ -301,15 +313,18 @@ class VectaraClient:
                 response, status = self.upload_document(
                     corpus_id,
                     file_path,
-                    document_id=document_id,
+                    # document_id=document_id,
                     return_extracted_document=return_extracted_document,
                 )
-                extracted_text = (
-                    response.get("extractedText", "")
-                    if return_extracted_document
-                    else None
-                )
-                results.append((document_id, status == "Success", extracted_text))
+                extracted_chunks:List[str]=[ i['text'] for i in response['document']['section'] ]
+                joined_chunks:str = ''.join(extracted_chunks)
+                
+                # extracted_text = (
+                #     response.get("extractedText", "")
+                #     if return_extracted_document
+                #     else None
+                # )
+                results.append((document_id, status == "Success", joined_chunks))
                 if status != "Success":
                     logging.error(f"Failed to index document {document_id}: {response}")
                 else:
@@ -317,6 +332,48 @@ class VectaraClient:
             except Exception as e:
                 logging.error(f"Error uploading or indexing file {file_name}: {e}")
                 results.append((document_id, False, None))
+
+        return results
+    
+    def alt_index_documents_from_folder(
+        self, corpus_id, folder_path, return_extracted_document=False
+    # ) -> Tuple[str,requests,requests.request]:
+    ) -> Tuple[str,dict,str]:
+        """Indexes all documents in a specified folder.
+
+        Args:
+            corpus_id: The ID of the corpus to which the documents will be indexed.
+            folder_path: The path to the folder containing the documents.
+
+        Returns:
+            A list of tuples, each containing the document ID and a boolean indicating success or failure.
+        """
+        results = []
+        for file_name in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, file_name)
+            document_id = os.path.splitext(file_name)[0]
+
+            try:
+                response, status = self.upload_document(
+                    corpus_id,
+                    file_path,
+                    # document_id=document_id,
+                    return_extracted_document=return_extracted_document,
+                )
+                extracted_chunks:List[str]=[ i['text'] for i in response['document']['section'] ]
+                joined_chunks:str = ''.join(extracted_chunks)
+                
+
+                results.append((document_id, response , joined_chunks))
+                
+                
+                if status != "Success":
+                    logging.error(f"Failed to index document {document_id}: {response}")
+                else:
+                    logging.info(f"Successfully indexed document {document_id}")
+            except Exception as e:
+                logging.error(f"Error uploading or indexing file {file_name}: {e}")
+                results.append((document_id, response, ""))
 
         return results
 
@@ -360,7 +417,7 @@ class VectaraClient:
         self,
         corpus_id,
         file_path,
-        document_id=None,
+        # document_id=None,
         metadata=None,
         return_extracted_document=False,
     ):
@@ -405,3 +462,63 @@ class VectaraClient:
             raise Exception(
                 f"Failed to upload document: HTTP {response.status_code} - {error_message}"
             )
+
+
+class LocalVectaraClient(VectaraClient):
+    """
+    A client for interacting with the Vectara API using local environment variables
+    for authentication.
+
+    Inherits from VectaraClient.
+
+    Attributes:
+        base_url (str): The base URL of the Vectara API.
+        customer_id (str): The customer ID used for authentication.
+        api_key (str): The API key used for authentication.
+        headers (dict): The headers to be included in API requests.
+
+    Methods:
+        __init__(self, *args, **kwargs): Initializes the client with authentication
+            credentials retrieved from environment variables.
+        index_text(self, corpus_id, document_id, text, context="", metadata_json="{}",
+            custom_dims=None, timeout=30): Indexes text data into the specified corpus.
+        query(self, query_text, num_results=10, corpus_id=None): Performs a simple
+            text-based query.
+        advanced_query(self, query_text, num_results=10, corpus_id=None, context_config=None,
+            summary_config=None): Performs an advanced query with optional configuration
+            for context and summary.
+        create_corpus(self, corpus_data: CorpusData): Creates a new corpus with the
+            provided metadata.
+        index_document(self, corpus_id, document_id, title, metadata, section_text):
+            Indexes a single document into the specified corpus.
+        index_documents_from_folder(self, corpus_id, folder_path, return_extracted_document=False):
+            Indexes all documents in a specified folder into the specified corpus.
+        delete_corpus(self, corpus_id): Deletes the specified corpus.
+        upload_document(self, corpus_id, file_path, document_id=None, metadata=None,
+            return_extracted_document=False): Uploads and indexes a single document into
+            the specified corpus.
+
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        Initializes the LocalVectaraClient instance with authentication credentials
+        retrieved from environment variables.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+
+        """
+        self.base_url = "https://api.vectara.io"
+        self.customer_id = os.getenv("VECTARA_CUSTOMER_ID")
+        self.api_key = os.getenv("VECTARA_API_KEY")
+        self.headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "customer-id": str(self.customer_id),
+            "x-api-key": self.api_key,
+        }
+
+        
+    

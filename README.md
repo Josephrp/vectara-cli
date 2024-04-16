@@ -11,7 +11,7 @@
 - Advanced text processing and analysis using pre-trained models (optional advanced package(s)).
 
 
-#### Basic Installation
+### Basic Installation
 
 The basic installation includes the core functionality for interacting with the Vectara platform.
 
@@ -44,6 +44,7 @@ vectara set-api-keys <user_id> <api_key>
 - [x] **`vectara create-ui`:** This command will create a new UI for your app.
 
 **Note:** that this script assumes you have [Node.js and NPM installed](https://nodejs.org/en/download) on your system, as required by the npx command.
+
 <details>
 <summary> Table of Contents </summary>
 
@@ -103,7 +104,7 @@ To index a document into a corpus, you can use the `index-document` command. Thi
 ### Indexing Text
 
 ```bash
-vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json>
+vectara index-text <corpus_id> <document_id> <text> <context> <metadata_json>
 ```
 
 - `<corpus_id>`: The unique identifier for the corpus where the document will be indexed.
@@ -115,7 +116,7 @@ vectara-cli index-text <corpus_id> <document_id> <text> <context> <metadata_json
 #### Example
 
 ```bash
-vectara-cli index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}'
+vectara index-text 12345 67890 "This is the text of the document." "Summary of the document" '{"author":"John Doe", "publishDate":"2024-01-01"}'
 ```
 
 This command indexes a document with the provided text, context, and metadata into the specified corpus.
@@ -167,7 +168,7 @@ To upload a document to a specific corpus in the Vectara platform, you can use t
 #### Basic Document Upload
 
 ```bash
-vectara-cli upload-document <corpus_id> <file_path> [document_id]
+vectara upload-document <corpus_id> <file_path> [document_id]
 ```
 
 - `<corpus_id>`: The unique identifier for the corpus where the document will be uploaded. This must be an integer.
@@ -177,7 +178,7 @@ vectara-cli upload-document <corpus_id> <file_path> [document_id]
 #### Example
 
 ```bash
-vectara-cli upload-document 12345 "/path/to/document.pdf"
+vectara upload-document 12345 "/path/to/document.pdf"
 ```
 
 This command uploads a document from the specified file path to the corpus with the given ID. If the upload is successful, you will receive a confirmation message along with any relevant details provided by the Vectara platform.
@@ -187,7 +188,7 @@ This command uploads a document from the specified file path to the corpus with 
 If you wish to specify a document ID during the upload process, you can include it as an additional argument:
 
 ```bash
-vectara-cli upload-document 12345 "/path/to/document.pdf" "custom-document-id-123"
+vectara upload-document 12345 "/path/to/document.pdf" "custom-document-id-123"
 ```
 
 This allows you to assign a custom identifier to the document, which can be useful for tracking or referencing the document within your application or database.
@@ -215,7 +216,7 @@ For detailed instructions on advanced document upload options, including how to 
 To perform a query in a specific corpus:
 
 ```bash
-vectara-cli query "<query_text>" <num_results> <corpus_id>
+vectara query "<query_text>" <num_results> <corpus_id>
 ```
 
 - `<query_text>`: The text of the query.
@@ -296,7 +297,7 @@ To set your Vectara customer ID and API key using the `vectara-cli`, you can use
 - **Syntax:** The command follows this simple syntax:
 
 ```bash
-vectara-cli set-api-keys <customer_id> <api_key>
+vectara set-api-keys <customer_id> <api_key>
 ```
 
 Replace `<customer_id>` with your Vectara customer ID and `<api_key>` with your Vectara API key.
@@ -304,7 +305,7 @@ Replace `<customer_id>` with your Vectara customer ID and `<api_key>` with your 
 - **Example:**
 
 ```bash
-vectara-cli set-api-keys 123456789 abcdefghijklmnopqrstuvwxyz
+vectara set-api-keys 123456789 abcdefghijklmnopqrstuvwxyz
 ```
 
 After executing this command, you will see a confirmation message indicating that your API keys have been set successfully.
@@ -332,8 +333,6 @@ Note that changes made through the command line will only take effect in new ins
 #### Using Credentials in `vectara-cli`
 
 Once you have set up your environment variables, `vectara-cli` will automatically use these credentials for authentication. There's no need to manually input your customer ID and API key each time you execute a command.
-
-- **[More About Configuration](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/docs/configuration.md)**
 
 </details>
 
@@ -447,7 +446,7 @@ pip install vectara-cli[rebel_span]
 To process text using the Span model:
 
 ```bash
-vectara-cli span-text "<text>" "<model_name>" "<model_type>"
+vectara span-text "<text>" "<model_name>" "<model_type>"
 ```
 
 - `<text>`: The text to process.
@@ -459,7 +458,7 @@ vectara-cli span-text "<text>" "<model_name>" "<model_type>"
 To process and upload documents from a folder:
 
 ```bash
-vectara-cli nerdspan-upsert-folder "<folder_path>" "<model_name>" "<model_type>"
+vectara nerdspan-upsert-folder "<folder_path>" "<model_name>" "<model_type>"
 ```
 
 - `<folder_path>`: The path to the folder containing documents to process and upload.
@@ -485,7 +484,7 @@ The `vectara-cli` includes specific commands designed to facilitate advanced tex
   To upload text that has been enriched with additional metadata:
 
   ```bash
-  vectara-cli upload-enriched-text <corpus_id> <document_id> <model_name> "<text>"
+  vectara upload-enriched-text <corpus_id> <document_id> <model_name> "<text>"
   ```
 
   - `<corpus_id>`: The ID of the corpus where the document will be uploaded.
@@ -498,7 +497,7 @@ The `vectara-cli` includes specific commands designed to facilitate advanced tex
   To process and upload all documents within a folder, enhancing them using a specified model:
 
   ```bash
-  vectara-cli span-enhance-folder <corpus_id_1> <corpus_id_2> <model_name> "<folder_path>"
+  vectara span-enhance-folder <corpus_id_1> <corpus_id_2> <model_name> "<folder_path>"
   ```
 
   - `<corpus_id_1>`: The ID for the corpus to upload plain text documents.
@@ -645,6 +644,7 @@ for result in enhanced_results:
 ```
 
 </details>
+
 <details>
 <summary> Contributing </summary>
 
@@ -660,18 +660,34 @@ Before you begin, ensure you have the following installed:
 - Conda (for managing environments)
 - Git (for version control)
 
-## Getting Started
+## Identify An Issue
 
-### 1. Set Up Your Development Environment
+Browse the [Issues](https://git.tonic-ai.com/contribute/vectara/vectara-cli/issues) to find tasks to work on. You can start with issues labeled as "good first issue".
+- If you have an idea or a bug fix that is not listed, feel free to open a new issue to discuss it with other contributors.
+
+## Setting Up for Contribution
 
 1. **Fork the Repository**: Visit [vectara-cli on GitLab](https://git.tonic-ai.com/contribute/vectara/vectara-cli/) and fork the project to your account.
-   
-2. **Clone Your Fork**: Clone the repository to your local machine:
 
-   ```bash
-   git clone https://git.tonic-ai.com/<your-username>/vectara-cli.git
-   cd vectara-cli
-   ```
+2. **Create a New Branch**: Before you start making changes, switch to the `devbranch` and create a new branch for your feature or fix. We encourage naming your branch in a way that reflects the issue or feature you're working on.
+
+    ```bash
+    git checkout devbranch
+    git checkout -b feature/your-feature-name
+    ```
+    Or, if you're working on a specific issue:
+
+    ```bash
+    git checkout devbranch
+    git checkout -b issue/ISSUE_NUMBER-short-description
+    ```
+
+    This naming convention (`feature/your-feature-name` or `issue/ISSUE_NUMBER-short-description`) helps in identifying branches with their purposes, making collaboration and review processes more efficient.
+
+- the easiest way to make a correctly named branch is to use the gitlab gui directly inside the issue that you are responding to.
+
+![easily use the GUI to make a branch](image.png)
+
 
 3. **Create and Activate Conda Environment**:
 
@@ -686,22 +702,7 @@ Before you begin, ensure you have the following installed:
    pip install --editable .
    ```
 
-### 2. Find a Task
-
-- Browse the [Issues](https://git.tonic-ai.com/contribute/vectara/vectara-cli/issues) to find tasks to work on. You can start with issues labeled as "good first issue".
-- If you have an idea or a bug fix that is not listed, feel free to open a new issue to discuss it with other contributors.
-
-## Making Changes
-
-### 1. Create a Branch
-
-Create a new branch for your changes:
-
-```bash
-git checkout -b your-feature-branch
-```
-
-### 2. Develop
+## Develop
 
 - **Add Functionality**: Write your code and add it to the appropriate directory:
   - For new functionalities, add your code in `./vectara_cli/commands`.
@@ -710,32 +711,35 @@ git checkout -b your-feature-branch
 
 - **Add Help Text**: Update help texts in `./vectara_cli/help_texts/help_text.py` to reflect your changes or new commands.
 
-### 3. Write Tests
+## Write Tests
 
 - Add tests for your new functionalities in the `tests/` directory.
 - Ensure all tests pass by running them locally.
 
-### 4. Document Your Changes
+## Document Your Changes
 
 Update any documentation relevant to your changes, including inline comments and README if necessary.
 
-## Submitting Changes
+## Submitting Your Contributions
 
-### 1. Commit Your Changes
+1. **Commit Your Changes**: After making your changes, commit them to your branch. Use descriptive commit messages that explain the "why" and "what" of your changes. This practice helps reviewers understand your reasoning and the context of your contributions.
 
-Commit your changes with a clear message describing the feature or fix:
+    ```bash
+    git add .
+    git commit -m "A descriptive message explaining the change"
+    ```
 
-```bash
-git commit -am "Add feature XYZ"
-```
+2. **Push Your Changes**: Once you're ready, push your changes to your forked repository on GitLab.
 
-### 2. Push Your Changes
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+    
+    Or, if you're working on an issue:
 
-Push your branch to your GitHub fork:
-
-```bash
-git push origin your-feature-branch
-```
+    ```bash
+    git push origin issue/ISSUE_NUMBER-short-description
+    ```
 
 ### 3. Create a Merge Request
 - Go to the [Merge Requests](https://git.tonic-ai.com/contribute/vectara/vectara-cli/-/merge_requests) page.
@@ -764,7 +768,7 @@ Thank you for contributing to `vectara-cli`! For any questions or further discus
 
 </details>
 
-<details> <summary> License</summary>
+<details><summary>License</summary>
 
 `vectara-cli` is MIT licensed. See the [LICENSE](https://git.tonic-ai.com/releases/vectara-cli/-/blob/devbranch/LICENSE.md?ref_type=heads) file for more details.
 
@@ -772,10 +776,10 @@ Thank you for contributing to `vectara-cli`! For any questions or further discus
 
 ```
 @misc{Vectara Cli,
-  author = {p3nGu1nZz, Tonic},
+  author = { isayahc , Josephrp, p3nGu1nZz},
   title = {Vectara Cli is a Python package for Vectara platform interaction, ideal for search and information retrieval tasks.},
   year = {2024},
-  publisher = {Tonic-AI},
+  publisher = {TeamTonic},
   journal = {Tonic-AI repository},
   howpublished = {\url{https://git.tonic-ai.com/releases/vectara-cli}}
 }

@@ -40,3 +40,13 @@ class ConfigManager:
                 "API keys are not set in the environment. Please set them using the appropriate method."
             )
         return customer_id, api_key
+
+    @staticmethod
+    def are_api_keys_set():
+        """
+        Checks if the API keys are set in the environment variables.
+        Returns True if both keys are set, False otherwise.
+        """
+        customer_id = os.getenv('VECTARA_CUSTOMER_ID')
+        api_key = os.getenv('VECTARA_API_KEY')
+        return customer_id is not None and api_key is not None

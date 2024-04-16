@@ -6,8 +6,12 @@ import os
 import logging
 from .data.corpus_data import CorpusData
 from .data.defaults import CorpusDefaults
-from .data.query_request import QueryRequest, CorpusKey, ContextConfig, SummaryConfig, ChatRequest , ScaleRequest , SpecialRequest, GrowthRequest
+from .data.query_request import (
+    QueryRequest, CorpusKey, ContextConfig, SummaryConfig, 
+    ChatRequest , ScaleRequest , SpecialRequest, GrowthRequest
+)
 from .data.query_response import QueryResponse
+
 class VectaraClient:
     def __init__(self, customer_id, api_key):
         self.base_url = "https://api.vectara.io"
@@ -189,11 +193,9 @@ class VectaraClient:
 
             return self.post_query(query_data)
 
-    def create_corpus(self, corpus_data: CorpusData):
+    def create_corpus(self, corpus_data: dict):
         url = f"{self.base_url}/v1/create-corpus"
-        payload = corpus_data 
-
-        response = requests.post(url, headers=self.headers, data=json.dumps({"corpus": payload}))
+        response = requests.post(url, headers=self.headers, data=json.dumps({"corpus": corpus_data}))
         return self._parse_response(response)
 
     def _parse_response(self, response):
@@ -310,7 +312,7 @@ class VectaraClient:
                 response, status = self.upload_document(
                     corpus_id,
                     file_path,
-                    document_id=document_id,
+                    # document_id=document_id,
                     return_extracted_document=return_extracted_document,
                 )
                 extracted_text = (
@@ -369,7 +371,7 @@ class VectaraClient:
         self,
         corpus_id,
         file_path,
-        document_id=None,
+        # document_id=None,
         metadata=None,
         return_extracted_document=False,
     ):

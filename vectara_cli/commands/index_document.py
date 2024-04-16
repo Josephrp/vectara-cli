@@ -4,7 +4,7 @@ import json
 from vectara_cli.core import VectaraClient
 from vectara_cli.helptexts.help_text import print_index_document_help
 
-def main(args, vectara_client):
+def main(vectara_client, args):
     if len(args) < 4:
         print_index_document_help()
         return

@@ -9,6 +9,7 @@ import random
 import string
 import json
 from vectara_cli.data.corpus_data import CorpusData
+
 class EnterpriseSpan:
     """
     EnterpriseSpan class for handling advanced text processing and analysis in enterprise applications.
@@ -185,10 +186,8 @@ class EnterpriseSpan:
             logging.debug(f"Received response for document {document_id}: {response}")  
             if not success:  
                 logging.warning(f"Upload failed for document {document_id}.")  
-                continue  
             if response is None or response == '':  
                 logging.warning(f"No response received for document {document_id}.")  
-                continue  
     
             # If the response is a string, try to parse it as JSON  
             if isinstance(response, str):  
@@ -197,13 +196,11 @@ class EnterpriseSpan:
                 except json.JSONDecodeError as e:  
                     logging.warning(f"Failed to parse response as JSON for document {document_id}: {e}")  
                     logging.debug(f"Response content: '{response}'")  
-                    continue
             
             # Now we can safely assume response is a dictionary and use the 'get' method  
             document_text_sections = response.get('document', {}).get('section', [])  
             if not document_text_sections:  
                 logging.warning(f"Text sections not found or invalid format in the response for document {document_id}.")  
-                continue  
               
             # Combine text from all sections  
             document_text = " ".join(section['text'] for section in document_text_sections if 'text' in section)  

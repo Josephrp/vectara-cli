@@ -6,28 +6,26 @@ from vectara_cli.rebel_span.commercial.enterprise import EnterpriseSpan
 
 
 def main(vectara_client, args):
-    if len(args) < 4:
+    if len(args) < 2:
         print(
-            "Usage: vectara-cli span-enhance-folder corpus_id_1 corpus_id_2 model_name folder_path"
+            "Usage: vectara-cli span-enhance-folder model_name folder_path"
         )
         return
 
-    corpus_id_1 = args[0]
-    corpus_id_2 = args[1]
-    model_name = args[2]
-    folder_path = args[3]
+    model_name = args[0]
+    folder_path = args[1]
 
     try:
-        customer_id, api_key = ConfigManager.get_api_keys()
         if not os.path.isdir(folder_path):
             print(f"The specified folder path does not exist: {folder_path}")
             return
 
-        enterprise_span = EnterpriseSpan(model_name, customer_id, api_key)
-        enterprise_span.span_enhance(corpus_id_1, corpus_id_2, folder_path)
+        enterprise_span = EnterpriseSpan(vectara_client, model_name)
+        corpus_id_1 , corpus_id_2 = enterprise_span.span_enhance(folder_path)
         print(
             f"Documents in {folder_path} enhanced and uploaded to corpora: {corpus_id_1} (plain), {corpus_id_2} (enhanced)"
         )
+#       return corpus_id_1 , corpus_id_2
     except Exception as e:
         print("An error occurred during the enhancement process:", str(e))
 

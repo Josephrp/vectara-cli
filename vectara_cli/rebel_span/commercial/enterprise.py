@@ -8,7 +8,7 @@ from span_marker import SpanMarkerModel
 import random
 import string
 import json
-
+from vectara_cli.data.corpus_data import CorpusData
 class EnterpriseSpan:
     """
     EnterpriseSpan class for handling advanced text processing and analysis in enterprise applications.
@@ -21,7 +21,7 @@ class EnterpriseSpan:
         "science": "tomaarsen/span-marker-bert-base-ncbi-disease",
     }
 
-    def __init__(self, model_name: str):
+    def __init__(self, vectara_client, model_name: str):
         """
         Initializes the EnterpriseSpan model with a given model name.
 
@@ -32,7 +32,7 @@ class EnterpriseSpan:
         self.logger = logging.getLogger(self.__class__.__name__)
         self.model_path = self._get_model_path()
         self.model = self._load_model()
-        self.vectara_client = VectaraClient()
+        self.vectara_client = vectara_client
 
     def _get_model_path(self) -> str:
         """
@@ -171,7 +171,7 @@ class EnterpriseSpan:
         except Exception as e:
             self.logger.error(f"An error occurred while uploading the document: {e}")
 
-    def span_enhance(self, corpus_id_1, corpus_id_2, folder_path):
+    def span_enhance(self, folder_path):
         logging.info("Starting the processing and upload of documents.")  
           
         # Create two corpora, one for raw uploads and one for processed uploads  

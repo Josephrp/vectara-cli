@@ -9,6 +9,7 @@ import random
 import string
 import json
 from vectara_cli.data.corpus_data import CorpusData
+from typing import NoReturn
 
 class EnterpriseSpan:
     """
@@ -106,19 +107,19 @@ class EnterpriseSpan:
         formatted = ""
         for pred in predictions:
             formatted += (
-                f"{pred['entity_group']}: {pred['word']} (Score: {pred['score']:.2f})\n"
+                f"{pred['label']}: {pred['span']} )\n"
             )
         return formatted.strip()
 
     def generate_metadata(self, predictions: List[Dict[str, Any]]) -> Dict[str, Any]:
         metadata = {}
         for pred in predictions:
-            key = pred["entity_group"]
+            key = pred["label"]
             if key not in metadata:
                 metadata[key] = []
-            metadata[key].append(pred["word"])
+            metadata[key].append(pred["span"])
         return metadata
-
+    
     def text_chunk(self, text, chunk_size=512):
         """
         Breaks down text into smaller chunks of a specified size.
@@ -158,7 +159,7 @@ class EnterpriseSpan:
         logging.info(f"Corpus creation response: {response}")
         return response
 
-    def upload_enriched_text(self, corpus_id, document_id, text, predictions):
+    def upload_enriched_text(self, corpus_id, document_id, text, predictions) -> NoReturn:
         metadata = self.generate_metadata(predictions)
         enriched_text = self.format_predictions(predictions) + "\n\n" + text
         try:
@@ -167,8 +168,10 @@ class EnterpriseSpan:
             )
             if success:
                 self.logger.info("Enriched document uploaded successfully.")
+                return response, success
             else:
                 self.logger.error("Failed to upload enriched document.")
+                return response, success
         except Exception as e:
             self.logger.error(f"An error occurred while uploading the document: {e}")
 

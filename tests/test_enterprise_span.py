@@ -73,11 +73,17 @@ def test_upload_enriched_text(enterprise_span):
     
     vectara_client = enterprise_span
     
-    vectara_client.upload_enriched_text(
+    text = "My Name is Daniel and i study computer science at CUNY"
+    
+    prediction_val = vectara_client.predict(text)
+    
+    data = vectara_client.upload_enriched_text(
         1,
         "vectara_employee_handbook-4524365135dc70a59977373c37601ad1.pdf",
-        "Hello my name is John."
+        text,
+        prediction_val
     )
+    x = 0 
     
     with patch.object(enterprise_span.vectara_client, "index_document") as mock_index_document:
         mock_index_document.return_value = ({"message": "Document indexed successfully"}, True)

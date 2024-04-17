@@ -7,7 +7,7 @@ import span_marker
 from span_marker import SpanMarkerModel
 import random
 import string
-
+import json
 
 class EnterpriseSpan:
     """
@@ -130,6 +130,32 @@ class EnterpriseSpan:
             List[str]: A list of text chunks.
         """
         return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
+    
+    def analyze_text(self):
+        entities = self.predict()
+        output_str = f"Entities found in the text: {self.text}\n"
+        key_value_pairs = self.format_predictions(entities)
+        output_str += "\n".join([f"{kvp['word']}" for kvp in key_value_pairs])
+        return output_str, key_value_pairs
+    
+    def create_corpus(self, name, description):
+        logging.info(f"Creating corpus with name: {name}")
+        corpus_data = CorpusData(
+            name=name,
+            description=description,
+            enabled=True,
+            swapQenc=False,
+            swapIenc=False,
+            textless=False,
+            encrypted=False,
+            encoderId=1,
+            metadataMaxBytes=10000,
+            customDimensions=[],
+            filterAttributes=[],
+        ).to_dict()
+        response = self.vectara_client.create_corpus(corpus_data)
+        logging.info(f"Corpus creation response: {response}")
+        return response
 
     def upload_enriched_text(self, corpus_id, document_id, text, predictions):
         metadata = self.generate_metadata(predictions)
@@ -146,37 +172,62 @@ class EnterpriseSpan:
             self.logger.error(f"An error occurred while uploading the document: {e}")
 
     def span_enhance(self, corpus_id_1, corpus_id_2, folder_path):
-        """
-        Enhances documents using the SpanMarkerModel and uploads them to Vectara.
-
-        Args:
-            corpus_id_1 (int): ID for the first corpus (plain text).
-            corpus_id_2 (int): ID for the second corpus (enhanced text).
-            folder_path (str): Path to the folder containing documents.
-        """
-        # Create two new corpora
-        corpus_id_1 = "".join(random.choices(string.ascii_letters + string.digits, k=7))
-        corpus_id_2 = "".join(random.choices(string.ascii_letters + string.digits, k=7))
-        self.vectara_client.create_corpus(
-            corpus_id=corpus_id_1,
-            name=f"{corpus_id_1}_Plain",
-            description="Plain Document Index",
-        )
-        self.vectara_client.create_corpus(
-            corpus_id=corpus_id_2,
-            name=f"{corpus_id_2}_Enhanced",
-            description="Enhanced Document Index",
-        )
-
-        results = self.vectara_client.index_documents_from_folder(
-            corpus_id_1, folder_path, return_extracted_document=True
-        )
-
-        for document_id, success, extracted_text in results:
-            if not success or not extracted_text:
-                continue
-            text_chunks = self.text_chunk(extracted_text)
-
-            for chunk in text_chunks:
-                predictions = self.predict(chunk)
-                self.upload_enriched_text(corpus_id_2, document_id, chunk, predictions)
+        logging.info("Starting the processing and upload of documents.")  
+          
+        # Create two corpora, one for raw uploads and one for processed uploads  
+        corpus_response_1 = self.create_corpus("Corpus 1", "First corpus for raw uploads")  
+        corpus_id_1 = corpus_response_1['data']['corpusId']  
+        corpus_response_2 = self.create_corpus("Corpus 2", "Second corpus for processed uploads")  
+        corpus_id_2 = corpus_response_2['data']['corpusId']  
+          
+        upload_results = self.vectara_client.index_documents_from_folder(corpus_id_1, folder_path, return_extracted_document=True)  
+        for document_id, success, response in upload_results:  
+            logging.debug(f"Received response for document {document_id}: {response}")  
+            if not success:  
+                logging.warning(f"Upload failed for document {document_id}.")  
+                continue  
+            if response is None or response == '':  
+                logging.warning(f"No response received for document {document_id}.")  
+                continue  
+    
+            # If the response is a string, try to parse it as JSON  
+            if isinstance(response, str):  
+                try:  
+                    response = json.loads(response)  
+                except json.JSONDecodeError as e:  
+                    logging.warning(f"Failed to parse response as JSON for document {document_id}: {e}")  
+                    logging.debug(f"Response content: '{response}'")  
+                    continue
+            
+            # Now we can safely assume response is a dictionary and use the 'get' method  
+            document_text_sections = response.get('document', {}).get('section', [])  
+            if not document_text_sections:  
+                logging.warning(f"Text sections not found or invalid format in the response for document {document_id}.")  
+                continue  
+              
+            # Combine text from all sections  
+            document_text = " ".join(section['text'] for section in document_text_sections if 'text' in section)  
+              
+            chunks = self.text_chunk(document_text)  
+            for chunk_index, chunk in enumerate(chunks):  
+                # Use the analyzed_text method to process text and extract entities  
+                self.text = chunk  
+                output_str, entities = self.analyze_text()  # Assuming that analyze_text now returns a tuple  
+  
+                # Prepend the output_str to the chunk  
+                chunk_with_entities = output_str + "\n" + chunk  
+  
+                # Create metadata with extracted entities  
+                metadata_json = json.dumps({"entities": entities})  
+                  
+                # Index the processed chunk with extracted entities as metadata  
+                self.vectara_client.index_text(  
+                    corpus_id=corpus_id_2,  
+                    document_id=f"{document_id}_chunk_{chunk_index}",  
+                    text=chunk_with_entities,  
+                    metadata_json=metadata_json  
+                )  
+          
+        logging.info("Finished processing and uploading documents.")  
+        return corpus_id_1, corpus_id_2  
+    

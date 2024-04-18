@@ -292,7 +292,7 @@ class VectaraClient:
 
 
     def index_documents_from_folder(
-        self, corpus_id, folder_path, return_extracted_document=False
+        self, corpus_id, folder_path, return_extracted_document=True
     ):
         """Indexes all documents in a specified folder.
 
@@ -371,7 +371,6 @@ class VectaraClient:
         self,
         corpus_id,
         file_path,
-        # document_id=None,
         metadata=None,
         return_extracted_document=False,
     ):

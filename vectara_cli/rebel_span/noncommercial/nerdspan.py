@@ -130,7 +130,7 @@ class Span:
                     continue
             
             # Now we can safely assume response is a dictionary and use the 'get' method  
-            document_text_sections = response.get('document', {}).get('section', [])  
+            document_text_sections = response.get('document', {}).get('extractedText', [])  
             if not document_text_sections:  
                 logging.warning(f"Text sections not found or invalid format in the response for document {document_id}.")  
                 continue  

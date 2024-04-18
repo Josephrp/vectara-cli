@@ -1,7 +1,7 @@
 # ./advanced/commercial/enterpise.py
 
 import logging
-from typing import List, Any, Dict
+from typing import List, Any, Dict, Tuple, Union, NoReturn
 from vectara_cli.core import VectaraClient
 import span_marker
 from span_marker import SpanMarkerModel
@@ -9,7 +9,6 @@ import random
 import string
 import json
 from vectara_cli.data.corpus_data import CorpusData
-from typing import NoReturn
 
 class EnterpriseSpan:
     """
@@ -168,13 +167,21 @@ class EnterpriseSpan:
             )
             if success:
                 self.logger.info("Enriched document uploaded successfully.")
-                return response, success
             else:
                 self.logger.error("Failed to upload enriched document.")
-                return response, success
+            return response, success
         except Exception as e:
             self.logger.error(f"An error occurred while uploading the document: {e}")
-
+            return None, False
+        
+    def handle_response(self, response: str) -> Union[None, str]:
+        try:
+            response_data = json.loads(response)
+            document_sections = response_data.get("document", {}).get("sections", [])
+            return " ".join(section.get("text", "") for section in document_sections)
+        except json.JSONDecodeError:
+            self.logger.error("Failed to parse response as JSON")
+            return None
     def span_enhance(self, folder_path):
         logging.info("Starting the processing and upload of documents.")  
           
@@ -189,8 +196,10 @@ class EnterpriseSpan:
             logging.debug(f"Received response for document {document_id}: {response}")  
             if not success:  
                 logging.warning(f"Upload failed for document {document_id}.")  
+                continue  
             if response is None or response == '':  
                 logging.warning(f"No response received for document {document_id}.")  
+                continue  
     
             # If the response is a string, try to parse it as JSON  
             if isinstance(response, str):  
@@ -199,11 +208,13 @@ class EnterpriseSpan:
                 except json.JSONDecodeError as e:  
                     logging.warning(f"Failed to parse response as JSON for document {document_id}: {e}")  
                     logging.debug(f"Response content: '{response}'")  
+                    continue
             
             # Now we can safely assume response is a dictionary and use the 'get' method  
-            document_text_sections = response.get('document', {}).get('section', [])  
+            document_text_sections = response.get('document', {}).get('extractedText', [])  
             if not document_text_sections:  
                 logging.warning(f"Text sections not found or invalid format in the response for document {document_id}.")  
+                continue
               
             # Combine text from all sections  
             document_text = " ".join(section['text'] for section in document_text_sections if 'text' in section)  
@@ -218,16 +229,15 @@ class EnterpriseSpan:
                 chunk_with_entities = output_str + "\n" + chunk  
   
                 # Create metadata with extracted entities  
-                metadata_json = json.dumps({"entities": entities})  
+                metadata = self.generate_metadata(entities)  
                   
                 # Index the processed chunk with extracted entities as metadata  
                 self.vectara_client.index_text(  
                     corpus_id=corpus_id_2,  
                     document_id=f"{document_id}_chunk_{chunk_index}",  
                     text=chunk_with_entities,  
-                    metadata_json=metadata_json  
+                    metadata_json=metadata 
                 )  
           
         logging.info("Finished processing and uploading documents.")  
-        return corpus_id_1, corpus_id_2  
-    
+        return corpus_id_1, corpus_id_2 

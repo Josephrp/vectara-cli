@@ -4,7 +4,8 @@ import requests
 import json
 import os
 import logging
-from typing import List, Tuple
+import time
+from typing import List, Tuple, NoReturn
 from .data.corpus_data import CorpusData
 from .data.defaults import CorpusDefaults
 from .data.query_request import (
@@ -412,6 +413,31 @@ class VectaraClient:
         except requests.exceptions.RequestException as e:
             logging.error("Request failed: %s", e)
             return {"error": str(e)}, False
+        
+    def delete_corpuses(
+        self,
+        corpus_ids: List[str],
+    ) -> NoReturn:
+        """
+        Delete multiple corpuses by their IDs.
+
+        Args:
+            corpus_ids (List[str]): A list of corpus IDs to be deleted.
+
+        Raises:
+            Any exceptions that may occur during the deletion process.
+
+        Notes:
+            This method iterates over the provided list of corpus IDs and deletes each corpus
+            one by one. After deleting each corpus, it waits for 15 seconds before proceeding
+            to the next one. This delay can be adjusted as needed.
+        """
+        for corpus_id in corpus_ids:
+            self.delete_corpus(
+                corpus_id=corpus_id,
+            )
+            time.sleep(15)
+        
 
     def upload_document(
         self,

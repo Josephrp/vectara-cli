@@ -417,12 +417,14 @@ class VectaraClient:
     def delete_corpuses(
         self,
         corpus_ids: List[str],
+        timeout_duration:int=15,
     ) -> NoReturn:
         """
         Delete multiple corpuses by their IDs.
 
         Args:
             corpus_ids (List[str]): A list of corpus IDs to be deleted.
+            timeout_duration(int): A int to space the the request. set to 15 by default
 
         Raises:
             Any exceptions that may occur during the deletion process.
@@ -436,7 +438,7 @@ class VectaraClient:
             self.delete_corpus(
                 corpus_id=corpus_id,
             )
-            time.sleep(15)
+            time.sleep(timeout_duration)
         
 
     def upload_document(
